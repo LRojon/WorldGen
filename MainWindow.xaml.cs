@@ -29,14 +29,9 @@ namespace WorldGen
             this.WindowState = WindowState.Maximized;
         }
 
-        private void HamburgerMenuItem_Selected(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Nouvelle map");
-        }
-
         private void HamburgerMenuItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-
+            MessageBox.Show("Nouvelle map");
         }
 
         private void Exit_Selected(object sender, RoutedEventArgs e)
@@ -46,6 +41,12 @@ namespace WorldGen
             {
                 this.Close();
             }
+        }
+
+        private void HamburgerMenuItem_Selected(object sender, RoutedEventArgs e)
+        {
+            //MessageBox.Show("Nouvelle map");
+
         }
     }
 }
