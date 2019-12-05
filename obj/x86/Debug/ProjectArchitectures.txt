@@ -1,1 +1,0 @@
-C:\Users\loicr\Desktop\Projet\WorldGen\WorldGen.csproj;x86
