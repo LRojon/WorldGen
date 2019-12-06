@@ -134,5 +134,11 @@
   <ItemGroup>
     <Resource Include="Assets\menu\city.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Image\city.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Image\map.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

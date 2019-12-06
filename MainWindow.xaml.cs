@@ -27,6 +27,7 @@ namespace WorldGen
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             this.WindowState = WindowState.Maximized;
+            //map.
         }
 
         private void HamburgerMenuItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -43,10 +44,15 @@ namespace WorldGen
             }
         }
 
-        private void HamburgerMenuItem_Selected(object sender, RoutedEventArgs e)
+        private void map_Selected(object sender, RoutedEventArgs e)
         {
-            //MessageBox.Show("Nouvelle map");
-
+            city.Visibility = Visibility.Hidden;
+            map.Visibility = Visibility.Visible;
+        }
+        private void city_Selected(object sender, RoutedEventArgs e)
+        {
+            city.Visibility = Visibility.Visible;
+            map.Visibility = Visibility.Hidden;
         }
     }
 }

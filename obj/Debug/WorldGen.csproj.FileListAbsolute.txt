@@ -63,3 +63,6 @@ C:\Users\loicr\Desktop\Projet\WorldGen\obj\Debug\WorldGen.pdb
 C:\Users\loicr\Desktop\Projet\WorldGen\bin\Debug\FortuneVoronoi.dll
 C:\Users\loicr\Desktop\Projet\WorldGen\bin\Debug\HandyCollections.dll
 C:\Users\loicr\Desktop\Projet\WorldGen\bin\Debug\SwizzleMyVectors.dll
+C:\Users\PTCX1319\Documents\Visual Studio 2019\WorldGen\bin\Debug\FortuneVoronoi.dll
+C:\Users\PTCX1319\Documents\Visual Studio 2019\WorldGen\bin\Debug\HandyCollections.dll
+C:\Users\PTCX1319\Documents\Visual Studio 2019\WorldGen\bin\Debug\SwizzleMyVectors.dll

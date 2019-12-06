@@ -15,15 +15,15 @@
                           MenuIconColor="White" 
                           SelectionIndicatorColor="White">
             <hm:HamburgerMenuItem Text="test"/>
-            <hm:HamburgerMenuItem Icon="Assets/menu/new_map.png" Foreground="White" FontWeight="Bold" Text="New Map" MouseDoubleClick="HamburgerMenuItem_MouseDoubleClick" Selected="HamburgerMenuItem_Selected"/>
-            <hm:HamburgerMenuItem Icon="Assets/menu/city.png" Foreground="White" FontWeight="Bold" Text="Ville" MouseDoubleClick="HamburgerMenuItem_MouseDoubleClick" Selected="HamburgerMenuItem_Selected"/>
+            <hm:HamburgerMenuItem Icon="Assets/menu/new_map.png" Foreground="White" FontWeight="Bold" Text="New Map" MouseDoubleClick="HamburgerMenuItem_MouseDoubleClick" Selected="map_Selected"/>
+            <hm:HamburgerMenuItem Icon="Assets/menu/city.png" Foreground="White" FontWeight="Bold" Text="Ville" MouseDoubleClick="HamburgerMenuItem_MouseDoubleClick" Selected="city_Selected"/>
             <hm:HamburgerMenuItem Icon="Assets/menu/off.png" Foreground="red" FontWeight="Bold" Text="Quitter" Selected="Exit_Selected"/>
         </hm:HamburgerMenu>
-        <Grid Name="map" HorizontalAlignment="Left" Height="443" Margin="50,0,0,0" VerticalAlignment="Top" Width="743">
-
+        <Grid Name="map" Margin="50,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Image Source="Assets/Image/map.jpg" Margin="0" Stretch="Fill"/>
         </Grid>
-        <Grid Name="city" Visibility="Hidden" HorizontalAlignment="Left" Height="443" Margin="50,0,0,0" VerticalAlignment="Top" Width="743">
-
+        <Grid Name="city" Visibility="Hidden" Margin="50,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Image Source="Assets/Image/city.jpg" Stretch="Fill"/>
         </Grid>
     </Grid>
 </Window>
