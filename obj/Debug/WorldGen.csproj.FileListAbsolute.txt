@@ -66,3 +66,39 @@ C:\Users\loicr\Desktop\Projet\WorldGen\bin\Debug\SwizzleMyVectors.dll
 C:\Users\PTCX1319\Documents\Visual Studio 2019\WorldGen\bin\Debug\FortuneVoronoi.dll
 C:\Users\PTCX1319\Documents\Visual Studio 2019\WorldGen\bin\Debug\HandyCollections.dll
 C:\Users\PTCX1319\Documents\Visual Studio 2019\WorldGen\bin\Debug\SwizzleMyVectors.dll
+C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Debug\WorldGen.exe.config
+C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Debug\WorldGen.exe
+C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Debug\WorldGen.pdb
+C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Debug\FortuneVoronoi.dll
+C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Debug\HamburgerMenu.dll
+C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Debug\HandyCollections.dll
+C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Debug\SwizzleMyVectors.dll
+C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Debug\Xceed.Wpf.AvalonDock.dll
+C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Debug\Xceed.Wpf.AvalonDock.Themes.Aero.dll
+C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Debug\Xceed.Wpf.AvalonDock.Themes.Metro.dll
+C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Debug\Xceed.Wpf.AvalonDock.Themes.VS2010.dll
+C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Debug\Xceed.Wpf.Toolkit.dll
+C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Debug\de\Xceed.Wpf.AvalonDock.resources.dll
+C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Debug\es\Xceed.Wpf.AvalonDock.resources.dll
+C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Debug\fr\Xceed.Wpf.AvalonDock.resources.dll
+C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Debug\hu\Xceed.Wpf.AvalonDock.resources.dll
+C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Debug\it\Xceed.Wpf.AvalonDock.resources.dll
+C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Debug\pt-BR\Xceed.Wpf.AvalonDock.resources.dll
+C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Debug\ro\Xceed.Wpf.AvalonDock.resources.dll
+C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Debug\ru\Xceed.Wpf.AvalonDock.resources.dll
+C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Debug\sv\Xceed.Wpf.AvalonDock.resources.dll
+C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Debug\zh-Hans\Xceed.Wpf.AvalonDock.resources.dll
+C:\Users\PTCX1319\Desktop\test\WorldGen\obj\Debug\WorldGen.csprojAssemblyReference.cache
+C:\Users\PTCX1319\Desktop\test\WorldGen\obj\Debug\MainWindow.g.cs
+C:\Users\PTCX1319\Desktop\test\WorldGen\obj\Debug\App.g.cs
+C:\Users\PTCX1319\Desktop\test\WorldGen\obj\Debug\WorldGen_MarkupCompile.cache
+C:\Users\PTCX1319\Desktop\test\WorldGen\obj\Debug\WorldGen_MarkupCompile.lref
+C:\Users\PTCX1319\Desktop\test\WorldGen\obj\Debug\MainWindow.baml
+C:\Users\PTCX1319\Desktop\test\WorldGen\obj\Debug\WorldGen.g.resources
+C:\Users\PTCX1319\Desktop\test\WorldGen\obj\Debug\WorldGen.Properties.Resources.resources
+C:\Users\PTCX1319\Desktop\test\WorldGen\obj\Debug\WorldGen.csproj.GenerateResource.cache
+C:\Users\PTCX1319\Desktop\test\WorldGen\obj\Debug\WorldGen.csproj.CopyComplete
+C:\Users\PTCX1319\Desktop\test\WorldGen\obj\Debug\WorldGen.exe
+C:\Users\PTCX1319\Desktop\test\WorldGen\obj\Debug\WorldGen.pdb
+C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Debug\VoronoiLib.dll
+C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Debug\VoronoiLib.pdb

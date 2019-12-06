@@ -1,0 +1,8 @@
+C:\Users\PTCX1319\Desktop\test\WorldGen\VoronoiLib\bin\Debug\netstandard1.1\VoronoiLib.deps.json
+C:\Users\PTCX1319\Desktop\test\WorldGen\VoronoiLib\bin\Debug\netstandard1.1\VoronoiLib.dll
+C:\Users\PTCX1319\Desktop\test\WorldGen\VoronoiLib\bin\Debug\netstandard1.1\VoronoiLib.pdb
+C:\Users\PTCX1319\Desktop\test\WorldGen\VoronoiLib\obj\Debug\netstandard1.1\VoronoiLib.AssemblyInfoInputs.cache
+C:\Users\PTCX1319\Desktop\test\WorldGen\VoronoiLib\obj\Debug\netstandard1.1\VoronoiLib.AssemblyInfo.cs
+C:\Users\PTCX1319\Desktop\test\WorldGen\VoronoiLib\obj\Debug\netstandard1.1\VoronoiLib.dll
+C:\Users\PTCX1319\Desktop\test\WorldGen\VoronoiLib\obj\Debug\netstandard1.1\VoronoiLib.pdb
+C:\Users\PTCX1319\Desktop\test\WorldGen\VoronoiLib\obj\Debug\netstandard1.1\VoronoiLib.csprojAssemblyReference.cache

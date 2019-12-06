@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WorldGen.Classes;
 
 namespace WorldGen
 {
@@ -27,12 +28,11 @@ namespace WorldGen
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             this.WindowState = WindowState.Maximized;
-            //map.
         }
 
         private void HamburgerMenuItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            MessageBox.Show("Nouvelle map");
+            Map map = new Map((int)this.map.ActualWidth, (int)this.map.ActualHeight);
         }
 
         private void Exit_Selected(object sender, RoutedEventArgs e)
