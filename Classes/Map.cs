@@ -25,6 +25,7 @@ namespace WorldGen.Classes
         private LinkedList<VEdge> vedges;
         private int mapWidth;
         private int mapHeight;
+        public bool voronoi = true;
 
         public Map()
         {
@@ -35,7 +36,7 @@ namespace WorldGen.Classes
             mapWidth = widthArea;
             Random rand = new Random();
             int nbSite = widthArea * heightArea / 400;
-            nbSite = 30;
+            //nbSite = 30;
             List<Vector2> list = new List<Vector2>();
 
             for (int i = 0; i < nbSite; i++)
@@ -54,20 +55,6 @@ namespace WorldGen.Classes
 
             using (Graphics g = Graphics.FromImage(bmp))
             {
-                foreach (VEdge vedge in vedges)
-                {
-                    g.DrawLine(new System.Drawing.Pen(System.Drawing.Color.Black),
-                        new System.Drawing.Point((int)vedge.Start.X, (int)vedge.Start.Y),
-                        new System.Drawing.Point((int)vedge.End.X, (int)vedge.End.Y));
-                    /*if (vedge.Left != null)
-                    {
-                        if (!fSites.Contains(vedge.Left))
-                        {// parcourir tous les site et pour chaque site leur ajouté les vedges
-                            fSites.Add(vedge.Left);
-                        }
-                    }*/
-                }
-
                 foreach (var site in sites)
                 {
                     foreach (VEdge vedge in vedges)
@@ -80,15 +67,22 @@ namespace WorldGen.Classes
                     int i = 0;
                     tmp.Add(site.Cell.First());
                     site.Cell.Remove(site.Cell.First());
-                    while (!site.Cell.IsEmpty())
+                    while (!site.Cell.IsEmpty() && i < site.Cell.Count)
                     {
                         VEdge ve = site.Cell.ElementAt(i);
                         VEdge t = tmp.Last();
-                        if (ve.Start == t.Start ||
-                            ve.Start == t.End ||
-                            ve.End == t.Start ||
-                            ve.End == t.End)
+                        if (t.End == ve.Start)
                         {
+                            tmp.Add(ve);
+                            site.Cell.Remove(ve);
+                            i = 0;
+                        }
+                        else if (t.End == ve.End)
+                        {
+                            VPoint vp = ve.End;
+                            ve.End = ve.Start;
+                            ve.Start = vp;
+                            
                             tmp.Add(ve);
                             site.Cell.Remove(ve);
                             i = 0;
@@ -99,25 +93,12 @@ namespace WorldGen.Classes
                         }
                     }
                     site.Cell = tmp;
-                    tmp.des
                     
-                    if (delaunay)
-                    {
-                        foreach (var neighbor in site.Neighbors)
-                        {
-                            g.DrawLine(new System.Drawing.Pen(Color.Blue),
-                                (float) site.X,
-                                (float) site.Y,
-                                (float) neighbor.X,
-                                (float) neighbor.Y);
-                        }
-                    }
-
                     List<Point> points = new List<Point>();
                     foreach (var edge in site.Cell)
                     {
-                        points.Add(new Point((int)edge.Start.X, (int)edge.Start.Y));
-                        points.Add(new Point((int)edge.End.X, (int)edge.End.Y));
+                        points.Add(new Point((int) edge.Start.X, (int) edge.Start.Y));
+                        points.Add(new Point((int) edge.End.X, (int) edge.End.Y));
                     }
 
                     Point[] tab = points.ToArray();
@@ -131,6 +112,28 @@ namespace WorldGen.Classes
                     g.FillEllipse(new SolidBrush(Color.Crimson), 
                         (float)(site.X-2), (float)(site.Y-2),
                         5f, 5f);
+                    
+                    if (delaunay)
+                    {
+                        foreach (var neighbor in site.Neighbors)
+                        {
+                            g.DrawLine(new System.Drawing.Pen(Color.Blue),
+                                (float) site.X,
+                                (float) site.Y,
+                                (float) neighbor.X,
+                                (float) neighbor.Y);
+                        }
+                    }
+                }
+
+                if (voronoi)
+                {
+                    foreach (VEdge vedge in vedges)
+                    {
+                        g.DrawLine(new System.Drawing.Pen(System.Drawing.Color.Black),
+                            new System.Drawing.Point((int) vedge.Start.X, (int) vedge.Start.Y),
+                            new System.Drawing.Point((int) vedge.End.X, (int) vedge.End.Y));
+                    }
                 }
             }
 

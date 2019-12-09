@@ -63,12 +63,19 @@ namespace WorldGen
             Button btn = (Button) sender;
 
             delaunay = !delaunay;
-            if (delaunay)
-                btn.Content = "ON";
-            else
-                btn.Content = "OFF";
+            btn.Content = delaunay ? "ON" : "OFF";
             
             if(graph != null)
+                imageMap.Source = graph.getVoronoiGraph(delaunay);
+        }        
+        private void voronoi_ON_OFF(object sender, RoutedEventArgs e)
+        {
+            Button btn = (Button) sender;
+
+            graph.voronoi = !graph.voronoi;
+            btn.Content = graph.voronoi ? "ON" : "OFF";
+
+            if (graph != null)
                 imageMap.Source = graph.getVoronoiGraph(delaunay);
         }
     }

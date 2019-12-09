@@ -2,8 +2,8 @@
 {
     public class VEdge
     {
-        public VPoint Start { get; internal set; }
-        public VPoint End { get; internal set; }
+        public VPoint Start { get; set; }
+        public VPoint End { get; set; }
         public FortuneSite Left { get; }
         public FortuneSite Right { get; }
         internal double SlopeRise { get; }
