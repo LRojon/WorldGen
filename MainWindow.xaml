@@ -11,7 +11,7 @@
     <Grid RenderTransformOrigin="0.498,0.481">
         <hm:HamburgerMenu Name="menu"
                           HorizontalAlignment="Left" 
-                          Background="#252525" 
+                          Background="#252525"  
                           MenuIconColor="White" 
                           SelectionIndicatorColor="White" Panel.ZIndex="10">
             <hm:HamburgerMenuItem Text="test"/>
@@ -20,7 +20,14 @@
             <hm:HamburgerMenuItem Icon="Assets/menu/off.png" Foreground="red" FontWeight="Bold" Text="Quitter" Selected="Exit_Selected"/>
         </hm:HamburgerMenu>
         <Grid Name="map" Margin="50,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <Image Source="Assets/Image/map.jpg" Margin="0" Stretch="Fill"/>
+            <Image Name="imageMap" Source="Assets/Image/map.jpg" Margin="0" Stretch="Fill"/>
+            <Button Click="delaunay_ON_OFF"
+                    Opacity="0.75" 
+                    Content="Delaunay" 
+                    VerticalAlignment="Top" 
+                    HorizontalAlignment="Right"
+                    Width="100"
+                    Height="25"/>
         </Grid>
         <Grid Name="city" Visibility="Hidden" Margin="50,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center">
             <Image Source="Assets/Image/city.jpg" Stretch="Fill"/>

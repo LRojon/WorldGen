@@ -7,7 +7,7 @@ namespace VoronoiLib.Structures
         public double X { get; }
         public double Y { get; }
 
-        public List<VEdge> Cell { get; private set; }
+        public List<VEdge> Cell { get; set; }
 
         public List<FortuneSite> Neighbors { get; private set; }
 

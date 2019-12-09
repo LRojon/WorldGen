@@ -1,11 +1,14 @@
 ﻿{
   "version": "1.0.0",
   "restore": {
-    "projectUniqueName": "C:\\Users\\PTCX1319\\Desktop\\test\\WorldGen\\VoronoiLib\\VoronoiLib.csproj",
+    "projectUniqueName": "C:\\Users\\loicr\\Desktop\\Projet\\WorldGen\\VoronoiLib\\VoronoiLib.csproj",
     "projectName": "VoronoiLib",
-    "projectPath": "C:\\Users\\PTCX1319\\Desktop\\test\\WorldGen\\VoronoiLib\\VoronoiLib.csproj",
-    "outputPath": "C:\\Users\\PTCX1319\\Desktop\\test\\WorldGen\\VoronoiLib\\obj\\",
+    "projectPath": "C:\\Users\\loicr\\Desktop\\Projet\\WorldGen\\VoronoiLib\\VoronoiLib.csproj",
+    "outputPath": "C:\\Users\\loicr\\Desktop\\Projet\\WorldGen\\VoronoiLib\\obj\\",
     "projectStyle": "PackageReference",
+    "fallbackFolders": [
+      "C:\\Microsoft\\Xamarin\\NuGet"
+    ],
     "originalTargetFrameworks": [
       "netstandard1.1"
     ],

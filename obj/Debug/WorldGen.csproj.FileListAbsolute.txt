@@ -102,3 +102,5 @@ C:\Users\PTCX1319\Desktop\test\WorldGen\obj\Debug\WorldGen.exe
 C:\Users\PTCX1319\Desktop\test\WorldGen\obj\Debug\WorldGen.pdb
 C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Debug\VoronoiLib.dll
 C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Debug\VoronoiLib.pdb
+C:\Users\loicr\Desktop\Projet\WorldGen\bin\Debug\VoronoiLib.dll
+C:\Users\loicr\Desktop\Projet\WorldGen\bin\Debug\VoronoiLib.pdb

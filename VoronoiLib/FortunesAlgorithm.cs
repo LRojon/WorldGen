@@ -6,7 +6,7 @@ namespace VoronoiLib
 {
     public static class FortunesAlgorithm
     {
-        public static LinkedList<VEdge> Run(List<FortuneSite> sites, double minX, double minY, double maxX, double maxY)
+        public static LinkedList<VEdge> Run(ref List<FortuneSite> sites, double minX, double minY, double maxX, double maxY)
         {
             var eventQueue = new MinHeap<FortuneEvent>(5*sites.Count);
             foreach (var s in sites)

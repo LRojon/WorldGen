@@ -21,6 +21,8 @@ namespace WorldGen
     /// </summary>
     public partial class MainWindow : Window
     {
+        private bool delaunay = false;
+        private Map graph;
         public MainWindow()
         {
             InitializeComponent();
@@ -32,7 +34,8 @@ namespace WorldGen
 
         private void HamburgerMenuItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            Map map = new Map((int)this.map.ActualWidth, (int)this.map.ActualHeight);
+            graph = new Map((int)this.map.ActualWidth, (int)this.map.ActualHeight);
+            this.imageMap.Source = graph.getVoronoiGraph(this.delaunay);
         }
 
         private void Exit_Selected(object sender, RoutedEventArgs e)
@@ -53,6 +56,20 @@ namespace WorldGen
         {
             city.Visibility = Visibility.Visible;
             map.Visibility = Visibility.Hidden;
+        }
+
+        private void delaunay_ON_OFF(object sender, RoutedEventArgs e)
+        {
+            Button btn = (Button) sender;
+
+            delaunay = !delaunay;
+            if (delaunay)
+                btn.Content = "ON";
+            else
+                btn.Content = "OFF";
+            
+            if(graph != null)
+                imageMap.Source = graph.getVoronoiGraph(delaunay);
         }
     }
 }
