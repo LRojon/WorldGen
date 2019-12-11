@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LibNoise;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,8 @@ using System.Windows.Media;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Numerics;
+using System.Resources;
+using System.Threading;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 using FortuneVoronoi;
@@ -15,6 +18,8 @@ using HandyCollections.Extensions;
 using VoronoiLib;
 using VoronoiLib.Structures;
 using Color = System.Drawing.Color;
+using PixelFormat = System.Drawing.Imaging.PixelFormat;
+using Pen = System.Drawing.Pen;
 using Point = System.Drawing.Point;
 
 namespace WorldGen.Classes
@@ -26,6 +31,12 @@ namespace WorldGen.Classes
         private int mapWidth;
         private int mapHeight;
         public bool voronoi = true;
+        public bool affSite = true;
+        private double[,] perlinMap;
+        private Bitmap map;
+        private Bitmap mapPerlin;
+        private int zoom;
+        private float ratio;
 
         public Map()
         {
@@ -34,35 +45,81 @@ namespace WorldGen.Classes
         {
             mapHeight = heightArea;
             mapWidth = widthArea;
+            ratio = (int)(mapWidth / mapHeight);
             Random rand = new Random();
             int nbSite = widthArea * heightArea / 400;
+            perlinMap = new double[widthArea, heightArea];
             //nbSite = 30;
-            List<Vector2> list = new List<Vector2>();
+            
+            Perlin p = new Perlin();
+            p.Persistence = 0.65;
+            p.Frequency = .003333;
+            p.OctaveCount = 8;
+            p.Seed = 628594615;//new Random().Next(5000);
 
+            for (int i = 0; i < widthArea; i++)
+            {
+                for (int j = 0; j < heightArea; j++)
+                {
+                    var tmp = p.GetValue(i, j, 0);
+                    perlinMap[i, j] = p.GetValue(i, j, 0);
+                }
+            }
+            
             for (int i = 0; i < nbSite; i++)
             {
-                sites.Add(new FortuneSite(rand.NextDouble()*widthArea, rand.NextDouble()*heightArea));
-                list.Add(new Vector2((float)rand.NextDouble()*widthArea, (float)rand.NextDouble()*heightArea));
+                sites.Add(new Region(rand.NextDouble()*widthArea, rand.NextDouble()*heightArea, p));
             }
             this.vedges = FortunesAlgorithm.Run(ref sites, 0, 0, widthArea, heightArea);
-            /*if(!this.vedges.IsEmpty())
-                MessageBox.Show("Nombre de site pour ("+ widthArea + "x" + heightArea + "): " + nbSite);*/
-        }
 
+            foreach (FortuneSite site in sites)
+            {
+                foreach (VEdge vedge in vedges)
+                {
+                    if(vedge.Left == site || vedge.Right == site)
+                        if(!site.Cell.Contains(vedge))
+                            site.Cell.Add(vedge);
+                }
+            }
+        }
+        
         public ImageSource getVoronoiGraph(bool delaunay = false)
         {
             Bitmap bmp = new Bitmap(this.mapWidth, this.mapHeight);
+            Image img = Image.FromFile("C:\\Users\\loicr\\Desktop\\Projet\\Perso\\WorldGen\\Assets\\gradient.bmp");
+            Bitmap gradient = new Bitmap(img);
+
+            /*if (mapPerlin == null)
+            {
+                for (int i = 0; i < mapWidth; i++)
+                {
+                    for (int j = 0; j < mapHeight; j++)
+                    {
+                        double value = perlinMap[i, j];
+                        double y = (value + 1 > 2 ? 2 : (value + 1 < 0 ? 0 : value + 1));
+                        int lvl = (int) ((y / 2) * 255);
+                        Color c = gradient.GetPixel(lvl, 0);
+                        bmp.SetPixel(i, j, c);
+                    }
+                }
+                this.mapPerlin = bmp;
+            }
+            else
+            {
+                bmp = this.mapPerlin;
+            }*/
+
 
             using (Graphics g = Graphics.FromImage(bmp))
             {
-                foreach (var site in sites)
+                int seed = -1;
+
+                
+                
+                foreach (Region site in sites)
                 {
-                    foreach (VEdge vedge in vedges)
-                    {
-                        if(vedge.Left == site || vedge.Right == site)
-                            if(!site.Cell.Contains(vedge))
-                                site.Cell.Add(vedge);
-                    }
+                    seed++;
+                    
                     List<VEdge> tmp = new List<VEdge>();
                     int i = 0;
                     tmp.Add(site.Cell.First());
@@ -102,16 +159,15 @@ namespace WorldGen.Classes
                     }
 
                     Point[] tab = points.ToArray();
-                    Random rand = new Random();
-                    Color color = Color.FromArgb(255,
-                        rand.Next(255),
-                        rand.Next(255),
-                        rand.Next(255));
-                    g.FillPolygon(new SolidBrush(Color.Red), tab);
+                    Random rand = new Random(seed);
+                    Color color = gradient.GetPixel(site.Height, 0);
+                    
+                    g.FillPolygon(new SolidBrush(color), tab);
 
-                    g.FillEllipse(new SolidBrush(Color.Crimson), 
-                        (float)(site.X-2), (float)(site.Y-2),
-                        5f, 5f);
+                    if(affSite)
+                        g.FillEllipse(new SolidBrush(Color.Crimson), 
+                            (float)(site.X-2), (float)(site.Y-2),
+                            5f, 5f);
                     
                     if (delaunay)
                     {
@@ -137,6 +193,7 @@ namespace WorldGen.Classes
                 }
             }
 
+            this.map = bmp;
             return ImageSourceFromBitmap(bmp);
         }
         
@@ -148,3 +205,10 @@ namespace WorldGen.Classes
         }
     }
 }
+
+// Voir pour déplacer la carte.
+// Voir pour mettre le zoom via un slider
+/*
+ * Sur un evenement mouse left button hold/cilck, déplacer le x,y en fonction du delta de la souris
+ * ou le width, height si x,y == 0,0
+ */

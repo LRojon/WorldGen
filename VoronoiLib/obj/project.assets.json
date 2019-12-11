@@ -2706,11 +2706,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\loicr\\Desktop\\Projet\\WorldGen\\VoronoiLib\\VoronoiLib.csproj",
+      "projectUniqueName": "C:\\Users\\loicr\\Desktop\\Projet\\Perso\\WorldGen\\VoronoiLib\\VoronoiLib.csproj",
       "projectName": "VoronoiLib",
-      "projectPath": "C:\\Users\\loicr\\Desktop\\Projet\\WorldGen\\VoronoiLib\\VoronoiLib.csproj",
+      "projectPath": "C:\\Users\\loicr\\Desktop\\Projet\\Perso\\WorldGen\\VoronoiLib\\VoronoiLib.csproj",
       "packagesPath": "C:\\Users\\loicr\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\loicr\\Desktop\\Projet\\WorldGen\\VoronoiLib\\obj\\",
+      "outputPath": "C:\\Users\\loicr\\Desktop\\Projet\\Perso\\WorldGen\\VoronoiLib\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Microsoft\\Xamarin\\NuGet"

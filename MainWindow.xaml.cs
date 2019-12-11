@@ -30,6 +30,8 @@ namespace WorldGen
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             this.WindowState = WindowState.Maximized;
+            graph = new Map((int)this.map.ActualWidth, (int)this.map.ActualHeight);
+            this.imageMap.Source = graph.getVoronoiGraph(this.delaunay);
         }
 
         private void HamburgerMenuItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -63,7 +65,7 @@ namespace WorldGen
             Button btn = (Button) sender;
 
             delaunay = !delaunay;
-            btn.Content = delaunay ? "ON" : "OFF";
+            btn.Content = delaunay ? "Delaunay: ON" : "Delaunay: OFF";
             
             if(graph != null)
                 imageMap.Source = graph.getVoronoiGraph(delaunay);
@@ -73,7 +75,17 @@ namespace WorldGen
             Button btn = (Button) sender;
 
             graph.voronoi = !graph.voronoi;
-            btn.Content = graph.voronoi ? "ON" : "OFF";
+            btn.Content = graph.voronoi ? "Voronoi: ON" : "Voronoi: OFF";
+
+            if (graph != null)
+                imageMap.Source = graph.getVoronoiGraph(delaunay);
+        }      
+        private void sites_ON_OFF(object sender, RoutedEventArgs e)
+        {
+            Button btn = (Button) sender;
+
+            graph.affSite = !graph.affSite;
+            btn.Content = graph.affSite ? "Sites: ON" : "Sites: OFF";
 
             if (graph != null)
                 imageMap.Source = graph.getVoronoiGraph(delaunay);
