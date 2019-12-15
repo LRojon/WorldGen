@@ -14,7 +14,7 @@
         "outputPath": "C:\\Users\\loicr\\Desktop\\Projet\\Perso\\WorldGen\\VoronoiLib\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Microsoft\\Xamarin\\NuGet"
+          "C:\\Microsoft\\Xamarin\\NuGet\\"
         ],
         "configFilePaths": [
           "C:\\Users\\loicr\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -47,12 +47,12 @@
               "version": "[1.0.1, )"
             },
             "NETStandard.Library": {
-              "suppressParent": "All",
               "target": "Package",
               "version": "[1.6.0, )",
               "autoReferenced": true
             }
-          }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     }

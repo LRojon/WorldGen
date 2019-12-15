@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.IO;
 using System.Numerics;
 using System.Resources;
 using System.Threading;
@@ -27,15 +28,17 @@ namespace WorldGen.Classes
     public class Map
     {
         public List<FortuneSite> sites = new List<FortuneSite>();
+        public List<Region> cities = new List<Region>();
         private LinkedList<VEdge> vedges;
+        private List<Color> colors = new List<Color>();
         private int mapWidth;
         private int mapHeight;
         public bool voronoi = true;
-        public bool affSite = true;
+        public bool affSite = false;
+        public bool influence = false;
         private double[,] perlinMap;
         private Bitmap map;
         private Bitmap mapPerlin;
-        private int zoom;
         private float ratio;
 
         public Map()
@@ -47,15 +50,21 @@ namespace WorldGen.Classes
             mapWidth = widthArea;
             ratio = (int)(mapWidth / mapHeight);
             Random rand = new Random();
-            int nbSite = widthArea * heightArea / 400;
+            int nbSite = widthArea * heightArea / 1000; // default: /400
             perlinMap = new double[widthArea, heightArea];
             //nbSite = 30;
-            
+
+            this.colors.Add(Color.Red);
+            this.colors.Add(Color.Black);
+            this.colors.Add(Color.Purple);
+            this.colors.Add(Color.Gray);
+            this.colors.Add(Color.Cyan);
+
             Perlin p = new Perlin();
             p.Persistence = 0.65;
             p.Frequency = .003333;
             p.OctaveCount = 8;
-            p.Seed = 628594615;//new Random().Next(5000);
+            p.Seed = /*628594615;*/new Random().Next(999999999);
 
             for (int i = 0; i < widthArea; i++)
             {
@@ -65,12 +74,34 @@ namespace WorldGen.Classes
                     perlinMap[i, j] = p.GetValue(i, j, 0);
                 }
             }
-            
+
             for (int i = 0; i < nbSite; i++)
             {
-                sites.Add(new Region(rand.NextDouble()*widthArea, rand.NextDouble()*heightArea, p));
+                var tmp = new Region(rand.NextDouble() * widthArea, rand.NextDouble() * heightArea, perlinMap);
+                sites.Add(tmp);
+                if (tmp.City)
+                    cities.Add(tmp);
             }
             this.vedges = FortunesAlgorithm.Run(ref sites, 0, 0, widthArea, heightArea);
+
+            if (cities.Count > 0)
+            {
+                int nbCapital = 5;
+                while (nbCapital > 0)
+                {
+                    var tmp = cities.ElementAt(new Random().Next(cities.Count));
+                    if (!tmp.Capital)
+                    {
+                        var r = new Random().Next(this.colors.Count);
+                        tmp.Capital = true;
+                        new Kingdom(tmp, this.colors.ElementAt(r));
+                        this.colors.RemoveAt(r);
+                        nbCapital--;
+                    }
+                }
+            }
+            
+            // Génération de la liste des villes, et de la capital
 
             foreach (FortuneSite site in sites)
             {
@@ -85,12 +116,12 @@ namespace WorldGen.Classes
         
         public ImageSource getVoronoiGraph(bool delaunay = false)
         {
-            Bitmap bmp = new Bitmap(this.mapWidth, this.mapHeight);
-            Image img = Image.FromFile("C:\\Users\\loicr\\Desktop\\Projet\\Perso\\WorldGen\\Assets\\gradient.bmp");
+            Image img = Image.FromFile("Assets\\gradient.bmp");
             Bitmap gradient = new Bitmap(img);
 
-            /*if (mapPerlin == null)
+            if (mapPerlin == null)
             {
+                mapPerlin = new Bitmap(mapWidth, mapHeight);
                 for (int i = 0; i < mapWidth; i++)
                 {
                     for (int j = 0; j < mapHeight; j++)
@@ -99,75 +130,89 @@ namespace WorldGen.Classes
                         double y = (value + 1 > 2 ? 2 : (value + 1 < 0 ? 0 : value + 1));
                         int lvl = (int) ((y / 2) * 255);
                         Color c = gradient.GetPixel(lvl, 0);
-                        bmp.SetPixel(i, j, c);
+                        mapPerlin.SetPixel(i, j, c);
                     }
                 }
-                this.mapPerlin = bmp;
             }
-            else
-            {
-                bmp = this.mapPerlin;
-            }*/
+            Bitmap bmp = new Bitmap(mapPerlin);
 
 
             using (Graphics g = Graphics.FromImage(bmp))
             {
-                int seed = -1;
-
-                
+                int seed = -1;                
                 
                 foreach (Region site in sites)
                 {
                     seed++;
-                    
-                    List<VEdge> tmp = new List<VEdge>();
-                    int i = 0;
-                    tmp.Add(site.Cell.First());
-                    site.Cell.Remove(site.Cell.First());
-                    while (!site.Cell.IsEmpty() && i < site.Cell.Count)
+
+                    if (site.Kingdom != null && affSite)
                     {
-                        VEdge ve = site.Cell.ElementAt(i);
-                        VEdge t = tmp.Last();
-                        if (t.End == ve.Start)
+                        List<VEdge> tmp = new List<VEdge>();
+                        int i = 0;
+                        tmp.Add(site.Cell.First());
+                        site.Cell.Remove(site.Cell.First());
+                        while (!site.Cell.IsEmpty() && i < site.Cell.Count)
                         {
-                            tmp.Add(ve);
-                            site.Cell.Remove(ve);
-                            i = 0;
+                            VEdge ve = site.Cell.ElementAt(i);
+                            VEdge t = tmp.Last();
+                            if (t.End == ve.Start)
+                            {
+                                tmp.Add(ve);
+                                site.Cell.Remove(ve);
+                                i = 0;
+                            }
+                            else if (t.End == ve.End)
+                            {
+                                VPoint vp = ve.End;
+                                ve.End = ve.Start;
+                                ve.Start = vp;
+
+                                tmp.Add(ve);
+                                site.Cell.Remove(ve);
+                                i = 0;
+                            }
+                            else
+                            {
+                                i++;
+                            }
                         }
-                        else if (t.End == ve.End)
+                        site.Cell = tmp;
+
+                        List<Point> points = new List<Point>();
+                        foreach (var edge in site.Cell)
                         {
-                            VPoint vp = ve.End;
-                            ve.End = ve.Start;
-                            ve.Start = vp;
-                            
-                            tmp.Add(ve);
-                            site.Cell.Remove(ve);
-                            i = 0;
+                            points.Add(new Point((int)edge.Start.X, (int)edge.Start.Y));
+                            points.Add(new Point((int)edge.End.X, (int)edge.End.Y));
                         }
+
+                        Point[] tab = points.ToArray();
+                        Random rand = new Random(seed);
+                        Color color = Color.FromArgb(90,
+                            site.Kingdom.Color.R,
+                            site.Kingdom.Color.G,
+                            site.Kingdom.Color.B);
+
+
+                        g.FillPolygon(new SolidBrush(color), tab);
+
+                    }
+                    if (influence)
+                    {
+                        if(site.Influence > 0.1)
+                            g.DrawString(site.Influence.ToString(), new Font(System.Drawing.FontFamily.GenericSansSerif, 5f), new SolidBrush(Color.Blue), (float)site.X, (float)site.Y);
+                    }
+
+                    if (site.City)
+                    {
+                        if(!site.Capital)
+                            g.FillEllipse(new SolidBrush(Color.Crimson),
+                                (float)(site.X - 2), (float)(site.Y - 2),
+                                5f, 5f);
                         else
-                        {
-                            i++;
-                        }
+                            g.FillEllipse(new SolidBrush(Color.Yellow),
+                                (float)(site.X - 2), (float)(site.Y - 2),
+                                5f, 5f);
                     }
-                    site.Cell = tmp;
-                    
-                    List<Point> points = new List<Point>();
-                    foreach (var edge in site.Cell)
-                    {
-                        points.Add(new Point((int) edge.Start.X, (int) edge.Start.Y));
-                        points.Add(new Point((int) edge.End.X, (int) edge.End.Y));
-                    }
-
-                    Point[] tab = points.ToArray();
-                    Random rand = new Random(seed);
-                    Color color = gradient.GetPixel(site.Height, 0);
-                    
-                    g.FillPolygon(new SolidBrush(color), tab);
-
-                    if(affSite)
-                        g.FillEllipse(new SolidBrush(Color.Crimson), 
-                            (float)(site.X-2), (float)(site.Y-2),
-                            5f, 5f);
                     
                     if (delaunay)
                     {
@@ -211,4 +256,8 @@ namespace WorldGen.Classes
 /*
  * Sur un evenement mouse left button hold/cilck, déplacer le x,y en fonction du delta de la souris
  * ou le width, height si x,y == 0,0
+ */
+/*
+ * Pour avoir les frontiers des pays, tester sur toutes les arrete des cellules. 
+ * Et supprimer celles qui sont en double laisse les arretes unique.
  */

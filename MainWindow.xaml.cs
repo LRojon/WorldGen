@@ -79,13 +79,23 @@ namespace WorldGen
 
             if (graph != null)
                 imageMap.Source = graph.getVoronoiGraph(delaunay);
-        }      
+        }
         private void sites_ON_OFF(object sender, RoutedEventArgs e)
         {
-            Button btn = (Button) sender;
+            Button btn = (Button)sender;
 
             graph.affSite = !graph.affSite;
-            btn.Content = graph.affSite ? "Sites: ON" : "Sites: OFF";
+            btn.Content = graph.affSite ? "Royaume: ON" : "Royaume: OFF";
+
+            if (graph != null)
+                imageMap.Source = graph.getVoronoiGraph(delaunay);
+        }
+        private void influence_ON_OFF(object sender, RoutedEventArgs e)
+        {
+            Button btn = (Button)sender;
+
+            graph.influence = !graph.influence;
+            btn.Content = graph.influence ? "Influence: ON" : "Influence: OFF";
 
             if (graph != null)
                 imageMap.Source = graph.getVoronoiGraph(delaunay);

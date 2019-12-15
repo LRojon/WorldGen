@@ -142,4 +142,4 @@ C:\Users\loicr\Desktop\Projet\Perso\WorldGen\obj\Debug\WorldGen.exe
 C:\Users\loicr\Desktop\Projet\Perso\WorldGen\obj\Debug\WorldGen.pdb
 C:\Users\loicr\Desktop\Projet\Perso\WorldGen\bin\Debug\LibNoise.dll
 C:\Users\loicr\Desktop\Projet\Perso\WorldGen\bin\Debug\LibNoise.xml
-C:\Users\loicr\Desktop\Projet\Perso\WorldGen\obj\Debug\WorldGen_Content.g.cs
+C:\Users\loicr\Desktop\Projet\Perso\WorldGen\bin\Debug\Assets\gradient.bmp
