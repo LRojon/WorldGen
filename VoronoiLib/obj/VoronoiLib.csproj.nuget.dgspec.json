@@ -1,23 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\loicr\\Desktop\\Projet\\Perso\\WorldGen\\VoronoiLib\\VoronoiLib.csproj": {}
+    "C:\\Users\\Loïc\\Desktop\\Projet\\worldgen\\VoronoiLib\\VoronoiLib.csproj": {}
   },
   "projects": {
-    "C:\\Users\\loicr\\Desktop\\Projet\\Perso\\WorldGen\\VoronoiLib\\VoronoiLib.csproj": {
+    "C:\\Users\\Loïc\\Desktop\\Projet\\worldgen\\VoronoiLib\\VoronoiLib.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\loicr\\Desktop\\Projet\\Perso\\WorldGen\\VoronoiLib\\VoronoiLib.csproj",
+        "projectUniqueName": "C:\\Users\\Loïc\\Desktop\\Projet\\worldgen\\VoronoiLib\\VoronoiLib.csproj",
         "projectName": "VoronoiLib",
-        "projectPath": "C:\\Users\\loicr\\Desktop\\Projet\\Perso\\WorldGen\\VoronoiLib\\VoronoiLib.csproj",
-        "packagesPath": "C:\\Users\\loicr\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\loicr\\Desktop\\Projet\\Perso\\WorldGen\\VoronoiLib\\obj\\",
+        "projectPath": "C:\\Users\\Loïc\\Desktop\\Projet\\worldgen\\VoronoiLib\\VoronoiLib.csproj",
+        "packagesPath": "C:\\Users\\Loïc\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Loïc\\Desktop\\Projet\\worldgen\\VoronoiLib\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Microsoft\\Xamarin\\NuGet\\"
+          "C:\\Microsoft\\Xamarin\\NuGet\\",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\loicr\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Loïc\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
@@ -52,7 +53,7 @@
               "autoReferenced": true
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.100\\RuntimeIdentifierGraph.json"
         }
       }
     }
