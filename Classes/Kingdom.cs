@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using WorldGen.Classes.Enum;
 using VoronoiLib;
 using VoronoiLib.Structures;
 
@@ -10,22 +11,29 @@ namespace WorldGen.Classes
     public class Kingdom
     {
         public List<Region> regions = new List<Region>();
-        private string name;
-        private Color color;
+        private string _name;
+        private KingdomType _type;
+        private Color _color;
+        private string _leader;
 
         public Kingdom(Region capital, Color color)
         {
             if(!capital.Capital)
                 throw new Exception("La region fourni n'est pas une capitale.");
 
-            this.color = color;
-            this.name = "Kingdom";
+            this.Color = color;
+            this.Type = (KingdomType)new Random().Next(4);
+            this.Name = "Kingdom";
+            this.Leader = "Roi";
+
             capital.Influence = 1;
             createKingdom(capital);
         }
 
-        public string Name { get => name; set => name = value; }
-        public Color Color { get => color; set => color = value; }
+        public string Name { get => _name; set => _name = value; }
+        public Color Color { get => _color; set => _color = value; }
+        public KingdomType Type { get => _type; set => _type = value; }
+        public string Leader { get => _leader; set => _leader = value; }
 
         private void createKingdom(Region current)
         {

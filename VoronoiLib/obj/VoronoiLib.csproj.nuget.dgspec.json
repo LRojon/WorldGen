@@ -1,26 +1,21 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Loïc\\Desktop\\Projet\\worldgen\\VoronoiLib\\VoronoiLib.csproj": {}
+    "C:\\Users\\PTCX1319\\Desktop\\test\\WorldGen\\VoronoiLib\\VoronoiLib.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Loïc\\Desktop\\Projet\\worldgen\\VoronoiLib\\VoronoiLib.csproj": {
+    "C:\\Users\\PTCX1319\\Desktop\\test\\WorldGen\\VoronoiLib\\VoronoiLib.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Loïc\\Desktop\\Projet\\worldgen\\VoronoiLib\\VoronoiLib.csproj",
+        "projectUniqueName": "C:\\Users\\PTCX1319\\Desktop\\test\\WorldGen\\VoronoiLib\\VoronoiLib.csproj",
         "projectName": "VoronoiLib",
-        "projectPath": "C:\\Users\\Loïc\\Desktop\\Projet\\worldgen\\VoronoiLib\\VoronoiLib.csproj",
-        "packagesPath": "C:\\Users\\Loïc\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Loïc\\Desktop\\Projet\\worldgen\\VoronoiLib\\obj\\",
+        "projectPath": "C:\\Users\\PTCX1319\\Desktop\\test\\WorldGen\\VoronoiLib\\VoronoiLib.csproj",
+        "packagesPath": "C:\\Users\\PTCX1319\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\PTCX1319\\Desktop\\test\\WorldGen\\VoronoiLib\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Microsoft\\Xamarin\\NuGet\\",
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
         "configFilePaths": [
-          "C:\\Users\\Loïc\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+          "C:\\Users\\PTCX1319\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netstandard1.1"

@@ -115,6 +115,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Classes\Kingdom.cs" />
+    <Compile Include="Classes\KingdomType.cs" />
     <Compile Include="Classes\Map.cs" />
     <Compile Include="Classes\Region.cs" />
     <Compile Include="MainWindow.xaml.cs">
