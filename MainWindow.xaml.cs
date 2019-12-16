@@ -22,7 +22,7 @@ namespace WorldGen
     public partial class MainWindow : Window
     {
         private bool delaunay = false;
-        private Map graph;
+        private World graph;
         public MainWindow()
         {
             InitializeComponent();
@@ -30,13 +30,13 @@ namespace WorldGen
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             this.WindowState = WindowState.Maximized;
-            graph = new Map((int)this.map.ActualWidth, (int)this.map.ActualHeight);
+            graph = new World((int)this.map.ActualWidth, (int)this.map.ActualHeight);
             this.imageMap.Source = graph.getVoronoiGraph(this.delaunay);
         }
 
         private void HamburgerMenuItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            graph = new Map((int)this.map.ActualWidth, (int)this.map.ActualHeight);
+            graph = new World((int)this.map.ActualWidth, (int)this.map.ActualHeight);
             this.imageMap.Source = graph.getVoronoiGraph(this.delaunay);
         }
 
@@ -99,6 +99,20 @@ namespace WorldGen
 
             if (graph != null)
                 imageMap.Source = graph.getVoronoiGraph(delaunay);
+        }
+
+        private void imageMap_ToolTip(object sender, MouseEventArgs e)
+        {
+            this.imageMap.Source = graph.getVoronoiGraph(e.GetPosition(this), delaunay);
+        }
+
+        private void Grid_MouseMove(object sender, MouseEventArgs e)
+        {
+        }
+
+        private void imageMap_MouseLeave(object sender, MouseEventArgs e)
+        {
+            imageMap.Source = graph.getVoronoiGraph(delaunay);
         }
     }
 }

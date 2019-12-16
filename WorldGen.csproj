@@ -114,9 +114,13 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Classes\Enum\KingdomNameGenerator.cs" />
+    <Compile Include="Classes\HistoricalEvenement.cs" />
+    <Compile Include="Classes\HistoricalPNJ.cs" />
     <Compile Include="Classes\Kingdom.cs" />
-    <Compile Include="Classes\KingdomType.cs" />
-    <Compile Include="Classes\Map.cs" />
+    <Compile Include="Classes\Enum\KingdomType.cs" />
+    <Compile Include="Classes\World.cs" />
+    <Compile Include="Classes\Pantheon.cs" />
     <Compile Include="Classes\Region.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -187,6 +191,11 @@
     <EmbeddedResource Include="Assets\gradient.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\cursor.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

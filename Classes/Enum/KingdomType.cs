@@ -11,6 +11,7 @@ namespace WorldGen.Classes.Enum
         Royaume,        // Dirigeant: Roi,                  Nom: Royaume de ----
         Empire,         // Dirigeant: Empereur,             Nom: L'empire <Nom de la race>
         Théocratie,     // Dirigeant: Grand pêtre/prophéte, Nom: L'ordre de <Nom de dieu> OU Nom aléatoire
-        Polysynodie     // Dirigeant: Le conseil,           Nom: Nom aléatoire
+        Polysynodie,    // Dirigeant: Le conseil,           Nom: Nom aléatoire
+        NULL
     }
 }

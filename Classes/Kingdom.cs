@@ -4,9 +4,13 @@ using System.Drawing;
 using WorldGen.Classes.Enum;
 using VoronoiLib;
 using VoronoiLib.Structures;
+using System.Windows;
 
 namespace WorldGen.Classes
-{
+{ 
+    /*
+     * Trouver l'équidistance entre chaque point
+     */
 
     public class Kingdom
     {
@@ -14,7 +18,7 @@ namespace WorldGen.Classes
         private string _name;
         private KingdomType _type;
         private Color _color;
-        private string _leader;
+        private string _leader; // Deviendra HistoricalPNJ
 
         public Kingdom(Region capital, Color color)
         {
@@ -22,8 +26,9 @@ namespace WorldGen.Classes
                 throw new Exception("La region fourni n'est pas une capitale.");
 
             this.Color = color;
-            this.Type = (KingdomType)new Random().Next(4);
-            this.Name = "Kingdom";
+            this.Type = (KingdomType)(new Random().Next(4));
+            this.Name = KingdomNameGenerator.genKingdomName();
+            MessageBox.Show(this.Name);
             this.Leader = "Roi";
 
             capital.Influence = 1;
