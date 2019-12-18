@@ -8,60 +8,84 @@
         mc:Ignorable="d"
         Title="WorldGen" Height="450" Width="800"
         Loaded="Window_Loaded" Cursor="Arrow" WindowStyle="None">
-    <Grid RenderTransformOrigin="0.498,0.481" MouseMove="Grid_MouseMove">
+    <Grid Name="app" RenderTransformOrigin="0.498,0.481" MouseMove="Grid_MouseMove">
         <hm:HamburgerMenu Name="menu"
                           HorizontalAlignment="Left" 
                           Background="#252525"  
                           MenuIconColor="White" 
                           SelectionIndicatorColor="White" Panel.ZIndex="10">
-            <hm:HamburgerMenuItem Text="test"/>
-            <hm:HamburgerMenuItem Icon="Assets/menu/new_map.png" Foreground="White" FontWeight="Bold" Text="New Map" MouseDoubleClick="HamburgerMenuItem_MouseDoubleClick" Selected="map_Selected"/>
-            <hm:HamburgerMenuItem Icon="Assets/menu/city.png" Foreground="White" FontWeight="Bold" Text="Ville" MouseDoubleClick="HamburgerMenuItem_MouseDoubleClick" Selected="city_Selected"/>
+            <hm:HamburgerMenuItem Icon="Assets/menu/new_map.png" Foreground="White" FontWeight="Bold" Text="Monde" Selected="Map_Selected"/>
+            <hm:HamburgerMenuItem Icon="Assets/menu/kingdom.png" Foreground="White" FontWeight="Bold" Text="Royaume" Selected="Kingdom_Selected"/>
+            <hm:HamburgerMenuItem Icon="Assets/menu/city.png" Foreground="White" FontWeight="Bold" Text="Ville" Selected="City_Selected"/>
             <hm:HamburgerMenuItem Icon="Assets/menu/off.png" Foreground="red" FontWeight="Bold" Text="Quitter" Selected="Exit_Selected"/>
         </hm:HamburgerMenu>
-        <Grid Name="map" Visibility="Visible" Margin="50,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center">
+        <Grid Name="map" Visibility="Hidden" Margin="50,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center">
             <Image Name="imageMap" 
                    Source="Assets/Image/map.jpg" 
                    Margin="0" 
                    Stretch="Fill"
-                   MouseMove="imageMap_ToolTip"
+                   MouseMove="ImageMap_ToolTip"
                    Cursor="Cross"
-                   MouseLeave="imageMap_MouseLeave"/>
-            <Button Click="delaunay_ON_OFF"
+                   MouseLeave="ImageMap_MouseLeave"/>
+            <Button Click="NewWorld"
+                    Opacity="0.75" 
+                    Content="Nouveau monde" 
+                    VerticalAlignment="Bottom" 
+                    HorizontalAlignment="Left"
+                    Width="100"
+                    Height="25"
+                    Margin="20,0,0,0"/>
+            <Button Click="Delaunay_ON_OFF"
                     Opacity="0.75" 
                     Content="Delaunay: OFF" 
-                    VerticalAlignment="Top" 
-                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom" 
+                    HorizontalAlignment="Left"
                     Width="100"
-                    Height="25"/>
-            <Button Click="voronoi_ON_OFF"
+                    Height="25"
+                    Margin="130,0,0,0"/>
+            <Button Click="Voronoi_ON_OFF"
                     Opacity="0.75" 
                     Content="Voronoi: ON" 
-                    VerticalAlignment="Top" 
-                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom" 
+                    HorizontalAlignment="Left"
                     Width="100"
                     Height="25"
-                    Margin="0,30,0,0"/>
-            <Button Click="sites_ON_OFF"
+                    Margin="240,0,0,0"/>
+            <Button Click="Sites_ON_OFF"
                     Opacity="0.75" 
                     Content="Royaume: OFF" 
-                    VerticalAlignment="Top" 
-                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom" 
+                    HorizontalAlignment="Left"
                     Width="100"
                     Height="25"
-                    Margin="0,60,0,0"/>
-            <Button Click="influence_ON_OFF"
+                    Margin="350,0,0,0"/>
+            <Button Click="Influence_ON_OFF"
                     Opacity="0.75" 
                     Content="Infuence: OFF" 
-                    VerticalAlignment="Top" 
-                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom" 
+                    HorizontalAlignment="Left"
                     Width="100"
                     Height="25"
-                    Margin="0,90,0,0"
-                    ToolTip="Test\nTest2"/>
+                    Margin="460,0,0,0"/>
         </Grid>
         <Grid Name="city" Visibility="Hidden" Margin="50,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Image Source="Assets/Image/city.jpg" Stretch="Fill"/>
+            <Image Name="backgroundCity" Source="Assets/Background/BackgroundCity-0.jpg" Stretch="Fill"/>
+        </Grid>
+        <Grid Name="kingdom" Visibility="Visible" Margin="50,0,0,0">
+            <Image Name="backgroundKingdom" Stretch="Fill" Margin="0"/>
+            <ComboBox x:Name="listKingdom" 
+                      SelectionChanged="Kingdom_SelectionChanged"
+                      Margin="10,5,0,0"
+                      HorizontalAlignment="Left"
+                      VerticalAlignment="Top" Width="300" Height="50" FontWeight="Bold" FontSize="24"/>
+            <Label Name="capitalName" Content="Label" HorizontalAlignment="Left" Height="35" Margin="10,60,0,0" VerticalAlignment="Top" Width="300" FontSize="18" FontWeight="Bold" Background="{x:Null}" Foreground="#FF040000"/>
+            <RichTextBox Name="affKingdom" HorizontalAlignment="Left" Height="333" Margin="10,100,0,0" VerticalAlignment="Top" Width="300">
+                <FlowDocument>
+                    <Paragraph>
+                        <Run Text="RichTextBox"/>
+                    </Paragraph>
+                </FlowDocument>
+            </RichTextBox>
         </Grid>
     </Grid>
 </Window>

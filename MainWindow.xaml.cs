@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HTMLConverter;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
@@ -22,7 +24,10 @@ namespace WorldGen
     public partial class MainWindow : Window
     {
         private bool delaunay = false;
-        private World graph;
+        private World _world;
+
+        public World World { get => _world; set => _world = value; }
+
         public MainWindow()
         {
             InitializeComponent();
@@ -30,14 +35,17 @@ namespace WorldGen
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             this.WindowState = WindowState.Maximized;
-            graph = new World((int)this.map.ActualWidth, (int)this.map.ActualHeight);
-            this.imageMap.Source = graph.getVoronoiGraph(this.delaunay);
+            World = new World((int)this.map.ActualWidth, (int)this.map.ActualHeight);
+            this.imageMap.Source = World.GetVoronoiGraph(this.delaunay);
+            this.listKingdom.ItemsSource = World.kingdoms;
+
+            this.GoTo(map);
         }
 
         private void HamburgerMenuItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            graph = new World((int)this.map.ActualWidth, (int)this.map.ActualHeight);
-            this.imageMap.Source = graph.getVoronoiGraph(this.delaunay);
+            World = new World((int)this.map.ActualWidth, (int)this.map.ActualHeight);
+            this.imageMap.Source = World.GetVoronoiGraph(this.delaunay);
         }
 
         private void Exit_Selected(object sender, RoutedEventArgs e)
@@ -49,70 +57,111 @@ namespace WorldGen
             }
         }
 
-        private void map_Selected(object sender, RoutedEventArgs e)
+        private void Map_Selected(object sender, RoutedEventArgs e)
         {
-            city.Visibility = Visibility.Hidden;
-            map.Visibility = Visibility.Visible;
+            this.GoTo(map);
         }
-        private void city_Selected(object sender, RoutedEventArgs e)
+        private void City_Selected(object sender, RoutedEventArgs e)
         {
-            city.Visibility = Visibility.Visible;
-            map.Visibility = Visibility.Hidden;
+            this.GoTo(city);
+
+            var r = new Random().Next(4);
+            var b = new BitmapImage(new Uri("Assets/Background/BackgroundCity-" + r + ".jpg", UriKind.Relative));
+            backgroundCity.Source = b;
+        }
+        private void Kingdom_Selected(object sender, RoutedEventArgs e)
+        {
+            this.GoTo(kingdom);
+            listKingdom.SelectedItem = World.kingdoms.First();
+            backgroundKingdom.Source = World.GetKingdomMap(listKingdom.SelectedItem.ToString());
+            SetKingdom(World.kingdoms.First());
         }
 
-        private void delaunay_ON_OFF(object sender, RoutedEventArgs e)
+        private void Delaunay_ON_OFF(object sender, RoutedEventArgs e)
         {
             Button btn = (Button) sender;
 
             delaunay = !delaunay;
             btn.Content = delaunay ? "Delaunay: ON" : "Delaunay: OFF";
             
-            if(graph != null)
-                imageMap.Source = graph.getVoronoiGraph(delaunay);
+            if(World != null)
+                imageMap.Source = World.GetVoronoiGraph(delaunay);
         }        
-        private void voronoi_ON_OFF(object sender, RoutedEventArgs e)
+        private void Voronoi_ON_OFF(object sender, RoutedEventArgs e)
         {
             Button btn = (Button) sender;
 
-            graph.voronoi = !graph.voronoi;
-            btn.Content = graph.voronoi ? "Voronoi: ON" : "Voronoi: OFF";
+            World.voronoi = !World.voronoi;
+            btn.Content = World.voronoi ? "Voronoi: ON" : "Voronoi: OFF";
 
-            if (graph != null)
-                imageMap.Source = graph.getVoronoiGraph(delaunay);
+            if (World != null)
+                imageMap.Source = World.GetVoronoiGraph(delaunay);
         }
-        private void sites_ON_OFF(object sender, RoutedEventArgs e)
+        private void Sites_ON_OFF(object sender, RoutedEventArgs e)
         {
             Button btn = (Button)sender;
 
-            graph.affSite = !graph.affSite;
-            btn.Content = graph.affSite ? "Royaume: ON" : "Royaume: OFF";
+            World.affSite = !World.affSite;
+            btn.Content = World.affSite ? "Royaume: ON" : "Royaume: OFF";
 
-            if (graph != null)
-                imageMap.Source = graph.getVoronoiGraph(delaunay);
+            if (World != null)
+                imageMap.Source = World.GetVoronoiGraph(delaunay);
         }
-        private void influence_ON_OFF(object sender, RoutedEventArgs e)
+        private void Influence_ON_OFF(object sender, RoutedEventArgs e)
         {
             Button btn = (Button)sender;
 
-            graph.influence = !graph.influence;
-            btn.Content = graph.influence ? "Influence: ON" : "Influence: OFF";
+            World.influence = !World.influence;
+            btn.Content = World.influence ? "Influence: ON" : "Influence: OFF";
 
-            if (graph != null)
-                imageMap.Source = graph.getVoronoiGraph(delaunay);
+            if (World != null)
+                imageMap.Source = World.GetVoronoiGraph(delaunay);
+        }
+        private void NewWorld(object sender, RoutedEventArgs e)
+        {
+            World = new World((int)this.map.ActualWidth, (int)this.map.ActualHeight);
+            this.imageMap.Source = World.GetVoronoiGraph(this.delaunay);
         }
 
-        private void imageMap_ToolTip(object sender, MouseEventArgs e)
+        private void ImageMap_ToolTip(object sender, MouseEventArgs e)
         {
-            this.imageMap.Source = graph.getVoronoiGraph(e.GetPosition(this), delaunay);
+            this.imageMap.Source = World.GetVoronoiGraph(e.GetPosition(this), delaunay);
         }
 
         private void Grid_MouseMove(object sender, MouseEventArgs e)
         {
         }
 
-        private void imageMap_MouseLeave(object sender, MouseEventArgs e)
+        private void ImageMap_MouseLeave(object sender, MouseEventArgs e)
         {
-            imageMap.Source = graph.getVoronoiGraph(delaunay);
+            imageMap.Source = World.GetVoronoiGraph(delaunay);
+        }
+    
+        private void GoTo(Grid g)
+        {
+            foreach (var elem in app.Children)
+            {
+                if (elem is Grid tmp)
+                {
+                    tmp.Visibility = Visibility.Hidden;
+                }
+            }
+            g.Visibility = Visibility.Visible;
+        }
+
+        private void Kingdom_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Kingdom selected = World.kingdoms.Where(k => k.Name == listKingdom.SelectedItem.ToString()).FirstOrDefault();
+            backgroundKingdom.Source = World.GetKingdomMap(selected.ToString());
+            SetKingdom(selected);
+        }
+    
+        private void SetKingdom(Kingdom kingdom)
+        {
+            capitalName.Content = "Capitale: " + kingdom.Capital.Name; 
+            var xaml = HtmlToXamlConverter.ConvertHtmlToXaml(kingdom.GetInfo(), true);
+            var flowDocument = XamlReader.Parse(xaml) as FlowDocument;
+            affKingdom.Document = flowDocument;
         }
     }
 }

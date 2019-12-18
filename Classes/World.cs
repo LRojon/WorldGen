@@ -23,11 +23,13 @@ using PixelFormat = System.Drawing.Imaging.PixelFormat;
 using Pen = System.Drawing.Pen;
 using Point = System.Drawing.Point;
 using Math = System.Math;
+using WorldGen.Classes.Enum;
 
 namespace WorldGen.Classes
 {
     public class World
     {
+        // Age du monde
         public List<FortuneSite> sites;
         public List<Region> cities;
         public List<Kingdom> kingdoms;
@@ -39,9 +41,7 @@ namespace WorldGen.Classes
         public bool affSite;
         public bool influence;
         private double[,] perlinMap;
-        private Bitmap map;
         private Bitmap mapPerlin;
-        private float ratio;
         public string name;
 
         public World()
@@ -55,13 +55,12 @@ namespace WorldGen.Classes
             this.cities = new List<Region>();
             this.kingdoms = new List<Kingdom>();
             this.colors = new List<Color>();
-            this.voronoi = true;
-            this.affSite = false;
+            this.voronoi = false;
+            this.affSite = true;
             this.influence = false;
 
             this.mapHeight = heightArea;
             this.mapWidth = widthArea;
-            this.ratio = (int)(this.mapWidth / this.mapHeight);
             Random rand = new Random();
             int nbSite = widthArea * heightArea / 1000; // default: /400
             this.perlinMap = new double[widthArea, heightArea];
@@ -73,28 +72,38 @@ namespace WorldGen.Classes
             this.colors.Add(Color.Gray);
             this.colors.Add(Color.Cyan);
 
-            Perlin p = new Perlin();
-            p.Persistence = 0.65;
-            p.Frequency = .003333;
-            p.OctaveCount = 8;
-            p.Seed = /*628594615;*/new Random().Next(999999999);
+            Perlin p = new Perlin
+            {
+                Persistence = 0.65,
+                Frequency = .003333,
+                OctaveCount = 8,
+                Seed = /*628594615;*/new Random().Next(999999999)
+            };
 
             for (int i = 0; i < widthArea; i++)
             {
                 for (int j = 0; j < heightArea; j++)
                 {
-                    var tmp = p.GetValue(i, j, 0);
                     perlinMap[i, j] = p.GetValue(i, j, 0);
                 }
             }
 
             for (int i = 0; i < nbSite; i++)
             {
-                var tmp = new Region(rand.NextDouble() * widthArea, rand.NextDouble() * heightArea, perlinMap);
+                double cadre = 50d;
+                var x = rand.NextDouble() * widthArea;
+                var y = rand.NextDouble() * heightArea;
+                var tmp = new Region(x, y, perlinMap);
+                if (!(x < this.mapWidth - cadre && x > cadre &&
+                    y < this.mapHeight - cadre && y > cadre))
+                {
+                    tmp.City = false;
+                }
                 sites.Add(tmp);
                 if (tmp.City)
                     cities.Add(tmp);
             }
+
             this.vedges = FortunesAlgorithm.Run(ref sites, 0, 0, widthArea, heightArea);
 
             if (cities.Count > 0)
@@ -108,13 +117,28 @@ namespace WorldGen.Classes
                         var r = new Random().Next(this.colors.Count);
                         tmp.Capital = true;
                         this.kingdoms.Add(new Kingdom(tmp, this.colors.ElementAt(r)));
+                        tmp.GenRegion();
                         this.colors.RemoveAt(r);
                         nbCapital--;
                     }
                 }
+
+                List<string> verifKingdomName = new List<string>();
+                foreach (Kingdom k in this.kingdoms)
+                {
+                    if (verifKingdomName.Contains(k.Name))
+                        k.Name = NameGenerator.GenKingdomName();
+
+                    verifKingdomName.Add(k.Name);
+                    k.Purge();
+                }
             }
 
-            // Génération de la liste des villes, et de la capital
+            foreach(Region c in cities)
+            {
+                if (!c.Capital)
+                    c.GenRegion();
+            }
 
             foreach (FortuneSite site in sites)
             {
@@ -133,7 +157,7 @@ namespace WorldGen.Classes
             }
         }
 
-        public ImageSource getVoronoiGraph(bool delaunay = false)
+        public ImageSource GetVoronoiGraph(bool delaunay = false)
         {
             Image img = Image.FromFile("Assets\\gradient.bmp");
             Bitmap gradient = new Bitmap(img);
@@ -257,10 +281,9 @@ namespace WorldGen.Classes
                 }
             }
 
-            this.map = bmp;
             return ImageSourceFromBitmap(bmp);
         }
-        public ImageSource getVoronoiGraph(System.Windows.Point position,bool delaunay = false)
+        public ImageSource GetVoronoiGraph(System.Windows.Point position,bool delaunay = false)
         {
 
             if (mapPerlin == null)
@@ -411,7 +434,99 @@ namespace WorldGen.Classes
                 }
             }
 
-            this.map = bmp;
+            return ImageSourceFromBitmap(bmp);
+        }
+        public ImageSource GetKingdomMap(string kingdomName)
+        {
+            if (mapPerlin == null)
+            {
+                Image img = Image.FromFile("Assets\\gradient.bmp");
+                Bitmap gradient = new Bitmap(img);
+                mapPerlin = new Bitmap(mapWidth, mapHeight);
+                for (int i = 0; i < mapWidth; i++)
+                {
+                    for (int j = 0; j < mapHeight; j++)
+                    {
+                        double value = perlinMap[i, j];
+                        double y = (value + 1 > 2 ? 2 : (value + 1 < 0 ? 0 : value + 1));
+                        int lvl = (int)((y / 2) * 255);
+                        Color c = gradient.GetPixel(lvl, 0);
+                        mapPerlin.SetPixel(i, j, c);
+                    }
+                }
+            }
+            Bitmap bmp = new Bitmap(mapPerlin);
+
+            Kingdom currentK = this.kingdoms.Where(e => e.Name == kingdomName).First();
+
+            using (Graphics g = Graphics.FromImage(bmp))
+            {
+                List<Point> frontier = new List<Point>();
+                foreach (Region site in currentK.regions)
+                {
+                    List<VEdge> tmp = new List<VEdge>();
+                    int i = 0;
+                    tmp.Add(site.Cell.First());
+                    site.Cell.Remove(site.Cell.First());
+                    while (!site.Cell.IsEmpty() && i < site.Cell.Count)
+                    {
+                        VEdge ve = site.Cell.ElementAt(i);
+                        VEdge t = tmp.Last();
+                        if (t.End == ve.Start)
+                        {
+                            tmp.Add(ve);
+                            site.Cell.Remove(ve);
+                            i = 0;
+                        }
+                        else if (t.End == ve.End)
+                        {
+                            VPoint vp = ve.End;
+                            ve.End = ve.Start;
+                            ve.Start = vp;
+
+                            tmp.Add(ve);
+                            site.Cell.Remove(ve);
+                            i = 0;
+                        }
+                        else
+                        {
+                            i++;
+                        }
+                    }
+                    site.Cell = tmp;
+
+                    List<Point> points = new List<Point>();
+                    foreach (var edge in site.Cell)
+                    {
+                        points.Add(new Point((int)edge.Start.X, (int)edge.Start.Y));
+                        points.Add(new Point((int)edge.End.X, (int)edge.End.Y));
+                    }
+
+                    Point[] tab = points.ToArray();
+                    Color color = Color.FromArgb(150,
+                        site.Kingdom.Color.R,
+                        site.Kingdom.Color.G,
+                        site.Kingdom.Color.B);
+
+
+                    g.FillPolygon(new SolidBrush(color), tab);
+
+                    if (site.City)
+                    {
+                        if (!site.Capital)
+                            g.FillEllipse(new SolidBrush(Color.White),
+                                (float)(site.X - 2), (float)(site.Y - 2),
+                                5f, 5f);
+                        else
+                            g.FillEllipse(new SolidBrush(Color.Yellow),
+                                (float)(site.X - 2), (float)(site.Y - 2),
+                                5f, 5f);
+                    }
+                }
+
+                g.FillRectangle(new SolidBrush(Color.FromArgb(50, 255, 255, 255)), 0, 0, this.mapWidth, this.mapHeight);
+            }
+
             return ImageSourceFromBitmap(bmp);
         }
 
@@ -435,9 +550,7 @@ namespace WorldGen.Classes
             this.affSite = false;
             this.influence = false;
             this.perlinMap =null;
-            this.map = null;
             this.mapPerlin = null;
-            this.ratio = 0;
             this.name = "";
         }
     }
@@ -445,10 +558,6 @@ namespace WorldGen.Classes
 
 // Voir pour déplacer la carte.
 // Voir pour mettre le zoom via un slider
-/*
- * Sur un evenement mouse left button hold/cilck, déplacer le x,y en fonction du delta de la souris
- * ou le width, height si x,y == 0,0
- */
 /*
  * Pour avoir les frontiers des pays, tester sur toutes les arrete des cellules. 
  * Et supprimer celles qui sont en double laisse les arretes unique.

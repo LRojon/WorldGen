@@ -9,7 +9,7 @@ using System.Windows;
 namespace WorldGen.Classes
 { 
     /*
-     * Trouver l'équidistance entre chaque point
+     * Race dominante
      */
 
     public class Kingdom
@@ -18,29 +18,42 @@ namespace WorldGen.Classes
         private string _name;
         private KingdomType _type;
         private Color _color;
+        private Region _capital;
         private string _leader; // Deviendra HistoricalPNJ
+        private RaceDominante _race;
+        private int _money;
+        private int _citizen;
+        private Dictionary<RaceDominante, int> _distribution = new Dictionary<RaceDominante, int>();
 
         public Kingdom(Region capital, Color color)
         {
             if(!capital.Capital)
                 throw new Exception("La region fourni n'est pas une capitale.");
 
-            this.Color = color;
-            this.Type = (KingdomType)(new Random().Next(4));
-            this.Name = KingdomNameGenerator.genKingdomName();
-            MessageBox.Show(this.Name);
-            this.Leader = "Roi";
+            Random r = new Random();
 
+            this.Color = color;
+            this.Type = (KingdomType)(r.Next(4));
+            this.Name = NameGenerator.GenKingdomName(r.Next(99999) + color.R + color.B + color.G);
+            this.Leader = "Roi";
+            this.Race = (RaceDominante)r.Next(5);
+
+            this.Capital = capital;
             capital.Influence = 1;
-            createKingdom(capital);
+            CreateKingdom(capital);
         }
 
         public string Name { get => _name; set => _name = value; }
         public Color Color { get => _color; set => _color = value; }
         public KingdomType Type { get => _type; set => _type = value; }
         public string Leader { get => _leader; set => _leader = value; }
+        public Region Capital { get => _capital; set => _capital = value; }
+        public RaceDominante Race { get => _race; set => _race = value; }
+        public int Money { get => _money; set => _money = value; }
+        public int Citizen { get => _citizen; set => _citizen = value; }
+        public Dictionary<RaceDominante, int> Distribution { get => _distribution; set => _distribution = value; }
 
-        private void createKingdom(Region current)
+        private void CreateKingdom(Region current)
         {
             if (current.Influence >= 0.1)
             {
@@ -51,10 +64,66 @@ namespace WorldGen.Classes
                     if (neighbor.Influence < current.Influence - 0.1)
                     {
                         neighbor.Influence = current.Influence - 0.1;
-                        createKingdom(neighbor);
+                        CreateKingdom(neighbor);
                     }
                 }
             }
+        }
+
+        public void Purge()
+        {
+            List<Region> tmp = new List<Region>();
+            foreach(Region r in this.regions)
+            {
+                if(!tmp.Contains(r) && r.Kingdom == this)
+                {
+                    tmp.Add(r);
+                }
+            }
+            this.regions = tmp;
+        }
+
+
+        public string GetInfo()
+        {
+            string tmp = "  <table>" +
+                "               <tr><th>Population</th><th>Argent</th></tr>" +
+                "               <tr><td>"+ this.Citizen + "</td><td>" + this.Money + " PO</td></tr>" +
+                "               <tr><td></td><td></td></tr>";
+            foreach(KeyValuePair<RaceDominante, int> kvp in this.Distribution)
+            {
+                string race = "";
+                switch(kvp.Key)
+                {
+                    case RaceDominante.Elfe_sylvain:
+                        race = "Elfe Sylvain";
+                        break;
+                    case RaceDominante.Gnome:
+                        race = "Gnome";
+                        break;
+                    case RaceDominante.Haut_elfe:
+                        race = "Haut Elfe";
+                        break;
+                    case RaceDominante.Humain:
+                        race = "Humain";
+                        break;
+                    case RaceDominante.Nain:
+                        race = "Nain";
+                        break;
+                    case RaceDominante.Autres:
+                        race = "Autres";
+                        break;
+                }
+                tmp += "<tr><td>" + kvp.Value + "</td><td>" + race + "</td></tr>";
+            }
+
+            tmp += "</table>";
+
+            return tmp;
+        }
+        public override string ToString()
+        {
+            return this.Name;
         }
     }
 }
