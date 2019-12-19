@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Drawing;
 using WorldGen.Classes.Enum;
 using VoronoiLib;
 using VoronoiLib.Structures;
 using System.Windows;
+using System.Globalization;
 
 namespace WorldGen.Classes
 { 
@@ -24,8 +26,9 @@ namespace WorldGen.Classes
         private int _money;
         private int _citizen;
         private Dictionary<RaceDominante, int> _distribution = new Dictionary<RaceDominante, int>();
+        private God _god;
 
-        public Kingdom(Region capital, Color color)
+        public Kingdom(Region capital, Color color, Pantheon pantheon)
         {
             if(!capital.Capital)
                 throw new Exception("La region fourni n'est pas une capitale.");
@@ -37,6 +40,9 @@ namespace WorldGen.Classes
             this.Name = NameGenerator.GenKingdomName(r.Next(99999) + color.R + color.B + color.G);
             this.Leader = "Roi";
             this.Race = (RaceDominante)r.Next(5);
+
+            if (this.Type == KingdomType.Théocratie)
+                this.God = pantheon.Gods.ElementAt(r.Next(pantheon.Gods.Count));
 
             this.Capital = capital;
             capital.Influence = 1;
@@ -52,6 +58,7 @@ namespace WorldGen.Classes
         public int Money { get => _money; set => _money = value; }
         public int Citizen { get => _citizen; set => _citizen = value; }
         public Dictionary<RaceDominante, int> Distribution { get => _distribution; set => _distribution = value; }
+        internal God God { get => _god; set => _god = value; }
 
         private void CreateKingdom(Region current)
         {
@@ -86,10 +93,8 @@ namespace WorldGen.Classes
 
         public string GetInfo()
         {
-            string tmp = "  <table>" +
-                "               <tr><th>Population</th><th>Argent</th></tr>" +
-                "               <tr><td>"+ this.Citizen + "</td><td>" + this.Money + " PO</td></tr>" +
-                "               <tr><td></td><td></td></tr>";
+            string tmp = "Argent: " + this.Money.ToString("N0", CultureInfo.CreateSpecificCulture("ru-RU")) + " PO<br>" +
+                "Population: " + this.Citizen.ToString("N0", CultureInfo.CreateSpecificCulture("ru-RU")) + "<br>";
             foreach(KeyValuePair<RaceDominante, int> kvp in this.Distribution)
             {
                 string race = "";
@@ -114,13 +119,12 @@ namespace WorldGen.Classes
                         race = "Autres";
                         break;
                 }
-                tmp += "<tr><td>" + kvp.Value + "</td><td>" + race + "</td></tr>";
+                tmp += kvp.Value.ToString("N0", CultureInfo.CreateSpecificCulture("ru-RU")) + " " + race + "<br>";
             }
-
-            tmp += "</table>";
-
+            
             return tmp;
         }
+        
         public override string ToString()
         {
             return this.Name;

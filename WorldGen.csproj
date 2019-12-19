@@ -117,6 +117,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Classes\Dungeon.cs" />
     <Compile Include="Classes\Enum\CitySize.cs" />
     <Compile Include="Classes\Enum\NameGenerator.cs" />
     <Compile Include="Classes\Enum\Race.cs" />
@@ -158,9 +159,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\menu\new_map.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\menu\off.png" />
@@ -216,6 +214,22 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Background\BackgroundCity-3.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\menu\map.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\menu\bars.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\menu\temple.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Background\BackgroundTemple.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

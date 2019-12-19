@@ -14,7 +14,9 @@ namespace WorldGen.Classes
         private bool _city;
         private bool _capital;
         private double _influence;
+        private double _godInfluence;
         private Kingdom _kingdom;
+        private God _god;
         private string _name;
         private CitySize _size;
         private int _money;
@@ -38,6 +40,8 @@ namespace WorldGen.Classes
         public int Money { get => _money; set => _money = value; }
         public int Citizen { get => _citizen; set => _citizen = value; }
         public Dictionary<RaceDominante, double> Distribution { get => _distribution; set => _distribution = value; }
+        public double GodInfluence { get => _godInfluence; set => _godInfluence = value; }
+        internal God God { get => _god; set => _god = value; }
 
         public Region(double x, double y, double[,] perlin) : base(x, y)
         {
@@ -51,15 +55,19 @@ namespace WorldGen.Classes
             this.Influence = 0;
         }
 
-        public void GenRegion()
+        public void GenRegion(int seed = 0)
         {
             if (this.City)
             {
-                Random r = new Random();
+                Random r;
+                if (seed == 0)
+                    r = new Random();
+                else
+                    r = new Random(seed);
                 if (this.Capital)
                 {
-                    int seed = (int)(this.Height * 10.78) + r.Next(99999);
-                    this.Name = NameGenerator.GenCapitalName(seed);
+                    int s = (int)(this.Height * 10.78) + r.Next(99999);
+                    this.Name = NameGenerator.GenCapitalName(s);
                     this.Size = CitySize.Capitale;
                 }
                 else

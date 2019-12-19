@@ -134,6 +134,49 @@ namespace WorldGen.Classes.Enum
             "gan",
         };
 
+        private static readonly string[] GodSyllabe =
+        {
+            "sees",
+            "dhya",
+            "qhet",
+            "aen",
+            "cogt",
+            "uien",
+            "nud",
+            "uzotl",
+            "sit",
+            "dhad",
+            "phet",
+            "ub",
+            "dhi",
+            "zex",
+            "vusm",
+            "qad",
+            "xad",
+            "larz",
+            "ar",
+            "ehd"
+        };
+        private static readonly string[] GodTerm =
+        {
+            "is",
+            "is",
+            "is",
+            "is",
+            "in",
+            "in",
+            "is",
+            "ite",
+            "lan",
+            "nir",
+            "ion",
+            "os",
+            "all",
+            "otl",
+            "os",
+            "all"
+        };
+
         public static string GenKingdomName(int seed = 0)
         {
             Random r;
@@ -197,6 +240,25 @@ namespace WorldGen.Classes.Enum
         public static string GenCityName()
         {
             return "";
+        }
+
+        public static string GenGodName(int seed = 0)
+        {
+            Random r;
+            if (seed == 0)
+                r = new Random();
+            else
+                r = new Random(seed);
+            int nbSyl = r.Next(1, 3);
+            string tmp = "";
+            if (nbSyl == 1)
+                tmp = GodSyllabe[r.Next(GodSyllabe.Length)];
+            if (nbSyl == 2)
+                tmp = GodSyllabe[r.Next(GodSyllabe.Length)] + GodTerm[r.Next(GodTerm.Length)];
+            if (nbSyl == 3)
+                tmp = GodSyllabe[r.Next(GodSyllabe.Length)] + GodSyllabe[new Random(r.Next(999999)).Next(GodSyllabe.Length)] + GodTerm[r.Next(GodTerm.Length)];
+
+            return Convert.ToChar(tmp[0] - 32) + tmp.Substring(1, tmp.Length - 1); ;
         }
     }
 }

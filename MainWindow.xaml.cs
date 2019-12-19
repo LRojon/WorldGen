@@ -25,6 +25,7 @@ namespace WorldGen
     {
         private bool delaunay = false;
         private World _world;
+        private ImageSource backPantheon;
 
         public World World { get => _world; set => _world = value; }
 
@@ -38,6 +39,8 @@ namespace WorldGen
             World = new World((int)this.map.ActualWidth, (int)this.map.ActualHeight);
             this.imageMap.Source = World.GetVoronoiGraph(this.delaunay);
             this.listKingdom.ItemsSource = World.kingdoms;
+            pantheonContent.ItemsSource = World.pantheon.Gods;
+            this.backPantheon = backgroundPantheon.Source;
 
             this.GoTo(map);
         }
@@ -75,6 +78,11 @@ namespace WorldGen
             listKingdom.SelectedItem = World.kingdoms.First();
             backgroundKingdom.Source = World.GetKingdomMap(listKingdom.SelectedItem.ToString());
             SetKingdom(World.kingdoms.First());
+        }
+        private void Pantheon_Selected(object sender, RoutedEventArgs e)
+        {
+            this.GoTo(pantheon);
+            pantheonContent.SelectedItem = World.pantheon.Gods.First();
         }
 
         private void Delaunay_ON_OFF(object sender, RoutedEventArgs e)
@@ -121,6 +129,7 @@ namespace WorldGen
         {
             World = new World((int)this.map.ActualWidth, (int)this.map.ActualHeight);
             this.imageMap.Source = World.GetVoronoiGraph(this.delaunay);
+            this.listKingdom.ItemsSource = World.kingdoms;
         }
 
         private void ImageMap_ToolTip(object sender, MouseEventArgs e)
@@ -158,10 +167,36 @@ namespace WorldGen
     
         private void SetKingdom(Kingdom kingdom)
         {
-            capitalName.Content = "Capitale: " + kingdom.Capital.Name; 
+            affKingdom.Height = kingdom.Distribution.Count * 40;
+            capitalName.Content = "Capitale: " + kingdom.Capital.Name;
             var xaml = HtmlToXamlConverter.ConvertHtmlToXaml(kingdom.GetInfo(), true);
             var flowDocument = XamlReader.Parse(xaml) as FlowDocument;
             affKingdom.Document = flowDocument;
+            kingdomType.Content = kingdom.Type + (kingdom.Type == Classes.Enum.KingdomType.Théocratie ? ": " + kingdom.God.ToString() : "" );
+        }
+
+        private void Menu_Click(object sender, RoutedEventArgs e)
+        {
+            if (subMenuMap.Visibility == Visibility.Visible)
+                subMenuMap.Visibility = Visibility.Hidden;
+            else
+                subMenuMap.Visibility = Visibility.Visible;
+        }
+
+        private void PantheonContent_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            God selected = World.pantheon.Gods.Where(g => g.ToString() == pantheonContent.SelectedItem.ToString()).FirstOrDefault();
+            if (!selected.Forgot)
+                backgroundPantheon.Source = World.GetGodMap(selected.ToString());
+            else
+                backgroundPantheon.Source = this.backPantheon;
+            SetGod(selected);
+        }
+
+        private void SetGod(God god)
+        {
+            nbRegion.Content = god.Followers.Count;
+            nbFollower.Content = god.Followers.Sum(r => r.Citizen);
         }
     }
 }

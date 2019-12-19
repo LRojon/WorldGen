@@ -35,6 +35,7 @@ namespace WorldGen.Classes
         public List<Kingdom> kingdoms;
         private LinkedList<VEdge> vedges;
         private List<Color> colors;
+        public Pantheon pantheon;
         private int mapWidth;
         private int mapHeight;
         public bool voronoi;
@@ -58,6 +59,7 @@ namespace WorldGen.Classes
             this.voronoi = false;
             this.affSite = true;
             this.influence = false;
+            this.pantheon = new Pantheon();
 
             this.mapHeight = heightArea;
             this.mapWidth = widthArea;
@@ -104,41 +106,81 @@ namespace WorldGen.Classes
                     cities.Add(tmp);
             }
 
+            if (this.cities.Count == 0)
+            {
+                this.Empty();
+                goto regen;
+            }
+
             this.vedges = FortunesAlgorithm.Run(ref sites, 0, 0, widthArea, heightArea);
 
-            if (cities.Count > 0)
+            // Génération Pays
+            int nbCapital = 5;
+            while (nbCapital > 0)
             {
-                int nbCapital = 5;
-                while (nbCapital > 0)
+                var tmp = cities.ElementAt(new Random().Next(cities.Count));
+                if (!tmp.Capital)
                 {
-                    var tmp = cities.ElementAt(new Random().Next(cities.Count));
-                    if (!tmp.Capital)
-                    {
-                        var r = new Random().Next(this.colors.Count);
-                        tmp.Capital = true;
-                        this.kingdoms.Add(new Kingdom(tmp, this.colors.ElementAt(r)));
-                        tmp.GenRegion();
-                        this.colors.RemoveAt(r);
-                        nbCapital--;
-                    }
-                }
-
-                List<string> verifKingdomName = new List<string>();
-                foreach (Kingdom k in this.kingdoms)
-                {
-                    if (verifKingdomName.Contains(k.Name))
-                        k.Name = NameGenerator.GenKingdomName();
-
-                    verifKingdomName.Add(k.Name);
-                    k.Purge();
+                    var r = new Random().Next(this.colors.Count);
+                    tmp.Capital = true;
+                    this.kingdoms.Add(new Kingdom(tmp, this.colors.ElementAt(r), this.pantheon));
+                    tmp.GenRegion(r + this.colors.ElementAt(r).ToArgb());
+                    this.colors.RemoveAt(r);
+                    nbCapital--;
                 }
             }
 
+            List<string> verifKingdomName = new List<string>();
+            foreach (Kingdom k in this.kingdoms)
+            {
+                if (verifKingdomName.Contains(k.Name))
+                    k.Name = NameGenerator.GenKingdomName();
+
+                verifKingdomName.Add(k.Name);
+                k.Purge();
+            }
+
+            int n = 0;
             foreach(Region c in cities)
             {
                 if (!c.Capital)
-                    c.GenRegion();
+                    c.GenRegion(new Random().Next(999999) + n);
+
+                n++;
             }
+
+            //Génération des religions
+            var pTmp = this.pantheon.Gods.Where(g => !g.Forgot).ToList();
+            foreach (Kingdom k in this.kingdoms.Where(e => e.Type == KingdomType.Théocratie))
+            {
+                var id = rand.Next(pTmp.Count);
+
+                var r = pTmp.ElementAt(id);
+
+                k.God = r;
+                r.Capitale = k.Capital;
+
+                foreach(Region region in k.regions)
+                {
+                    region.GodInfluence = 1;
+                    r.Followers.Add(region);
+                    region.God = r;
+                }
+
+                pTmp.RemoveAt(id);
+            }
+
+            foreach (God g in pTmp)
+            {
+                var tmp = this.cities.Where(c => c.Kingdom != null ? c.Kingdom.Type != KingdomType.Théocratie : true).ToList();
+                var r = tmp.ElementAt(rand.Next(tmp.Count));
+                r.GodInfluence = 1;
+                r.God = g;
+                g.Capitale = r;
+                g.Followers.Add(r);
+            }
+
+            // foreach region avec 1 de GodInfluence expendre en -0.1 jusqu'a rencontrer une influence equivalente ou atteindre 0.1
 
             foreach (FortuneSite site in sites)
             {
@@ -150,11 +192,6 @@ namespace WorldGen.Classes
                 }
             }
 
-            if (this.cities.Count == 0)
-            {
-                this.Empty();
-                goto regen;
-            }
         }
 
         public ImageSource GetVoronoiGraph(bool delaunay = false)
@@ -528,6 +565,105 @@ namespace WorldGen.Classes
             }
 
             return ImageSourceFromBitmap(bmp);
+        }
+        public ImageSource GetGodMap(string godString)
+        {
+            God currentG = this.pantheon.Gods.Where(e => e.ToString() == godString).First();
+            if (!currentG.Forgot)
+            {
+                if (mapPerlin == null)
+                {
+                    Image img = Image.FromFile("Assets\\gradient.bmp");
+                    Bitmap gradient = new Bitmap(img);
+                    mapPerlin = new Bitmap(mapWidth, mapHeight);
+                    for (int i = 0; i < mapWidth; i++)
+                    {
+                        for (int j = 0; j < mapHeight; j++)
+                        {
+                            double value = perlinMap[i, j];
+                            double y = (value + 1 > 2 ? 2 : (value + 1 < 0 ? 0 : value + 1));
+                            int lvl = (int)((y / 2) * 255);
+                            Color c = gradient.GetPixel(lvl, 0);
+                            mapPerlin.SetPixel(i, j, c);
+                        }
+                    }
+                }
+                Bitmap bmp = new Bitmap(mapPerlin);
+
+
+                using (Graphics g = Graphics.FromImage(bmp))
+                {
+                    foreach (Region site in currentG.Followers)
+                    {
+                        List<VEdge> tmp = new List<VEdge>();
+                        int i = 0;
+                        tmp.Add(site.Cell.First());
+                        site.Cell.Remove(site.Cell.First());
+                        while (!site.Cell.IsEmpty() && i < site.Cell.Count)
+                        {
+                            VEdge ve = site.Cell.ElementAt(i);
+                            VEdge t = tmp.Last();
+                            if (t.End == ve.Start)
+                            {
+                                tmp.Add(ve);
+                                site.Cell.Remove(ve);
+                                i = 0;
+                            }
+                            else if (t.End == ve.End)
+                            {
+                                VPoint vp = ve.End;
+                                ve.End = ve.Start;
+                                ve.Start = vp;
+
+                                tmp.Add(ve);
+                                site.Cell.Remove(ve);
+                                i = 0;
+                            }
+                            else
+                            {
+                                i++;
+                            }
+                        }
+                        site.Cell = tmp;
+
+                        List<Point> points = new List<Point>();
+                        foreach (var edge in site.Cell)
+                        {
+                            points.Add(new Point((int)edge.Start.X, (int)edge.Start.Y));
+                            points.Add(new Point((int)edge.End.X, (int)edge.End.Y));
+                        }
+
+                        Point[] tab = points.ToArray();
+                        Color color = Color.FromArgb((int)(site.GodInfluence * 255),
+                            site.God.Color.R,
+                            site.God.Color.G,
+                            site.God.Color.B);
+
+
+                        g.FillPolygon(new SolidBrush(color), tab);
+
+                        if (site.City)
+                        {
+                            if (site == site.God.Capitale)
+                                g.FillEllipse(new SolidBrush(Color.White),
+                                    (float)(site.X - 2), (float)(site.Y - 2),
+                                    5f, 5f);
+                            else
+                                g.FillEllipse(new SolidBrush(Color.Yellow),
+                                    (float)(site.X - 2), (float)(site.Y - 2),
+                                    5f, 5f);
+                        }
+                    }
+
+                    g.FillRectangle(new SolidBrush(Color.FromArgb(50, 255, 255, 255)), 0, 0, this.mapWidth, this.mapHeight);
+                }
+
+                return ImageSourceFromBitmap(bmp);
+            }
+            else
+            {
+                return this.ImageSourceFromBitmap((Bitmap)Bitmap.FromFile("Assets/Background/BackgroundTemple.jpg"));
+            }
         }
 
         private ImageSource ImageSourceFromBitmap(Bitmap bmp)
