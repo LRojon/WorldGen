@@ -159,13 +159,9 @@ namespace WorldGen.Classes
 
                 k.God = r;
                 r.Capitale = k.Capital;
-
-                foreach(Region region in k.regions)
-                {
-                    region.GodInfluence = 1;
-                    r.Followers.Add(region);
-                    region.God = r;
-                }
+                r.Followers.Add(k.Capital);
+                k.Capital.God = r;
+                k.Capital.GodInfluence = 1;
 
                 pTmp.RemoveAt(id);
             }
@@ -181,6 +177,15 @@ namespace WorldGen.Classes
             }
 
             // foreach region avec 1 de GodInfluence expendre en -0.1 jusqu'a rencontrer une influence equivalente ou atteindre 0.1
+
+            foreach(Region r in this.sites)
+            {
+                if (r.GodInfluence == 1)
+                {
+                    var g = this.pantheon.Gods.Where(e => e == r.God).FirstOrDefault();
+                    g.GenInfluence(r);
+                }
+            }
 
             foreach (FortuneSite site in sites)
             {
@@ -346,10 +351,10 @@ namespace WorldGen.Classes
             using (Graphics g = Graphics.FromImage(bmp))
             {
                 int seed = -1;
-                Region info = null;
+                Region info = (Region)this.sites.First();
                 double distMin = this.mapWidth*2;
                 
-                foreach (Region site in sites)
+                foreach (Region site in this.sites)
                 {
                     seed++;
 
@@ -446,18 +451,22 @@ namespace WorldGen.Classes
                 if (info != null)
                 {
                     string kName = "";
-                    if (info.Kingdom != null)
-                        kName = info.Kingdom.Name;
-                    else
+                    if (info.Kingdom == null)
                         kName = "Terres indompté";
+                    else
+                        kName = info.Kingdom.Name;
 
                     Font font = new Font(System.Drawing.FontFamily.GenericMonospace, 12f, GraphicsUnit.Pixel);
 
-                    g.FillRectangle(new SolidBrush(Color.White), (float)(position.X), (float)(position.Y - 10), kName.Length*7.5f, font.Size + 2);
+                    var width = kName.Length * 7.5f;
+
+                    g.FillRectangle(new SolidBrush(Color.White), 
+                        (position.X < this.mapWidth - width ? (float)(position.X) : (float)(position.X - width*2)), 
+                        (float)(position.Y - 10), width, font.Size + 2);
                     g.DrawString(kName,
                         font,
                         new SolidBrush(Color.Black),
-                        (float)(position.X), (float)(position.Y-10));
+                        (position.X < this.mapWidth - width ? (float)(position.X) : (float)(position.X - width*2)), (float)(position.Y-10));
                 }
 
                 if (voronoi)
@@ -634,7 +643,7 @@ namespace WorldGen.Classes
                         }
 
                         Point[] tab = points.ToArray();
-                        Color color = Color.FromArgb((int)(site.GodInfluence * 255),
+                        Color color = Color.FromArgb(150,
                             site.God.Color.R,
                             site.God.Color.G,
                             site.God.Color.B);

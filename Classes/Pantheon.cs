@@ -109,6 +109,33 @@ namespace WorldGen.Classes
                 r.Next(256));
         }
 
+        // foreach region avec 1 de GodInfluence expendre en -0.1 jusqu'a rencontrer une influence equivalente ou atteindre 0.1
+        public void GenInfluence(Region r)
+        {
+            double seuil;
+            if (r.Kingdom != null && r.Kingdom.Type == KingdomType.Théocratie)
+                seuil = 0.05;
+            else
+                seuil = 0.1;
+
+            if (r.GodInfluence >= seuil)
+            {
+                if(r.God != null)
+                    r.God.Followers.Remove(r);
+
+                r.God = this;
+                this.Followers.Add(r);
+                foreach (Region neighbor in r.Neighbors)
+                {
+                    if (neighbor.GodInfluence < r.GodInfluence - seuil)
+                    {
+                        neighbor.GodInfluence = r.GodInfluence - seuil;
+                        GenInfluence(neighbor);
+                    }
+                }
+            }
+        }
+
         public override string ToString()
         {
             return this.Name + ", " + (this.Sexe ?  (this.Forgot ? "Dieu oublié " : "Dieu ") : (this.Forgot ? "Déesse oubliée " : "Déesse ")) + this.Title;

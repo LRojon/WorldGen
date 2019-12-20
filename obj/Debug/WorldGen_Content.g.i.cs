@@ -8,6 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("assets/background/backgroundtemple.jpg")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("load.gif")]
 
 

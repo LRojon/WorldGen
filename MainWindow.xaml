@@ -1,6 +1,7 @@
 ﻿<Window x:Class="WorldGen.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:gif="http://wpfanimatedgif.codeplex.com"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WorldGen"
@@ -20,7 +21,7 @@
             <hm:HamburgerMenuItem Icon="Assets/menu/temple.png" Foreground="White" FontWeight="Bold" Text="Panthéon" Selected="Pantheon_Selected"/>
             <hm:HamburgerMenuItem Icon="Assets/menu/off.png" Foreground="red" FontWeight="Bold" Text="Quitter" Selected="Exit_Selected"/>
         </hm:HamburgerMenu>
-        <Grid Name="map" Visibility="Hidden" Margin="50,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center">
+        <Grid Name="map" Visibility="Visible" Margin="50,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center">
             <Image Name="imageMap" 
                    Source="Assets/Image/map.jpg" 
                    Margin="0" 
@@ -79,7 +80,7 @@
         <Grid Name="city" Visibility="Hidden" Margin="50,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center">
             <Image Name="backgroundCity" Source="Assets/Background/BackgroundCity-0.jpg" Stretch="Fill"/>
         </Grid>
-        <Grid Name="kingdom" Visibility="Visible" Margin="50,0,0,0">
+        <Grid Name="kingdom" Visibility="Hidden" Margin="50,0,0,0">
             <Image Name="backgroundKingdom" Stretch="Fill" Margin="0"/>
             <ComboBox x:Name="listKingdom" 
                       SelectionChanged="Kingdom_SelectionChanged"
