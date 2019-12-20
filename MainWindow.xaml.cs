@@ -42,6 +42,10 @@ namespace WorldGen
             pantheonContent.ItemsSource = World.pantheon.Gods;
             this.backPantheon = backgroundPantheon.Source;
 
+            var tmp = World.cities.OrderBy(c => c.Kingdom != null ? c.Kingdom.Name : "zzzzzzzz").ThenByDescending(c => c.Capital);
+            this.listCity.ItemsSource = tmp;
+            this.listCity.SelectedItem = tmp.First();
+
             this.GoTo(map);
         }
 
@@ -195,8 +199,37 @@ namespace WorldGen
 
         private void SetGod(God god)
         {
-            nbRegion.Content = god.Followers.Count;
-            nbFollower.Content = god.Followers.Sum(r => r.Citizen);
+            nbRegion.Content = god.Followers.Count + " regions sous influence";
+            nbFollower.Content = god.Followers.Sum(r => r.Citizen) + " adepte";
+        }
+
+        private void City_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Region selected = World.cities.Where(c => c.ToString() == listCity.SelectedItem.ToString()).FirstOrDefault();
+            //backgroundKingdom.Source = World.GetKingdomMap(selected.ToString());
+            SetCity(selected);
+        }
+
+        private void SetCity(Region r)
+        {
+            if(r.Capital)
+            {
+                this.isNotCapitale.Visibility = Visibility.Hidden;
+                this.isCapitale.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                this.isCapitale.Visibility = Visibility.Hidden;
+                this.isNotCapitale.Visibility = Visibility.Visible;
+            }
+
+            this.cityKingdom.Content = (r.Kingdom != null ? r.Kingdom.Name : "");
+            this.cityGod.Content = (r.God != null ? r.God.ToString() : "");
+            this.cityType.Content = r.Size;
+
+            var xaml = HtmlToXamlConverter.ConvertHtmlToXaml(r.GetHTMLInfo(), true);
+            var flowDocument = XamlReader.Parse(xaml) as FlowDocument;
+            cityInfo.Document = flowDocument;
         }
     }
 }

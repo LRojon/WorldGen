@@ -1,7 +1,9 @@
 ﻿using LibNoise;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
+using System.Globalization;
 using VoronoiLib.Structures;
 using WorldGen.Classes.Enum;
 
@@ -22,6 +24,7 @@ namespace WorldGen.Classes
         private int _money;
         private int _citizen;
         private Dictionary<RaceDominante, double> _distribution;
+        private string _ressource;
 
         public double Influence { get => _influence; set => _influence = value; }
         public int Height
@@ -42,6 +45,7 @@ namespace WorldGen.Classes
         public Dictionary<RaceDominante, double> Distribution { get => _distribution; set => _distribution = value; }
         public double GodInfluence { get => _godInfluence; set => _godInfluence = value; }
         internal God God { get => _god; set => _god = value; }
+        public string Ressource { get => _ressource; set => _ressource = value; }
 
         public Region(double x, double y, double[,] perlin) : base(x, y)
         {
@@ -55,7 +59,7 @@ namespace WorldGen.Classes
             this.Influence = 0;
         }
 
-        public void GenRegion(int seed = 0)
+        public void GenRegion(double[,] heightMap, int seed = 0)
         {
             if (this.City)
             {
@@ -64,16 +68,17 @@ namespace WorldGen.Classes
                     r = new Random();
                 else
                     r = new Random(seed);
+
+                int randS = (int)(this.Height * 10.78) + r.Next(99999);
                 if (this.Capital)
                 {
-                    int s = (int)(this.Height * 10.78) + r.Next(99999);
-                    this.Name = NameGenerator.GenCapitalName(s);
+                    this.Name = NameGenerator.GenCapitalName(randS);
                     this.Size = CitySize.Capitale;
                 }
                 else
                 {
-                    this.Name = NameGenerator.GenCityName();
                     this.Size = (CitySize)r.Next(5);
+                    this.Name = NameGenerator.GenCityName(this.Size, randS);
                 }
 
                 double percentP; double percentS; double percentT; double percentA;
@@ -181,7 +186,76 @@ namespace WorldGen.Classes
                         }
                     }
                 }
+
+                Dictionary<double, int> compte = new Dictionary<double, int>();
+                for(int i = (int)(this.X - 25); i < this.X + 25; i++)
+                {
+                    for(int j = (int)(this.Y - 25); j < this.Y + 25; j++)
+                    {
+                        double k = System.Math.Round(heightMap[i, j], 2);
+                        if (compte.ContainsKey(k))
+                            compte[k]++;
+                        else
+                            compte.Add(k, 1);
+                    }
+                }
+
+                double h = compte.OrderByDescending(kvp => kvp.Value).First().Key;
+                if (h >= .3)
+                    this.Ressource = "Minerai";
+                else if (h <= .05)
+                    this.Ressource = "Poisson";
+                else
+                    this.Ressource = (r.Next(2) == 0 ? "Agriculture" : "Elevage");
             }
+        }
+
+        public string GetHTMLInfo()
+        {
+            if(this.City)
+            {
+                string tmp = "Argent: " + this.Money.ToString("N0", new CultureInfo("ru-RU")) + " PO<br>";
+                tmp += this.Citizen + " Habitant<br>";
+
+                foreach(KeyValuePair<RaceDominante, double> kvp in this.Distribution)
+                {
+                    string race = "";
+                    switch (kvp.Key)
+                    {
+                        case RaceDominante.Elfe_sylvain:
+                            race = "Elfe Sylvain";
+                            break;
+                        case RaceDominante.Gnome:
+                            race = "Gnome";
+                            break;
+                        case RaceDominante.Haut_elfe:
+                            race = "Haut Elfe";
+                            break;
+                        case RaceDominante.Humain:
+                            race = "Humain";
+                            break;
+                        case RaceDominante.Nain:
+                            race = "Nain";
+                            break;
+                        case RaceDominante.Autres:
+                            race = "Autres";
+                            break;
+                    }
+                    tmp += (int)(kvp.Value * this.Citizen) + " " + race + "<br>";
+                }
+
+                return tmp;
+            }
+
+            return "";
+        }
+
+        public override string ToString()
+        {
+            if (this.City)
+                return this.Name + (this.Kingdom != null ? " - " + this.Kingdom.Name : "");
+            else
+                return "Not a city";
         }
     }
 }

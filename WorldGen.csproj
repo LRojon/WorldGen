@@ -242,5 +242,15 @@
   <ItemGroup>
     <Resource Include="load.gif" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Image\crown.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Image\city.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

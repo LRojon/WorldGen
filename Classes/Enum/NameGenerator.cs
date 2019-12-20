@@ -217,14 +217,37 @@ namespace WorldGen.Classes.Enum
             else
                 r = new Random(seed);
 
-            if (r.Next(2) == 48)
+            tmp += CapitalSyllabe[r.Next(CapitalSyllabe.Length)];
+
+            tmp += CapitalTerm[r.Next(CapitalTerm.Length)];
+
+            tmp = Convert.ToChar(tmp[0] - 32) + tmp.Substring(1, tmp.Length - 1);
+            return tmp;
+        }
+
+        public static string GenCityName(CitySize size, int seed = 0)
+        {
+            GC.Collect();
+            var tmp = "";
+            Random r;
+
+            if (seed == 0)
+                r = new Random();
+            else
+                r = new Random(seed);
+
+            int nbSyl = r.Next(2) + 1;
+            if (nbSyl == 2)
             {
                 var t1 = CapitalSyllabe[r.Next(CapitalSyllabe.Length)];
-                var t2 = CapitalSyllabe[new Random(r.Next(999999)).Next(CapitalSyllabe.Length)];
-                if (t1 == t2)
-                    tmp += t1;
-                else
-                    tmp += t1 + t2;
+                string t2;
+
+                do
+                {
+                    t2 = CapitalSyllabe[new Random(r.Next(999999)).Next(CapitalSyllabe.Length)];
+                } while (t2 == t1);
+
+                tmp += t1 + t2;
             }
             else
             {
@@ -235,11 +258,6 @@ namespace WorldGen.Classes.Enum
 
             tmp = Convert.ToChar(tmp[0] - 32) + tmp.Substring(1, tmp.Length - 1);
             return tmp;
-        }
-
-        public static string GenCityName()
-        {
-            return "";
         }
 
         public static string GenGodName(int seed = 0)

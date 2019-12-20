@@ -124,7 +124,7 @@ namespace WorldGen.Classes
                     var r = new Random().Next(this.colors.Count);
                     tmp.Capital = true;
                     this.kingdoms.Add(new Kingdom(tmp, this.colors.ElementAt(r), this.pantheon));
-                    tmp.GenRegion(r + this.colors.ElementAt(r).ToArgb());
+                    tmp.GenRegion(this.perlinMap, r + this.colors.ElementAt(r).ToArgb());
                     this.colors.RemoveAt(r);
                     nbCapital--;
                 }
@@ -144,7 +144,7 @@ namespace WorldGen.Classes
             foreach(Region c in cities)
             {
                 if (!c.Capital)
-                    c.GenRegion(new Random().Next(999999) + n);
+                    c.GenRegion(this.perlinMap, new Random().Next(999999) + n);
 
                 n++;
             }
