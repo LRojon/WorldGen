@@ -148,3 +148,5 @@ C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Debug\LibNoise.dll
 C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Debug\LibNoise.xml
 C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Debug\HtmlToXamlConverter.dll
 C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Debug\XamlAnimatedGif.dll
+C:\Users\loicr\Desktop\Projet\Perso\WorldGen\bin\Debug\HtmlToXamlConverter.dll
+C:\Users\loicr\Desktop\Projet\Perso\WorldGen\bin\Debug\XamlAnimatedGif.dll

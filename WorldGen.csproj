@@ -52,6 +52,9 @@
   <PropertyGroup>
     <StartupObject>WorldGen.App</StartupObject>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="FortuneVoronoi, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\FortuneVoronoi.4.0.0.0\lib\net46\FortuneVoronoi.dll</HintPath>
@@ -251,6 +254,12 @@
     <Resource Include="Assets\Image\city.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Image\icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

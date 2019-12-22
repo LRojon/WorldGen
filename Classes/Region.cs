@@ -215,7 +215,7 @@ namespace WorldGen.Classes
             if(this.City)
             {
                 string tmp = "Argent: " + this.Money.ToString("N0", new CultureInfo("ru-RU")) + " PO<br>";
-                tmp += this.Citizen + " Habitant<br>";
+                tmp += "Population: " + this.Citizen + " Habitant<br>";
 
                 foreach(KeyValuePair<RaceDominante, double> kvp in this.Distribution)
                 {
