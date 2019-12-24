@@ -22,9 +22,9 @@
             <hm:HamburgerMenuItem Icon="Assets/menu/off.png" Foreground="red" FontWeight="Bold" Text="Quitter" Selected="Exit_Selected"/>
         </hm:HamburgerMenu>
         <Grid Name="map" Visibility="Hidden" Margin="50,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <Image Name="imageMap" 
-                   Source="Assets/Image/map.jpg" 
-                   Margin="0" 
+            <Image Name="imageMap"
+                   Source="Assets/Image/map.jpg"
+                   Margin="0"
                    Stretch="Fill"
                    MouseMove="ImageMap_ToolTip"
                    Cursor="Cross"
@@ -61,15 +61,15 @@
                     Margin="10,0,0,73"/>
                 <Button Click="Sites_ON_OFF"
                     Opacity="0.75" 
-                    Content="Royaume: OFF" 
+                    Content="Royaume: ON" 
                     VerticalAlignment="Bottom" 
                     HorizontalAlignment="Left"
                     Width="100"
                     Height="25"
                     Margin="10,0,0,43"/>
-                <Button Click="Influence_ON_OFF"
+                <Button Click="Croyance_ON_OFF"
                     Opacity="0.75" 
-                    Content="Infuence: OFF" 
+                    Content="Croyance: OFF" 
                     VerticalAlignment="Bottom" 
                     HorizontalAlignment="Left"
                     Width="100"
@@ -77,7 +77,7 @@
                     Margin="10,0,0,13"/>
             </Grid>
         </Grid>
-        <Grid Name="city" Visibility="Visible" Margin="50,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Grid Name="city" Visibility="Hidden" Margin="50,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center">
             <Image Name="backgroundCity" Source="Assets/Background/BackgroundCity-0.jpg" Stretch="Fill"/>
             <Image Name="isCapitale" Visibility="Hidden" HorizontalAlignment="Left" Height="38" Margin="10,10,0,0" VerticalAlignment="Top" Width="38" Source="Assets/Image/crown.png"/>
             <Image Name="isNotCapitale" Visibility="Hidden" HorizontalAlignment="Left" Height="38" Margin="10,10,0,0" VerticalAlignment="Top" Width="38" Source="Assets/Image/city.png" Stretch="Fill"/>

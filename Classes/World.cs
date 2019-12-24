@@ -24,6 +24,15 @@ using Pen = System.Drawing.Pen;
 using Point = System.Drawing.Point;
 using Math = System.Math;
 using WorldGen.Classes.Enum;
+using Pathfindax.PathfindEngine;
+using Pathfindax.Factories;
+using Pathfindax.Graph;
+using Pathfindax.Algorithms;
+using Pathfindax.Utils;
+using Pathfindax.Nodes;
+using Pathfindax.Collections;
+using Pathfindax.Paths;
+using RoyT.AStar;
 
 namespace WorldGen.Classes
 {
@@ -40,7 +49,7 @@ namespace WorldGen.Classes
         private int mapHeight;
         public bool voronoi;
         public bool affSite;
-        public bool influence;
+        public bool croyance;
         private double[,] perlinMap;
         private Bitmap mapPerlin;
         public string name;
@@ -58,7 +67,7 @@ namespace WorldGen.Classes
             this.colors = new List<Color>();
             this.voronoi = false;
             this.affSite = true;
-            this.influence = false;
+            this.croyance = false;
             this.pantheon = new Pantheon();
 
             this.mapHeight = heightArea;
@@ -201,23 +210,9 @@ namespace WorldGen.Classes
 
         public ImageSource GetVoronoiGraph(bool delaunay = false)
         {
-            Image img = Image.FromFile("Assets\\gradient.bmp");
-            Bitmap gradient = new Bitmap(img);
-
             if (mapPerlin == null)
             {
-                mapPerlin = new Bitmap(mapWidth, mapHeight);
-                for (int i = 0; i < mapWidth; i++)
-                {
-                    for (int j = 0; j < mapHeight; j++)
-                    {
-                        double value = perlinMap[i, j];
-                        double y = (value + 1 > 2 ? 2 : (value + 1 < 0 ? 0 : value + 1));
-                        int lvl = (int)((y / 2) * 255);
-                        Color c = gradient.GetPixel(lvl, 0);
-                        mapPerlin.SetPixel(i, j, c);
-                    }
-                }
+                GenPerlinMap();
             }
             Bitmap bmp = new Bitmap(mapPerlin);
 
@@ -281,11 +276,58 @@ namespace WorldGen.Classes
                         g.FillPolygon(new SolidBrush(color), tab);
 
                     }
-                    if (influence)
+
+                    if (site.God != null && this.croyance)
                     {
-                        if (site.Influence > 0.1)
-                            g.DrawString(site.Influence.ToString(), new Font(System.Drawing.FontFamily.GenericSansSerif, 5f), new SolidBrush(Color.Blue), (float)site.X, (float)site.Y);
+                        List<VEdge> tmp = new List<VEdge>();
+                        int i = 0;
+                        tmp.Add(site.Cell.First());
+                        site.Cell.Remove(site.Cell.First());
+                        while (!site.Cell.IsEmpty() && i < site.Cell.Count)
+                        {
+                            VEdge ve = site.Cell.ElementAt(i);
+                            VEdge t = tmp.Last();
+                            if (t.End == ve.Start)
+                            {
+                                tmp.Add(ve);
+                                site.Cell.Remove(ve);
+                                i = 0;
+                            }
+                            else if (t.End == ve.End)
+                            {
+                                VPoint vp = ve.End;
+                                ve.End = ve.Start;
+                                ve.Start = vp;
+
+                                tmp.Add(ve);
+                                site.Cell.Remove(ve);
+                                i = 0;
+                            }
+                            else
+                            {
+                                i++;
+                            }
+                        }
+                        site.Cell = tmp;
+
+                        List<Point> points = new List<Point>();
+                        foreach (var edge in site.Cell)
+                        {
+                            points.Add(new Point((int)edge.Start.X, (int)edge.Start.Y));
+                            points.Add(new Point((int)edge.End.X, (int)edge.End.Y));
+                        }
+
+                        Point[] tab = points.ToArray();
+                        Random rand = new Random(seed);
+                        Color color = Color.FromArgb(90,
+                            site.God.Color.R,
+                            site.God.Color.G,
+                            site.God.Color.B);
+
+
+                        g.FillPolygon(new SolidBrush(color), tab);
                     }
+
 
                     if (site.City)
                     {
@@ -330,20 +372,7 @@ namespace WorldGen.Classes
 
             if (mapPerlin == null)
             {
-                Image img = Image.FromFile("Assets\\gradient.bmp");
-                Bitmap gradient = new Bitmap(img);
-                mapPerlin = new Bitmap(mapWidth, mapHeight);
-                for (int i = 0; i < mapWidth; i++)
-                {
-                    for (int j = 0; j < mapHeight; j++)
-                    {
-                        double value = perlinMap[i, j];
-                        double y = (value + 1 > 2 ? 2 : (value + 1 < 0 ? 0 : value + 1));
-                        int lvl = (int)((y / 2) * 255);
-                        Color c = gradient.GetPixel(lvl, 0);
-                        mapPerlin.SetPixel(i, j, c);
-                    }
-                }
+                GenPerlinMap();
             }
             Bitmap bmp = new Bitmap(mapPerlin);
 
@@ -358,7 +387,7 @@ namespace WorldGen.Classes
                 {
                     seed++;
 
-                    if (site.Kingdom != null && affSite)
+                    if (site.Kingdom != null && this.affSite)
                     {
                         List<VEdge> tmp = new List<VEdge>();
                         int i = 0;
@@ -408,18 +437,64 @@ namespace WorldGen.Classes
 
                         g.FillPolygon(new SolidBrush(color), tab);
 
-                        double dist = Math.Sqrt(Math.Pow(site.X - position.X, 2) + Math.Pow(site.Y - position.Y, 2));
-                        if (distMin > dist)
+                    }
+
+                    if(site.God != null && this.croyance)
+                    {
+                        List<VEdge> tmp = new List<VEdge>();
+                        int i = 0;
+                        tmp.Add(site.Cell.First());
+                        site.Cell.Remove(site.Cell.First());
+                        while (!site.Cell.IsEmpty() && i < site.Cell.Count)
                         {
-                            info = site;
-                            distMin = dist;
+                            VEdge ve = site.Cell.ElementAt(i);
+                            VEdge t = tmp.Last();
+                            if (t.End == ve.Start)
+                            {
+                                tmp.Add(ve);
+                                site.Cell.Remove(ve);
+                                i = 0;
+                            }
+                            else if (t.End == ve.End)
+                            {
+                                VPoint vp = ve.End;
+                                ve.End = ve.Start;
+                                ve.Start = vp;
+
+                                tmp.Add(ve);
+                                site.Cell.Remove(ve);
+                                i = 0;
+                            }
+                            else
+                            {
+                                i++;
+                            }
+                        }
+                        site.Cell = tmp;
+
+                        List<Point> points = new List<Point>();
+                        foreach (var edge in site.Cell)
+                        {
+                            points.Add(new Point((int)edge.Start.X, (int)edge.Start.Y));
+                            points.Add(new Point((int)edge.End.X, (int)edge.End.Y));
                         }
 
+                        Point[] tab = points.ToArray();
+                        Random rand = new Random(seed);
+                        Color color = Color.FromArgb(90,
+                            site.God.Color.R,
+                            site.God.Color.G,
+                            site.God.Color.B);
+
+
+                        g.FillPolygon(new SolidBrush(color), tab);
                     }
-                    if (influence)
+
+                    double dist = Math.Sqrt(Math.Pow(site.X - position.X, 2) + Math.Pow(site.Y - position.Y, 2));
+                    if (distMin > dist)
                     {
-                        if (site.Influence > 0.1)
-                            g.DrawString(site.Influence.ToString(), new Font(System.Drawing.FontFamily.GenericSansSerif, 5f), new SolidBrush(Color.Blue), (float)site.X, (float)site.Y);
+                        info = site;
+                        distMin = dist;
                     }
 
                     if (site.City)
@@ -448,25 +523,36 @@ namespace WorldGen.Classes
 
                 }
 
-                if (info != null)
+                if (info != null && (this.croyance || this.affSite))
                 {
-                    string kName = "";
-                    if (info.Kingdom == null)
-                        kName = "Terres indompté";
-                    else
-                        kName = info.Kingdom.Name;
+                    string str = "";
+                    if (this.affSite)
+                    {
+                        if (info.Kingdom == null)
+                            str = "Les régions sauvages";
+                        else
+                            str = info.Kingdom.Name;
+                    }
+                    else if (this.croyance)
+                    {
+                        if (info.God == null)
+                            str = "Non croyant";
+                        else
+                            str = info.God.ToString();
+                    }
 
                     Font font = new Font(System.Drawing.FontFamily.GenericMonospace, 12f, GraphicsUnit.Pixel);
 
-                    var width = kName.Length * 7.5f;
+                    var width = str.Length * 7.5f;
 
-                    g.FillRectangle(new SolidBrush(Color.White), 
-                        (position.X < this.mapWidth - width ? (float)(position.X) : (float)(position.X - width*2)), 
+                    g.FillRectangle(new SolidBrush(Color.White),
+                        (position.X < this.mapWidth - width ? (float)(position.X) : (float)(position.X - width * 2)),
                         (float)(position.Y - 10), width, font.Size + 2);
-                    g.DrawString(kName,
+                    g.DrawString(str,
                         font,
                         new SolidBrush(Color.Black),
-                        (position.X < this.mapWidth - width ? (float)(position.X) : (float)(position.X - width*2)), (float)(position.Y-10));
+                        (position.X < this.mapWidth - width ? (float)(position.X) : (float)(position.X - width * 2)), (float)(position.Y - 10));
+
                 }
 
                 if (voronoi)
@@ -486,20 +572,7 @@ namespace WorldGen.Classes
         {
             if (mapPerlin == null)
             {
-                Image img = Image.FromFile("Assets\\gradient.bmp");
-                Bitmap gradient = new Bitmap(img);
-                mapPerlin = new Bitmap(mapWidth, mapHeight);
-                for (int i = 0; i < mapWidth; i++)
-                {
-                    for (int j = 0; j < mapHeight; j++)
-                    {
-                        double value = perlinMap[i, j];
-                        double y = (value + 1 > 2 ? 2 : (value + 1 < 0 ? 0 : value + 1));
-                        int lvl = (int)((y / 2) * 255);
-                        Color c = gradient.GetPixel(lvl, 0);
-                        mapPerlin.SetPixel(i, j, c);
-                    }
-                }
+                GenPerlinMap();
             }
             Bitmap bmp = new Bitmap(mapPerlin);
 
@@ -582,20 +655,7 @@ namespace WorldGen.Classes
             {
                 if (mapPerlin == null)
                 {
-                    Image img = Image.FromFile("Assets\\gradient.bmp");
-                    Bitmap gradient = new Bitmap(img);
-                    mapPerlin = new Bitmap(mapWidth, mapHeight);
-                    for (int i = 0; i < mapWidth; i++)
-                    {
-                        for (int j = 0; j < mapHeight; j++)
-                        {
-                            double value = perlinMap[i, j];
-                            double y = (value + 1 > 2 ? 2 : (value + 1 < 0 ? 0 : value + 1));
-                            int lvl = (int)((y / 2) * 255);
-                            Color c = gradient.GetPixel(lvl, 0);
-                            mapPerlin.SetPixel(i, j, c);
-                        }
-                    }
+                    GenPerlinMap();
                 }
                 Bitmap bmp = new Bitmap(mapPerlin);
 
@@ -693,10 +753,181 @@ namespace WorldGen.Classes
             this.mapHeight = 0;
             this.voronoi = false;
             this.affSite = false;
-            this.influence = false;
+            this.croyance = false;
             this.perlinMap =null;
             this.mapPerlin = null;
             this.name = "";
+        }
+    
+        private void GenPerlinMap()
+        {
+            Random r = new Random();
+            Image img = Image.FromFile("Assets\\gradient.bmp");
+            Bitmap gradient = new Bitmap(img);
+            mapPerlin = new Bitmap(mapWidth, mapHeight);
+            for (int i = 0; i < mapWidth; i++)
+            {
+                for (int j = 0; j < mapHeight; j++)
+                {
+                    double value = perlinMap[i, j];
+                    double t = (value + 1 > 2 ? 2 : (value + 1 < 0 ? 0 : value + 1));
+                    int lvl = (int)((t / 2) * 255);
+                    Color c = gradient.GetPixel(lvl, 0);
+                    mapPerlin.SetPixel(i, j, c);
+                }
+            }
+
+            /*PathfindaxManager pathfindaxManager = new PathfindaxManager();
+            DefinitionNodeGridFactory factory = new DefinitionNodeGridFactory();
+            Array2D<DefinitionNode> nodeGrid = factory.GeneratePreFilledArray(GenerateNodeGridConnections.All,this.mapWidth, this.mapHeight);
+            for (int i = 0; i < this.mapWidth; i++)
+            {
+                for (int j = 0; j < this.mapHeight; j++)
+                {
+                    nodeGrid.Array[j * this.mapWidth + i].MovementCostModifier = (float)(this.perlinMap[i, j] <= 0 ? 1 : Math.Round(this.perlinMap[i, j], 2));
+                }
+            }
+            DefinitionNodeGrid nodeNetwork = new DefinitionNodeGrid(nodeGrid, new Duality.Vector2(1, 1));
+            IPathfinder<IDefinitionNodeNetwork, IPathfindNodeNetwork<AstarNode>, WaypointPath> pathfinder = pathfindaxManager.CreateAstarPathfinder(nodeNetwork, new ChebyshevDistance());
+            
+            int x = 0;
+            int y = 0;
+            foreach (Region r in this.cities)
+            {
+                var tmppp = this.cities.First();
+                foreach (Region n in tmppp.Neighbors)
+                {
+                    if (n.City)
+                    {
+                        y++;
+                        PathRequest<WaypointPath> pathRequest = pathfinder.RequestPath(nodeNetwork.NodeGrid.ToIndex((int)r.X, (int)(r.Y)),
+                                                                                        nodeNetwork.NodeGrid.ToIndex((int)(n.X), (int)(n.Y)));
+
+                        while (pathRequest.Status == PathRequestStatus.Solving)
+                        {
+                        }
+                        if (pathRequest.Status == PathRequestStatus.Solved)
+                        {
+                            foreach (Duality.Vector2 v in pathRequest.CompletedPath)
+                            {
+                                this.mapPerlin.SetPixel((int)v.X, (int)v.Y, Color.Fuchsia);
+                            }
+                        }
+                        else if (pathRequest.Status == PathRequestStatus.NoPathFound)
+                        {
+                            x++;
+                        }
+                    }
+                }
+            }*/
+
+            var grid = new Grid(this.mapWidth, this.mapHeight, 1.0f);
+
+            for(int x = 0; x < this.mapWidth; x++)
+            {
+                for (int y = 0; y < this.mapHeight; y++)
+                {
+                    if (this.perlinMap[x, y] > 0.05)
+                        grid.SetCellCost(new Position(x, y), ((float)this.perlinMap[x, y] * 100) > 1 ? ((float)this.perlinMap[x, y] * 100) : 1f);
+                    else
+                        grid.BlockCell(new Position(x, y));
+                }
+            }
+            foreach(Region c in this.cities)
+            {
+                foreach(Region n in c.Neighbors)
+                {
+                    if(n.City)
+                    {
+                        Position[] path = grid.GetPath(new Position((int)c.X, (int)c.Y), new Position((int)n.X, (int)n.Y), MovementPatterns.Full);
+
+                        foreach (Position p in path)
+                        {
+                            this.mapPerlin.SetPixel(p.X, p.Y, Color.Fuchsia);// Color.FromArgb(255, 142, 84, 52));
+                        }
+                    }
+                }
+            }
+
+
+            /*for (int i = 0; i < 1; i++)
+            {
+                int x; int y;
+                int cadre = 50;
+                do
+                {
+                    x = r.Next(this.mapWidth);
+                    y = r.Next(this.mapHeight);
+                } while (this.perlinMap[x, y] < 0.6 || this.perlinMap[x, y] > 0.8 ||
+                x < cadre || x > this.mapWidth - cadre ||
+                y < cadre || y > this.mapHeight - cadre); // et tant quedans le cadre de 50px
+                GenRiver(x, y);
+            }*/
+        }
+
+        private void GenRiver(int x, int y, int direction = 45)
+        {
+            GC.Collect();
+            if (this.perlinMap[x, y] > 0)
+            {
+                this.mapPerlin.SetPixel(x, y, Color.Fuchsia); 
+                int[] neighbor;
+                switch (direction)
+                {
+                    case 0:
+                        neighbor = this.RandTab(new int[] { 0, 0, 0, 0, 1, 2, 3 });
+                        break;
+                    case 1:
+                        neighbor = this.RandTab(new int[] { 0, 1, 1, 1, 1, 2, 3 });
+                        break;
+                    case 2:
+                        neighbor = this.RandTab(new int[] { 0, 1, 2, 2, 2, 2, 3 });
+                        break;
+                    case 3:
+                        neighbor = this.RandTab(new int[] { 0, 1, 2, 3, 3, 3, 3 });
+                        break;
+                    default:
+                        neighbor = this.RandTab(new int[] { 0, 1, 2, 3 });
+                        break;
+                }
+                
+                foreach(int i in neighbor)
+                {
+                    switch(i)
+                    {
+                        case 0:
+                            if (perlinMap[x, y - 1] <= Math.Round(perlinMap[x, y], 8) && this.mapPerlin.GetPixel(x, y - 1) != Color.Fuchsia && this.mapPerlin.GetPixel(x, y - 2) != Color.Fuchsia)
+                                GenRiver(x, y - 1, 0);
+                            break;
+                        case 1:
+                            if (perlinMap[x + 1, y] <= Math.Round(perlinMap[x, y], 8) && this.mapPerlin.GetPixel(x + 1, y) != Color.Fuchsia && this.mapPerlin.GetPixel(x + 2, y) != Color.Fuchsia)
+                                GenRiver(x + 1, y, 1);
+                            break;
+                        case 2:
+                            if (perlinMap[x, y + 1] <= Math.Round(perlinMap[x, y], 8) && this.mapPerlin.GetPixel(x, y + 1) != Color.Fuchsia && this.mapPerlin.GetPixel(x, y + 2) != Color.Fuchsia)
+                                GenRiver(x, y + 1, 2);
+                            break;
+                        case 3:
+                            if (perlinMap[x - 1, y] <= Math.Round(perlinMap[x, y], 8) && this.mapPerlin.GetPixel(x - 1, y) != Color.Fuchsia && this.mapPerlin.GetPixel(x - 2, y) != Color.Fuchsia)
+                                GenRiver(x - 1, y, 3);
+                            break;
+                    }
+                }
+            }
+        }
+        private int[] RandTab(int[] tab)
+        {
+            Random r = new Random();
+            int n = 0;
+            foreach(int i in tab)
+            {
+                var id = r.Next(tab.Length);
+                var tmp = tab[n];
+                tab[n] = tab[id];
+                tab[id] = tmp;
+                n++;
+            }
+            return tab;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using HTMLConverter;
 using System;
+using System.Globalization;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -119,12 +120,12 @@ namespace WorldGen
             if (World != null)
                 imageMap.Source = World.GetVoronoiGraph(delaunay);
         }
-        private void Influence_ON_OFF(object sender, RoutedEventArgs e)
+        private void Croyance_ON_OFF(object sender, RoutedEventArgs e)
         {
             Button btn = (Button)sender;
 
-            World.influence = !World.influence;
-            btn.Content = World.influence ? "Influence: ON" : "Influence: OFF";
+            World.croyance = !World.croyance;
+            btn.Content = World.croyance ? "Croyance: ON" : "Croyance: OFF";
 
             if (World != null)
                 imageMap.Source = World.GetVoronoiGraph(delaunay);
@@ -171,7 +172,7 @@ namespace WorldGen
     
         private void SetKingdom(Kingdom kingdom)
         {
-            affKingdom.Height = kingdom.Distribution.Count * 40;
+            affKingdom.Height = 40 + kingdom.Distribution.Count * 40;
             capitalName.Content = "Capitale: " + kingdom.Capital.Name;
             var xaml = HtmlToXamlConverter.ConvertHtmlToXaml(kingdom.GetInfo(), true);
             var flowDocument = XamlReader.Parse(xaml) as FlowDocument;
@@ -199,8 +200,8 @@ namespace WorldGen
 
         private void SetGod(God god)
         {
-            nbRegion.Content = god.Followers.Count + " regions sous influence";
-            nbFollower.Content = god.Followers.Sum(r => r.Citizen) + " adepte";
+            nbRegion.Content = god.Followers.Count.ToString("N0", CultureInfo.GetCultureInfo("ru-RU")) + " regions sous influence";
+            nbFollower.Content = god.Followers.Sum(r => r.Citizen).ToString("N0", CultureInfo.GetCultureInfo("ru-RU")) + " adepte";
         }
 
         private void City_SelectionChanged(object sender, SelectionChangedEventArgs e)
