@@ -42,17 +42,6 @@ namespace WorldGen
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            /*World = new World((int)this.map.ActualWidth, (int)this.map.ActualHeight);
-            this.imageMap.Source = World.GetVoronoiGraph(this.delaunay);
-
-            this.listKingdom.ItemsSource = World.kingdoms;
-            this.listKingdom.SelectedItem = World.kingdoms.First();
-            pantheonContent.ItemsSource = World.pantheon.Gods;
-            this.backPantheon = backgroundPantheon.Source;
-
-            var tmp = World.cities.OrderBy(c => c.Kingdom != null ? c.Kingdom.Name : "zzzzzzzz").ThenByDescending(c => c.Capital);
-            this.listCity.ItemsSource = tmp;
-            this.listCity.SelectedItem = tmp.First();*/
             if (Application.Current.Properties["OpenWithFile"] != null)
             {
                 string path = Application.Current.Properties["OpenWithFile"].ToString();
@@ -65,6 +54,7 @@ namespace WorldGen
                     this.World = (World)formatter.Deserialize(stream);
                     stream.Close();
 
+                    this.Title = World.name;
                     this.imageMap.Source = World.GetVoronoiGraph(this.delaunay);
 
                     this.listKingdom.SelectedItem = World.kingdoms.First();
@@ -193,6 +183,8 @@ namespace WorldGen
         {
             this.NW.Visibility = Visibility.Hidden;
             World = new World((int)this.map.ActualWidth, (int)this.map.ActualHeight);
+            this.Title = World.name;
+
             this.imageMap.Source = World.GetVoronoiGraph(this.delaunay);
 
             this.listKingdom.SelectedItem = World.kingdoms.First();
@@ -371,6 +363,7 @@ namespace WorldGen
             this.World = (World)formatter.Deserialize(stream);
             stream.Close();
 
+            this.Title = World.name;
             this.imageMap.Source = World.GetVoronoiGraph(this.delaunay);
 
             this.listKingdom.SelectedItem = World.kingdoms.First();
@@ -397,6 +390,7 @@ namespace WorldGen
                 this.World = (World)formatter.Deserialize(stream);
                 stream.Close();
 
+                this.Title = World.name;
                 this.imageMap.Source = World.GetVoronoiGraph(this.delaunay);
 
                 this.listKingdom.SelectedItem = World.kingdoms.First();

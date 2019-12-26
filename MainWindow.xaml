@@ -64,14 +64,6 @@
                    MouseMove="ImageMap_ToolTip"
                    Cursor="Cross"
                    MouseLeave="ImageMap_MouseLeave"/>
-            <Button Click="NewWorld"
-                    Opacity="0.75" 
-                    Content="Nouveau monde" 
-                    VerticalAlignment="Bottom" 
-                    HorizontalAlignment="Left"
-                    Width="125"
-                    Height="25"
-                    Margin="20,0,0,5"/>
             <Button Click="Menu_Click" HorizontalAlignment="Right" Margin="0,0,5,5" VerticalAlignment="Bottom" Width="32" Height="32" BorderBrush="{x:Null}" Cursor="Hand" Foreground="{x:Null}">
                 <Button.Background>
                     <ImageBrush Stretch="Uniform" ImageSource="Assets/menu/bars.png"/>
