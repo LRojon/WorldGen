@@ -17,14 +17,12 @@ C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Release\RoyT.AStar.dll
 C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Release\SwizzleMyVectors.dll
 C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Release\System.Diagnostics.DiagnosticSource.dll
 C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Release\System.Windows.Interactivity.dll
-C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Release\VoronoiLib.dll
 C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Release\XamlAnimatedGif.dll
 C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Release\Xceed.Wpf.AvalonDock.dll
 C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Release\Xceed.Wpf.AvalonDock.Themes.Aero.dll
 C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Release\Xceed.Wpf.AvalonDock.Themes.Metro.dll
 C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Release\Xceed.Wpf.AvalonDock.Themes.VS2010.dll
 C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Release\Xceed.Wpf.Toolkit.dll
-C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Release\VoronoiLib.pdb
 C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Release\ControlzEx.pdb
 C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Release\DualityPrimitives.pdb
 C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Release\DualityPrimitives.xml
@@ -60,3 +58,7 @@ C:\Users\PTCX1319\Desktop\test\WorldGen\obj\Release\WorldGen.csproj.GenerateReso
 C:\Users\PTCX1319\Desktop\test\WorldGen\obj\Release\WorldGen.csproj.CopyComplete
 C:\Users\PTCX1319\Desktop\test\WorldGen\obj\Release\WorldGen.exe
 C:\Users\PTCX1319\Desktop\test\WorldGen\obj\Release\WorldGen.pdb
+C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Release\WorldGen.exe.manifest
+C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Release\WorldGen.application
+C:\Users\PTCX1319\Desktop\test\WorldGen\obj\Release\WorldGen.exe.manifest
+C:\Users\PTCX1319\Desktop\test\WorldGen\obj\Release\WorldGen.application

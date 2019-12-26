@@ -345,7 +345,7 @@ namespace WorldGen
             OpenFileDialog ofd = new OpenFileDialog()
             {
                 Title = "Load your world...",
-                FileName = World.name + ".wg",
+                FileName = "*.wg",
                 Filter = "World file (*.wg)|*.wg",
                 InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
             };
@@ -376,6 +376,7 @@ namespace WorldGen
             this.listCity.SelectedItem = tmp.First();
             this.listCity.ItemsSource = tmp;
 
+            this.NW.Visibility = Visibility.Hidden;
             this.GoTo(map);
         }
 

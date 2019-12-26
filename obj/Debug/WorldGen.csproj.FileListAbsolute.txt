@@ -167,3 +167,7 @@ C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Debug\MahApps.Metro.xml
 C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Debug\Newtonsoft.Json.dll
 C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Debug\Newtonsoft.Json.xml
 C:\Users\PTCX1319\Desktop\test\WorldGen\obj\Debug\App.baml
+C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Debug\WorldGen.exe.manifest
+C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Debug\WorldGen.application
+C:\Users\PTCX1319\Desktop\test\WorldGen\obj\Debug\WorldGen.exe.manifest
+C:\Users\PTCX1319\Desktop\test\WorldGen\obj\Debug\WorldGen.application

@@ -113,7 +113,7 @@
             <Image Name="backgroundCity" Source="Assets/Background/BackgroundCity-0.jpg" Stretch="Fill"/>
             <Image Name="isCapitale" Visibility="Hidden" HorizontalAlignment="Left" Height="38" Margin="10,10,0,0" VerticalAlignment="Top" Width="38" Source="Assets/Image/crown.png"/>
             <Image Name="isNotCapitale" Visibility="Hidden" HorizontalAlignment="Left" Height="38" Margin="10,10,0,0" VerticalAlignment="Top" Width="38" Source="Assets/Image/city.png" Stretch="Fill"/>
-            <ComboBox Name="listCity" SelectionChanged="City_SelectionChanged" HorizontalAlignment="Left" Margin="53,10,0,0" VerticalAlignment="Top" Width="190" Height="38" FontFamily="Viner Hand ITC" FontSize="18" FontWeight="Bold" Foreground="White"/>
+            <ComboBox Name="listCity" SelectionChanged="City_SelectionChanged" HorizontalAlignment="Left" Margin="53,10,0,0" VerticalAlignment="Top" Width="190" Height="38" FontFamily="Viner Hand ITC" FontSize="18" FontWeight="Bold" Foreground="Black"/>
             <Label Name="cityKingdom" Content="Label" HorizontalAlignment="Left" Margin="10,53,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.521,-0.609" Width="233" FontFamily="Viner Hand ITC" FontWeight="Bold" FontSize="18" Foreground="Black"/>
             <RichTextBox Name="cityInfo" HorizontalAlignment="Left" Height="201" Margin="10,182,0,0" VerticalAlignment="Top" Width="233" Background="{x:Null}" BorderBrush="{x:Null}" SelectionBrush="#BF0078D7" FontFamily="Viner Hand ITC" FontWeight="Bold" FontSize="18" Foreground="Black">
                 <FlowDocument>
@@ -142,7 +142,7 @@
                 </FlowDocument>
             </RichTextBox>
             <Label Name="kingdomType" Content="Label" HorizontalAlignment="Left" Margin="10,100,0,0" VerticalAlignment="Top" Width="450" Height="35" FontSize="18" FontWeight="Bold" FontFamily="Viner Hand ITC" Foreground="Black"/>
-            <RichTextBox x:Name="ecoInfo" HorizontalAlignment="Left" Height="250" Margin="315,140,0,0" VerticalAlignment="Top" Width="350" Background="#3F000000" Foreground="Black" FontFamily="Viner Hand ITC" FontWeight="Bold" FontSize="18">
+            <RichTextBox x:Name="ecoInfo" IsReadOnly="True" HorizontalAlignment="Left" Height="250" Margin="315,140,0,0" VerticalAlignment="Top" Width="350" Background="#3F000000" Foreground="Black" FontFamily="Viner Hand ITC" FontWeight="Bold" FontSize="18" BorderBrush="{x:Null}">
                 <FlowDocument>
                     <Paragraph>
                         <Run Text="RichTextBox"/>
