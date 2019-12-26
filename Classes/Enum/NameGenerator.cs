@@ -177,6 +177,55 @@ namespace WorldGen.Classes.Enum
             "all"
         };
 
+        private static readonly string[] WorldSyllabe =
+        {
+            "chal",
+            "la",
+            "igou",
+            "hun",
+            "ko",
+            "re",
+            "zo",
+            "che",
+            "tis",
+            "el",
+            "ea",
+            "bre",
+            "an",
+            "ia",
+            "ze",
+            "gucar",
+            "ro",
+            "bu",
+            "cui",
+            "tune",
+            "sas",
+            "tro",
+            "geg",
+            "rion",
+            "gi",
+            "phi",
+            "des",
+            "den",
+            "ope",
+            "dor",
+            "stre",
+            "zel",
+            "hast"
+        };
+        private static readonly string[] WorldTerm =
+        {
+            "tov",
+            "tera",
+            "rix",
+            "mia",
+            "ea",
+            "ia",
+            "aria",
+            "rion",
+            "phides",
+        };
+
         public static string GenKingdomName(int seed = 0)
         {
             Random r;
@@ -255,6 +304,41 @@ namespace WorldGen.Classes.Enum
             }
 
             tmp += CapitalTerm[r.Next(CapitalTerm.Length)];
+
+            tmp = Convert.ToChar(tmp[0] - 32) + tmp.Substring(1, tmp.Length - 1);
+            return tmp;
+        }
+
+        public static string GenWorldName(int seed = 0)
+        {
+            GC.Collect();
+            var tmp = "";
+            Random r;
+
+            if (seed == 0)
+                r = new Random();
+            else
+                r = new Random(seed);
+
+            int nbSyl = r.Next(2) + 1;
+            if (nbSyl == 2)
+            {
+                var t1 = WorldSyllabe[r.Next(WorldSyllabe.Length)];
+                string t2;
+
+                do
+                {
+                    t2 = WorldSyllabe[new Random(r.Next(999999)).Next(WorldSyllabe.Length)];
+                } while (t2 == t1);
+
+                tmp += t1 + t2;
+            }
+            else
+            {
+                tmp += WorldSyllabe[r.Next(WorldSyllabe.Length)];
+            }
+
+            tmp += WorldTerm[r.Next(WorldTerm.Length)];
 
             tmp = Convert.ToChar(tmp[0] - 32) + tmp.Substring(1, tmp.Length - 1);
             return tmp;

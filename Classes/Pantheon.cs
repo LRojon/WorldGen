@@ -8,6 +8,7 @@ using WorldGen.Classes.Enum;
 
 namespace WorldGen.Classes
 {
+    [Serializable]
     public class Pantheon
     {
         private readonly List<God> _gods = new List<God>();
@@ -82,6 +83,7 @@ namespace WorldGen.Classes
         internal List<God> Gods { get => _gods; }
     }
 
+    [Serializable]
     class God
     {
         private string _name;

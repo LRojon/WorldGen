@@ -9,11 +9,12 @@ using System.Windows;
 using System.Globalization;
 
 namespace WorldGen.Classes
-{ 
+{
     /*
      * Race dominante
      */
 
+    [Serializable]
     public class Kingdom
     {
         public List<Region> regions = new List<Region>();
@@ -27,7 +28,9 @@ namespace WorldGen.Classes
         private int _citizen;
         private Dictionary<RaceDominante, int> _distribution = new Dictionary<RaceDominante, int>();
         private God _god;
+        private Dictionary<Ressource, int> _richesse = new Dictionary<Ressource, int>();
 
+        public Kingdom() { }
         public Kingdom(Region capital, Color color, Pantheon pantheon)
         {
             if(!capital.Capital)
@@ -59,6 +62,7 @@ namespace WorldGen.Classes
         public int Citizen { get => _citizen; set => _citizen = value; }
         public Dictionary<RaceDominante, int> Distribution { get => _distribution; set => _distribution = value; }
         internal God God { get => _god; set => _god = value; }
+        public Dictionary<Ressource, int> Richesse { get => _richesse; set => _richesse = value; }
 
         private void CreateKingdom(Region current)
         {
@@ -91,10 +95,9 @@ namespace WorldGen.Classes
         }
 
 
-        public string GetInfo()
+        public string GetDemoInfo()
         {
-            string tmp = "Argent: " + this.Money.ToString("N0", CultureInfo.CreateSpecificCulture("ru-RU")) + " PO<br>" +
-                "Population: " + this.Citizen.ToString("N0", CultureInfo.CreateSpecificCulture("ru-RU")) + "<br>";
+            string tmp ="Population: " + this.Citizen.ToString("N0", CultureInfo.CreateSpecificCulture("ru-RU")) + "<br>";
             foreach(KeyValuePair<RaceDominante, int> kvp in this.Distribution)
             {
                 string race = "";
@@ -125,6 +128,17 @@ namespace WorldGen.Classes
             return tmp;
         }
         
+        public string GetEcoInfo()
+        {
+            string tmp = "Argent: " + this.Money.ToString("N0", CultureInfo.CreateSpecificCulture("ru-RU")) + " PO<br>";
+            tmp += "Ressource principale du pays: " + this.Richesse.OrderByDescending(kvp => kvp.Value).First().Key + "<br>";
+            foreach(KeyValuePair<Ressource,int> kvp in this.Richesse.OrderByDescending(kvp => kvp.Value))
+            {
+                tmp += kvp.Key.ToString() + ": " + kvp.Value + " ville<br>";
+            }
+
+            return tmp;
+        }
         public override string ToString()
         {
             return this.Name;

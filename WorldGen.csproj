@@ -52,7 +52,13 @@
   <PropertyGroup>
     <StartupObject>WorldGen.App</StartupObject>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ControlzEx, Version=3.0.2.4, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\ControlzEx.3.0.2.4\lib\net462\ControlzEx.dll</HintPath>
+    </Reference>
     <Reference Include="DualityPrimitives, Version=3.0.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\AdamsLair.Duality.Primitives.3.0.2\lib\portable45-net45+win8+wpa81\DualityPrimitives.dll</HintPath>
     </Reference>
@@ -72,10 +78,16 @@
       <HintPath>packages\CalmBit.LibNoise.1.0.0\lib\net40\LibNoise.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="MahApps.Metro, Version=1.6.5.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\MahApps.Metro.1.6.5\lib\net47\MahApps.Metro.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Win32.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Win32.Primitives.4.3.0\lib\net46\Microsoft.Win32.Primitives.dll</HintPath>
       <Private>True</Private>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Pathfindax, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\Pathfindax.4.0.0\lib\net472\Pathfindax.dll</HintPath>
@@ -213,6 +225,9 @@
       <Private>True</Private>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\ControlzEx.3.0.2.4\lib\net462\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -253,6 +268,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Classes\DeviseParPays.cs" />
+    <Compile Include="Classes\SourceOfMagic.cs" />
+    <Compile Include="Voronoi\FortunesAlgorithm.cs" />
+    <Compile Include="Voronoi\ParabolaMath.cs" />
+    <Compile Include="Voronoi\Structures\BeachLine.cs" />
+    <Compile Include="Voronoi\Structures\FortuneCircleEvent.cs" />
+    <Compile Include="Voronoi\Structures\FortuneEvent.cs" />
+    <Compile Include="Voronoi\Structures\FortuneSite.cs" />
+    <Compile Include="Voronoi\Structures\FortuneSiteEvent.cs" />
+    <Compile Include="Voronoi\Structures\MinHeap.cs" />
+    <Compile Include="Voronoi\Structures\RBTree.cs" />
+    <Compile Include="Voronoi\Structures\VEdge.cs" />
+    <Compile Include="Voronoi\Structures\VPoint.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -265,6 +293,7 @@
     <Compile Include="Classes\Enum\CitySize.cs" />
     <Compile Include="Classes\Enum\NameGenerator.cs" />
     <Compile Include="Classes\Enum\Race.cs" />
+    <Compile Include="Classes\Enum\Ressource.cs" />
     <Compile Include="Classes\HistoricalEvenement.cs" />
     <Compile Include="Classes\HistoricalPNJ.cs" />
     <Compile Include="Classes\Kingdom.cs" />
@@ -306,12 +335,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\menu\off.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="VoronoiLib\VoronoiLib.csproj">
-      <Project>{6b5a8521-f903-464d-94c5-f946e52455d6}</Project>
-      <Name>VoronoiLib</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\menu\city.png" />
@@ -390,6 +413,25 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\Image\city.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\menu\open.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\menu\save.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\menu\new.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\menu\plus.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

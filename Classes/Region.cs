@@ -9,6 +9,7 @@ using WorldGen.Classes.Enum;
 
 namespace WorldGen.Classes
 {
+    [Serializable]
     public class Region : VoronoiLib.Structures.FortuneSite
     {
         // Zone pour ressource principale
@@ -24,7 +25,7 @@ namespace WorldGen.Classes
         private int _money;
         private int _citizen;
         private Dictionary<RaceDominante, double> _distribution;
-        private string _ressource;
+        private Ressource _ressource;
 
         public double Influence { get => _influence; set => _influence = value; }
         public int Height
@@ -45,8 +46,9 @@ namespace WorldGen.Classes
         public Dictionary<RaceDominante, double> Distribution { get => _distribution; set => _distribution = value; }
         public double GodInfluence { get => _godInfluence; set => _godInfluence = value; }
         internal God God { get => _god; set => _god = value; }
-        public string Ressource { get => _ressource; set => _ressource = value; }
+        public Ressource Ressource { get => _ressource; set => _ressource = value; }
 
+        public Region() { }
         public Region(double x, double y, double[,] perlin) : base(x, y)
         {
             this.Height = (int)(perlin[(int)x, (int)y] * 127) + 127;
@@ -162,6 +164,29 @@ namespace WorldGen.Classes
 
                 }
 
+                // Gen Ressource
+                Dictionary<double, int> compte = new Dictionary<double, int>();
+                for (int i = (int)(this.X - 25); i < this.X + 25; i++)
+                {
+                    for (int j = (int)(this.Y - 25); j < this.Y + 25; j++)
+                    {
+                        double k = System.Math.Round(heightMap[i, j], 2);
+                        if (compte.ContainsKey(k))
+                            compte[k]++;
+                        else
+                            compte.Add(k, 1);
+                    }
+                }
+
+                double h = compte.OrderByDescending(kvp => kvp.Value).First().Key;
+                if (h >= .3)
+                    this.Ressource = Ressource.Minerai;
+                else if (h <= .05)
+                    this.Ressource = Ressource.Poisson;
+                else
+                    this.Ressource = (r.Next(2) == 0 ? Ressource.Céréale : Ressource.Bétail);
+
+                // Fill Kingdom
                 if (this.Kingdom != null)
                 {
                     this.Kingdom.Money += this.Money;
@@ -175,8 +200,7 @@ namespace WorldGen.Classes
 
                             nb += (int)(this.Citizen * val);
 
-                            this.Kingdom.Distribution.Remove(kvp.Key);
-                            this.Kingdom.Distribution.Add(kvp.Key, nb);
+                            this.Kingdom.Distribution[kvp.Key] = nb;
                         }
                         else
                         {
@@ -185,28 +209,16 @@ namespace WorldGen.Classes
                             this.Kingdom.Distribution.Add(kvp.Key, (int)(this.Citizen * val));
                         }
                     }
-                }
 
-                Dictionary<double, int> compte = new Dictionary<double, int>();
-                for(int i = (int)(this.X - 25); i < this.X + 25; i++)
-                {
-                    for(int j = (int)(this.Y - 25); j < this.Y + 25; j++)
+                    if(!this.Kingdom.Richesse.ContainsKey(this.Ressource))
                     {
-                        double k = System.Math.Round(heightMap[i, j], 2);
-                        if (compte.ContainsKey(k))
-                            compte[k]++;
-                        else
-                            compte.Add(k, 1);
+                        this.Kingdom.Richesse.Add(this.Ressource, 1);
+                    }
+                    else
+                    {
+                        this.Kingdom.Richesse[this.Ressource]++;
                     }
                 }
-
-                double h = compte.OrderByDescending(kvp => kvp.Value).First().Key;
-                if (h >= .3)
-                    this.Ressource = "Minerai";
-                else if (h <= .05)
-                    this.Ressource = "Poisson";
-                else
-                    this.Ressource = (r.Next(2) == 0 ? "Agriculture" : "Elevage");
             }
         }
 

@@ -36,6 +36,7 @@ using RoyT.AStar;
 
 namespace WorldGen.Classes
 {
+    [Serializable]
     public class World
     {
         // Age du monde
@@ -82,6 +83,8 @@ namespace WorldGen.Classes
             this.colors.Add(Color.Purple);
             this.colors.Add(Color.Gray);
             this.colors.Add(Color.Cyan);
+
+            this.name = NameGenerator.GenWorldName();
 
             Perlin p = new Perlin
             {
@@ -581,6 +584,7 @@ namespace WorldGen.Classes
             using (Graphics g = Graphics.FromImage(bmp))
             {
                 List<Point> frontier = new List<Point>();
+
                 foreach (Region site in currentK.regions)
                 {
                     List<VEdge> tmp = new List<VEdge>();
@@ -776,53 +780,9 @@ namespace WorldGen.Classes
                     mapPerlin.SetPixel(i, j, c);
                 }
             }
-
-            /*PathfindaxManager pathfindaxManager = new PathfindaxManager();
-            DefinitionNodeGridFactory factory = new DefinitionNodeGridFactory();
-            Array2D<DefinitionNode> nodeGrid = factory.GeneratePreFilledArray(GenerateNodeGridConnections.All,this.mapWidth, this.mapHeight);
-            for (int i = 0; i < this.mapWidth; i++)
-            {
-                for (int j = 0; j < this.mapHeight; j++)
-                {
-                    nodeGrid.Array[j * this.mapWidth + i].MovementCostModifier = (float)(this.perlinMap[i, j] <= 0 ? 1 : Math.Round(this.perlinMap[i, j], 2));
-                }
-            }
-            DefinitionNodeGrid nodeNetwork = new DefinitionNodeGrid(nodeGrid, new Duality.Vector2(1, 1));
-            IPathfinder<IDefinitionNodeNetwork, IPathfindNodeNetwork<AstarNode>, WaypointPath> pathfinder = pathfindaxManager.CreateAstarPathfinder(nodeNetwork, new ChebyshevDistance());
             
-            int x = 0;
-            int y = 0;
-            foreach (Region r in this.cities)
-            {
-                var tmppp = this.cities.First();
-                foreach (Region n in tmppp.Neighbors)
-                {
-                    if (n.City)
-                    {
-                        y++;
-                        PathRequest<WaypointPath> pathRequest = pathfinder.RequestPath(nodeNetwork.NodeGrid.ToIndex((int)r.X, (int)(r.Y)),
-                                                                                        nodeNetwork.NodeGrid.ToIndex((int)(n.X), (int)(n.Y)));
-
-                        while (pathRequest.Status == PathRequestStatus.Solving)
-                        {
-                        }
-                        if (pathRequest.Status == PathRequestStatus.Solved)
-                        {
-                            foreach (Duality.Vector2 v in pathRequest.CompletedPath)
-                            {
-                                this.mapPerlin.SetPixel((int)v.X, (int)v.Y, Color.Fuchsia);
-                            }
-                        }
-                        else if (pathRequest.Status == PathRequestStatus.NoPathFound)
-                        {
-                            x++;
-                        }
-                    }
-                }
-            }*/
-
+            // Génération des routes
             var grid = new Grid(this.mapWidth, this.mapHeight, 1.0f);
-
             for(int x = 0; x < this.mapWidth; x++)
             {
                 for (int y = 0; y < this.mapHeight; y++)
@@ -839,30 +799,15 @@ namespace WorldGen.Classes
                 {
                     if(n.City)
                     {
-                        Position[] path = grid.GetPath(new Position((int)c.X, (int)c.Y), new Position((int)n.X, (int)n.Y), MovementPatterns.Full);
+                        Position[] path = grid.GetPath(new Position((int)c.X, (int)c.Y), new Position((int)n.X, (int)n.Y), MovementPatterns.Full, 10000);
 
                         foreach (Position p in path)
                         {
-                            this.mapPerlin.SetPixel(p.X, p.Y, Color.Fuchsia);// Color.FromArgb(255, 142, 84, 52));
+                            this.mapPerlin.SetPixel(p.X, p.Y, Color.LightGray);// Color.FromArgb(255, 142, 84, 52));
                         }
                     }
                 }
             }
-
-
-            /*for (int i = 0; i < 1; i++)
-            {
-                int x; int y;
-                int cadre = 50;
-                do
-                {
-                    x = r.Next(this.mapWidth);
-                    y = r.Next(this.mapHeight);
-                } while (this.perlinMap[x, y] < 0.6 || this.perlinMap[x, y] > 0.8 ||
-                x < cadre || x > this.mapWidth - cadre ||
-                y < cadre || y > this.mapHeight - cadre); // et tant quedans le cadre de 50px
-                GenRiver(x, y);
-            }*/
         }
 
         private void GenRiver(int x, int y, int direction = 45)
@@ -934,7 +879,3 @@ namespace WorldGen.Classes
 
 // Voir pour déplacer la carte.
 // Voir pour mettre le zoom via un slider
-/*
- * Pour avoir les frontiers des pays, tester sur toutes les arrete des cellules. 
- * Et supprimer celles qui sont en double laisse les arretes unique.
- */
