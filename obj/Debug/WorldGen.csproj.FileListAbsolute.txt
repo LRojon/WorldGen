@@ -146,6 +146,7 @@ C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Debug\LibNoise.dll
 C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Debug\LibNoise.xml
 C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Debug\HtmlToXamlConverter.dll
 C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Debug\XamlAnimatedGif.dll
+<<<<<<< HEAD
 C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Debug\DualityPrimitives.dll
 C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Debug\Pathfindax.dll
 C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Debug\Priority Queue.dll
@@ -171,3 +172,7 @@ C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Debug\WorldGen.exe.manifest
 C:\Users\PTCX1319\Desktop\test\WorldGen\bin\Debug\WorldGen.application
 C:\Users\PTCX1319\Desktop\test\WorldGen\obj\Debug\WorldGen.exe.manifest
 C:\Users\PTCX1319\Desktop\test\WorldGen\obj\Debug\WorldGen.application
+=======
+C:\Users\loicr\Desktop\Projet\Perso\WorldGen\bin\Debug\HtmlToXamlConverter.dll
+C:\Users\loicr\Desktop\Projet\Perso\WorldGen\bin\Debug\XamlAnimatedGif.dll
+>>>>>>> bacd94be8c90752d72cbeb3760958655fc3c4ead

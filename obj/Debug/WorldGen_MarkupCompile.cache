@@ -4,16 +4,21 @@
 winexe
 C#
 .cs
-C:\Users\PTCX1319\Desktop\test\WorldGen\obj\Debug\
+C:\Users\loicr\Desktop\Projet\Perso\WorldGen\obj\Debug\
 WorldGen
 none
 false
 DEBUG;TRACE
-C:\Users\PTCX1319\Desktop\test\WorldGen\App.xaml
+C:\Users\loicr\Desktop\Projet\Perso\WorldGen\App.xaml
 11151548125
 
+<<<<<<< HEAD
 31-282078334
 144-1395500348
+=======
+16-1592094647
+1321531321462
+>>>>>>> bacd94be8c90752d72cbeb3760958655fc3c4ead
 MainWindow.xaml;
 
 False
