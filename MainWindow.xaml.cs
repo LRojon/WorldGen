@@ -22,6 +22,9 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Xml.Serialization;
+using System.Runtime;
+using System.Runtime.InteropServices;
+using System.Net;
 
 namespace WorldGen
 {
@@ -123,6 +126,17 @@ namespace WorldGen
             {
                 this.GoTo(pantheon);
                 pantheonContent.SelectedItem = World.pantheon.Gods.First();
+            }
+        }
+        private void Bestiary_Selected(object sender, RoutedEventArgs e)
+        {
+            if (CheckConnection())
+            {
+                GoTo(this.bestiary);
+            }
+            else
+            {
+                MessageBox.Show("Vérifiez votre connection internet.", "Errur", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -409,6 +423,26 @@ namespace WorldGen
             else
             {
                 MessageBox.Show("L'extension ." + p[p.Length - 1].Split('.')[1] + " n'est pas prise en charge.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
+            }
+        }
+        
+        private bool CheckConnection()
+        {
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://bestiaire.alwaysdata.net/");
+                request.Timeout = 5000;
+                request.Credentials = CredentialCache.DefaultNetworkCredentials;
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+
+                if (response.StatusCode == HttpStatusCode.OK)
+                    return true;
+                else
+                    return false;
+            }
+            catch
+            {
+                return false;
             }
         }
     }
