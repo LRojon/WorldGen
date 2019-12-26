@@ -1,0 +1,46 @@
+﻿{
+  "version": "1.0.0",
+  "restore": {
+    "projectUniqueName": "C:\\Users\\loicr\\Desktop\\Projet\\Perso\\WorldGen\\VoronoiLib\\VoronoiLib.csproj",
+    "projectName": "VoronoiLib",
+    "projectPath": "C:\\Users\\loicr\\Desktop\\Projet\\Perso\\WorldGen\\VoronoiLib\\VoronoiLib.csproj",
+    "outputPath": "C:\\Users\\loicr\\Desktop\\Projet\\Perso\\WorldGen\\VoronoiLib\\obj\\",
+    "projectStyle": "PackageReference",
+    "fallbackFolders": [
+      "C:\\Microsoft\\Xamarin\\NuGet"
+    ],
+    "originalTargetFrameworks": [
+      "netstandard1.1"
+    ],
+    "sources": {
+      "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+      "https://api.nuget.org/v3/index.json": {}
+    },
+    "frameworks": {
+      "netstandard1.1": {
+        "projectReferences": {}
+      }
+    },
+    "warningProperties": {
+      "warnAsError": [
+        "NU1605"
+      ]
+    }
+  },
+  "frameworks": {
+    "netstandard1.1": {
+      "dependencies": {
+        "Microsoft.NETCore.Portable.Compatibility": {
+          "target": "Package",
+          "version": "[1.0.1, )"
+        },
+        "NETStandard.Library": {
+          "suppressParent": "All",
+          "target": "Package",
+          "version": "[1.6.0, )",
+          "autoReferenced": true
+        }
+      }
+    }
+  }
+}

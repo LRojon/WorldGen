@@ -1,0 +1,619 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Pathfindax</name>
+    </assembly>
+    <members>
+        <member name="T:Pathfindax.Algorithms.AStarAlgorithm">
+            <summary>
+            Class that implements the A* algorithm to find paths
+            </summary>
+        </member>
+        <member name="T:Pathfindax.Algorithms.DijkstraAlgorithm">
+            <summary>
+            Algorithm for potential and flow fields. Not to be used directly except for testing purposes.
+            </summary>
+        </member>
+        <member name="T:Pathfindax.Algorithms.IPathFindAlgorithm`2">
+            <summary>
+            Interface for classes that implement algorithms to find a path.
+            </summary>
+            <typeparam name="TThreadNodeNetwork"></typeparam>
+            <typeparam name="TPath"></typeparam>
+        </member>
+        <member name="M:Pathfindax.Algorithms.IPathFindAlgorithm`2.FindPath(`0,Pathfindax.PathfindEngine.IPathRequest)">
+            <summary>
+            Finds a path.
+            </summary>
+            <param name="nodeNetwork">The <typeparamref name="TThreadNodeNetwork"/> in which the pathfinding will be done</param>
+            <param name="pathRequest">The <see cref="T:Pathfindax.PathfindEngine.PathRequest"/> that contains the info needed such as the start and end of the path</param>
+            <param name="succes"></param>
+            <returns>A list of nodes in the defining the path</returns>
+        </member>
+        <member name="T:Pathfindax.Collections.Array2D`1">
+            <summary>
+            A array class that provides both single dimensional and 2-dimensional access to a array.
+            </summary>
+            <typeparam name="TItem"></typeparam>
+        </member>
+        <member name="P:Pathfindax.Collections.Array2D`1.Length">
+            <summary>
+            The length of the internal array
+            </summary>
+        </member>
+        <member name="P:Pathfindax.Collections.Array2D`1.Count">
+            <summary>
+            The length of the internal array
+            </summary>
+        </member>
+        <member name="P:Pathfindax.Collections.Array2D`1.Width">
+            <summary>
+            The width of the array in items
+            </summary>
+        </member>
+        <member name="P:Pathfindax.Collections.Array2D`1.Height">
+            <summary>
+            The height of the array in items
+            </summary>
+        </member>
+        <member name="P:Pathfindax.Collections.Array2D`1.Array">
+            <summary>
+            The internal single dimensional array thats used to store the <typeparamref name="TItem"/>s
+            </summary>
+        </member>
+        <member name="P:Pathfindax.Collections.Array2D`1.Item(System.Int32,System.Int32)">
+            <summary>
+            Provides access to the internal array with a 2-dimensional indexer
+            </summary>
+            <param name="x"></param>
+            <param name="y"></param>
+        </member>
+        <member name="P:Pathfindax.Collections.Array2D`1.Item(System.Int32)">
+            <summary>
+            Provides access to the internal array with the standard indexer
+            </summary>
+            <param name="i"></param>
+        </member>
+        <member name="M:Pathfindax.Collections.Array2D`1.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Creates a new <see cref="T:Pathfindax.Collections.Array2D`1"/>
+            </summary>
+            <param name="width">The width of the array in items</param>
+            <param name="height">The height of the array in items</param>
+        </member>
+        <member name="T:Pathfindax.Collections.IndexMinHeap`1">
+            <summary>
+            A fast minheap that is used as a priority queue for pathfinding.
+            Does not store the items itself but keeps references to them with array indexes. So do not move items in the original array.
+            Items with equal priority are returned in LIFO order.
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:Pathfindax.Collections.IndexMinHeap`1.Count">
+            <summary>
+            The current amount of items in the heap.
+            </summary>
+        </member>
+        <member name="M:Pathfindax.Collections.IndexMinHeap`1.Add(System.Int32)">
+            <summary>
+            Adds the item that is at the specified <paramref name="index"/> to the heap
+            </summary>
+            <exception cref="T:System.IndexOutOfRangeException">If the interal array is full</exception>
+            <param name="index"></param>
+        </member>
+        <member name="M:Pathfindax.Collections.IndexMinHeap`1.RemoveFirst">
+            <summary>
+            Removes the first item from the heap. 
+            Since this is a minheap it will have the highest value which is determined by the implementation of the <see cref="T:System.IComparable`1"/> interface.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Pathfindax.Collections.IndexMinHeap`1.Peek">
+            <summary>
+            Returns the index of the first item from the heap but does not remove it.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Pathfindax.Collections.IndexMinHeap`1.Contains(System.Int32)">
+            <summary>
+            Returns true if this heap contains the specified index
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="F:Pathfindax.Factories.CollisionDirection.Free">
+            <summary>
+            This node has no collisions
+            </summary>
+        </member>
+        <member name="F:Pathfindax.Factories.CollisionDirection.Top">
+            <summary>
+            When going to the top node there will be a collision
+            </summary>
+        </member>
+        <member name="F:Pathfindax.Factories.CollisionDirection.Bottom">
+            <summary>
+            When going to the bottom node there will be a collision
+            </summary>
+        </member>
+        <member name="F:Pathfindax.Factories.CollisionDirection.Left">
+            <summary>
+            When going to the left node there will be a collision
+            </summary>
+        </member>
+        <member name="F:Pathfindax.Factories.CollisionDirection.Right">
+            <summary>
+            When going to the right node there will be a collision
+            </summary>
+        </member>
+        <member name="F:Pathfindax.Factories.CollisionDirection.Solid">
+            <summary>
+            All directions will have a collision
+            </summary>
+        </member>
+        <member name="M:Pathfindax.Factories.DefinitionNodeGridFactory.GeneratePreFilledArray(Pathfindax.Graph.GenerateNodeGridConnections,System.Int32,System.Int32,Pathfindax.Factories.NodeGridCollisionMask,System.Boolean)">
+            <summary>
+            Returns a preconfigured <see cref="T:Pathfindax.Collections.Array2D`1"/> which can be used to make a <see cref="T:Pathfindax.Graph.DefinitionNodeGrid"/>
+            </summary>
+            <param name="width"></param>
+            <param name="height"></param>
+            <param name="generateNodeGridConnections"></param>
+            <param name="nodeGridCollisionLayers"></param>
+            <param name="crossCorners"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Pathfindax.Graph.AstarNodeNetwork">
+            <summary>
+            A node network for <see cref="T:Pathfindax.Nodes.AstarNode"/>s
+            </summary>
+        </member>
+        <member name="M:Pathfindax.Graph.AstarNodeNetwork.#ctor(Pathfindax.Graph.IDefinitionNodeNetwork,Pathfindax.Graph.IPathfindNodeGenerator{Pathfindax.Nodes.AstarNode}[])">
+            <summary>
+            Creates a new instance of the <see cref="T:Pathfindax.Graph.AstarNodeNetwork"/>
+            </summary>
+            <param name="definitionNodeNetwork"></param>
+            <param name="pathfindNodeGenerators"></param>
+        </member>
+        <member name="T:Pathfindax.Graph.DefinitionNodeGrid">
+            <summary>
+            Class that holds the definition data for the nodegrid.
+            The nodegrid will be shared between multiple threads so do not make changes to it after you start pathfinding on it.
+            </summary>
+        </member>
+        <member name="T:Pathfindax.Graph.DefinitionNodeNetwork">
+            <summary>
+            Class that holds the definition data for the nodenetwork.
+            The nodenetwork will be shared between multiple threads so do not make changes to it after you start pathfinding on it.
+            </summary>
+        </member>
+        <member name="M:Pathfindax.Graph.DefinitionNodeNetwork.GetNode(System.Single,System.Single)">
+            <summary>
+            Returns the node closest to this position
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="F:Pathfindax.Graph.GenerateNodeGridConnections.None">
+            <summary>
+            Generate no neighbours.
+            </summary>
+        </member>
+        <member name="F:Pathfindax.Graph.GenerateNodeGridConnections.NoDiagonal">
+            <summary>
+            Generate connections to all neighbours of a node except diagonal.
+            </summary>
+        </member>
+        <member name="F:Pathfindax.Graph.GenerateNodeGridConnections.All">
+            <summary>
+            Generate connections to all neighbours of a node.
+            </summary>
+        </member>
+        <member name="T:Pathfindax.Graph.IDefinitionNodeGrid">
+            <summary>
+            Interface for sourcenodegrids
+            </summary>
+        </member>
+        <member name="T:Pathfindax.Graph.IDefinitionNodeNetwork">
+            <summary>
+            Interface for sourcenodenetworks
+            </summary>
+        </member>
+        <member name="M:Pathfindax.Graph.IDefinitionNodeNetwork.GetNode(System.Single,System.Single)">
+            <summary>
+            Gets the node closest to this position
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Pathfindax.Graph.IDefinitionNodeNetworkProvider`1">
+            <summary>
+            Interface for classes that can provide <typeparamref name="TNodeNetwork"/> which will be used as base information for other nodenetworks when for pathfinding
+            </summary>
+            <typeparam name="TNodeNetwork"></typeparam>
+        </member>
+        <member name="M:Pathfindax.Graph.IDefinitionNodeNetworkProvider`1.GenerateGrid2D">
+            <summary>
+            Generates the <typeparamref name="TNodeNetwork"></typeparamref>
+            </summary>
+            <returns>The <typeparamref name="TNodeNetwork"></typeparamref></returns>
+        </member>
+        <member name="T:Pathfindax.Graph.IPathfindNodeNetwork`1">
+            <summary>
+            Generic interface for nodenetworks. Each thread will have its own nodenetwork.
+            </summary>
+            <typeparam name="TNode"></typeparam>
+        </member>
+        <member name="M:Pathfindax.Graph.IPathfindNodeNetwork`1.GetCollisionLayerNetwork(Pathfindax.Nodes.PathfindaxCollisionCategory)">
+            <summary>
+            Gets a nodenetwork for this <paramref name="collisionCategory"/>.
+            </summary>
+            <param name="collisionCategory"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Pathfindax.Graph.IPathfindNodeNetwork">
+            <summary>
+            Interface for nodenetworks
+            </summary>
+        </member>
+        <member name="T:Pathfindax.Nodes.AstarNode">
+            <summary>
+            Represents a node that can be used with the A* algorithm.
+            </summary>
+        </member>
+        <member name="P:Pathfindax.Nodes.AstarNode.Parent">
+            <summary>
+            Used to retrace the path in the A* algorithm.
+            </summary>
+        </member>
+        <member name="P:Pathfindax.Nodes.AstarNode.GCost">
+            <summary>
+            The cost to the targetnode
+            </summary>
+        </member>
+        <member name="F:Pathfindax.Nodes.DefinitionNode.Position">
+            <summary>
+            The position in the <see cref="T:Pathfindax.Graph.IDefinitionNodeNetwork"/>
+            </summary>
+        </member>
+        <member name="F:Pathfindax.Nodes.DefinitionNode.MovementCostModifier">
+            <summary>
+            The movement penalty for this node. This can be used to make the pathfinder try to avoid or prefer certain nodes.
+            </summary>
+        </member>
+        <member name="P:Pathfindax.Nodes.DijkstraNode.Priority">
+            <summary>
+            The cost to the targetnode
+            </summary>
+        </member>
+        <member name="T:Pathfindax.Nodes.NodeConnection">
+            <summary>
+            Represents a connection to another node.
+            </summary>
+        </member>
+        <member name="F:Pathfindax.Nodes.NodeConnection.To">
+            <summary>
+            Where this connection is going to.
+            </summary>
+        </member>
+        <member name="F:Pathfindax.Nodes.NodeConnection.CollisionCategory">
+            <summary>
+            The collisions in this connection
+            </summary>
+        </member>
+        <member name="M:Pathfindax.Nodes.NodeConnection.#ctor(System.Int32,Pathfindax.Nodes.PathfindaxCollisionCategory)">
+            <summary>
+            Creates a new <see cref="T:Pathfindax.Nodes.NodeConnection"/>.
+            </summary>
+            <param name="to">Where this connection is going to</param>
+            <param name="collisionCategory">The <see cref="T:Pathfindax.Nodes.PathfindaxCollisionCategory"/> of this <see cref="T:Pathfindax.Nodes.NodeConnection"/></param>
+        </member>
+        <member name="T:Pathfindax.PathfindEngine.DummyPathfindAlgorithm`2">
+            <summary>
+            A dummy algorithm that is designed to do nothing.
+            </summary>
+            <typeparam name="TPathfindNodeNetwork"></typeparam>
+            <typeparam name="TPath"></typeparam>
+        </member>
+        <member name="T:Pathfindax.PathfindEngine.DummyPathfinder`3">
+            <summary>
+            A dummy pathfinder that is designed to do nothing at all. 
+            </summary>
+            <typeparam name="TDefinitionNodeNetwork"></typeparam>
+            <typeparam name="TPathfindNodeNetwork"></typeparam>
+            <typeparam name="TPath"></typeparam>
+        </member>
+        <member name="M:Pathfindax.PathfindEngine.IPathfinder`1.RequestPath(Pathfindax.PathfindEngine.PathRequest{`0})">
+            <summary>
+            Requests a path.
+            </summary>
+            <param name="pathRequest"></param>
+        </member>
+        <member name="M:Pathfindax.PathfindEngine.IPathfinder`1.RequestPath(Duality.Vector3,Duality.Vector3,Pathfindax.Nodes.PathfindaxCollisionCategory,System.Byte)">
+            <summary>
+            Requests a new path
+            </summary>
+            <param name="start"></param>
+            <param name="end"></param>
+            <param name="agentSize"></param>
+            <param name="collisionLayer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Pathfindax.PathfindEngine.IPathfinder`1.RequestPath(Duality.Vector2,Duality.Vector2,Pathfindax.Nodes.PathfindaxCollisionCategory,System.Byte)">
+            <summary>
+            Requests a new path
+            </summary>
+            <param name="start"></param>
+            <param name="end"></param>
+            <param name="agentSize"></param>
+            <param name="collisionLayer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Pathfindax.PathfindEngine.IPathfinder`1.RequestPath(System.Single,System.Single,System.Single,System.Single,Pathfindax.Nodes.PathfindaxCollisionCategory,System.Byte)">
+            <summary>
+            Requests a new path
+            </summary>
+            <param name="x1"></param>
+            <param name="y1"></param>
+            <param name="x2"></param>
+            <param name="y2"></param>
+            <param name="agentSize"></param>
+            <param name="collisionLayer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Pathfindax.PathfindEngine.IPathfinder`1.RequestPath(System.Int32,System.Int32,Pathfindax.Nodes.PathfindaxCollisionCategory,System.Byte)">
+            <summary>
+            Requests a new path
+            </summary>
+            <param name="start"></param>
+            <param name="end"></param>
+            <param name="agentSize"></param>
+            <param name="collisionLayer"></param>
+        </member>
+        <member name="M:Pathfindax.PathfindEngine.IPathfinder.Start">
+            <summary>
+            Starts the pathfinder.
+            </summary>
+        </member>
+        <member name="M:Pathfindax.PathfindEngine.IPathfinder.Stop">
+            <summary>
+            Stops the pathfinder.
+            </summary>
+        </member>
+        <member name="M:Pathfindax.PathfindEngine.PathfindaxManager.#ctor(Pathfindax.Threading.IUpdatableSynchronizationContext)">
+            <summary>
+            Creates a new <see cref="T:Pathfindax.PathfindEngine.PathfindaxManager"/>
+            </summary>
+            <param name="synchronizationContext">The synchronization context that will be used to post the callbacks of the completed paths to. If none is supplied the current threads <see cref="T:System.Threading.SynchronizationContext"/> will be used</param>
+        </member>
+        <member name="T:Pathfindax.PathfindEngine.Pathfinder`3">
+            <summary>
+            Provides multithreading functionality using a producer consumer queue
+            </summary>
+            <typeparam name="TDefinitionNodeNetwork"></typeparam>
+            <typeparam name="TThreadNodeNetwork"></typeparam>
+            <typeparam name="TPath"></typeparam>
+        </member>
+        <member name="M:Pathfindax.PathfindEngine.Pathfinder`3.#ctor(Pathfindax.Threading.ISynchronizationContext,`0,Pathfindax.Algorithms.IPathFindAlgorithm{`1,`2},System.Func{`0,Pathfindax.Algorithms.IPathFindAlgorithm{`1,`2},Pathfindax.Collections.Interfaces.ICache{Pathfindax.PathfindEngine.IPathRequest,`2},Pathfindax.PathfindEngine.PathRequestProcesser{`1,`2}},Pathfindax.Collections.Interfaces.ICache{Pathfindax.PathfindEngine.IPathRequest,`2},System.Int32)">
+            <summary>
+            Creates a new <see cref="T:Pathfindax.PathfindEngine.Pathfinder`3"/>
+            </summary>
+            <param name="synchronizationContext"></param>
+            <param name="definitionNodeNetwork"></param>
+            <param name="pathFindAlgorithm"></param>
+            <param name="processerConstructor">Used to construct the processers for each thread</param>
+            <param name="pathCache"></param>
+            <param name="threads">The amount of threads that will be used</param>
+        </member>
+        <member name="M:Pathfindax.PathfindEngine.Pathfinder`3.Start">
+            <summary>
+            Starts giving the pathfinders paths to solve if there are any
+            </summary>
+        </member>
+        <member name="M:Pathfindax.PathfindEngine.Pathfinder`3.Stop">
+            <summary>
+            Stops giving the pathfinders paths to solve if there are any
+            </summary>
+        </member>
+        <member name="M:Pathfindax.PathfindEngine.Pathfinder`3.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="T:Pathfindax.PathfindEngine.PathRequest`1">
+            <summary>
+            A class with all the information needed to calculate a path from A to B.
+            </summary>
+        </member>
+        <member name="P:Pathfindax.PathfindEngine.PathRequest`1.PathStart">
+            <summary>
+            The node start node.
+            </summary>
+        </member>
+        <member name="P:Pathfindax.PathfindEngine.PathRequest`1.PathEnd">
+            <summary>
+            The end node.
+            </summary>
+        </member>
+        <member name="P:Pathfindax.PathfindEngine.PathRequest`1.AgentSize">
+            <summary>
+            The size of the agent. 1 is the default value meaning that the agent occupies only 1 node.
+            </summary>
+        </member>
+        <member name="P:Pathfindax.PathfindEngine.PathRequest`1.CollisionCategory">
+            <summary>
+            The CollisionCategory. Multiple categories can be active at the same time.
+            </summary>
+        </member>
+        <member name="P:Pathfindax.PathfindEngine.PathRequest`1.CompletedPath">
+            <summary>
+            The calculated path. Will be null unless the <see cref="P:Pathfindax.PathfindEngine.PathRequest`1.Status"/> is equal to <see cref="F:Pathfindax.PathfindEngine.PathRequestStatus.Solved"/>
+            </summary>
+        </member>
+        <member name="P:Pathfindax.PathfindEngine.PathRequest`1.Status">
+            <summary>
+            The status of this <see cref="T:Pathfindax.PathfindEngine.PathRequest"/>. See <see cref="T:Pathfindax.PathfindEngine.PathRequestStatus"/> for more info.
+            </summary>
+        </member>
+        <member name="P:Pathfindax.PathfindEngine.PathRequest`1.WaitHandle">
+            <summary>
+            Will be set when the <see cref="P:Pathfindax.PathfindEngine.PathRequest`1.Status"/> is equal or greater than <see cref="F:Pathfindax.PathfindEngine.PathRequestStatus.Solved"/>.
+            </summary>
+        </member>
+        <member name="F:Pathfindax.PathfindEngine.PathRequest`1._callbacks">
+            <summary>
+            The callback that will be called after the pathfinder finds a path or cannot find one.
+            </summary>
+        </member>
+        <member name="M:Pathfindax.PathfindEngine.PathRequest`1.#ctor(System.Int32,System.Int32,Pathfindax.Nodes.PathfindaxCollisionCategory,System.Byte)">
+            <summary>
+            Creates a new <see cref="T:Pathfindax.PathfindEngine.PathRequest"/>
+            </summary>
+            <param name="start">The worldcoordinates of the start of the path</param>
+            <param name="end">The worldcoordinates of the end of the path</param>
+            <param name="agentSize">The size of the agent in nodes</param>
+            <param name="collisionCategory">The collision layers that this agent cannot cross</param>
+        </member>
+        <member name="M:Pathfindax.PathfindEngine.PathRequest`1.AddCallback(System.Action{Pathfindax.PathfindEngine.PathRequest{`0}})">
+            <summary>
+            Adds a new callback to this <see cref="T:Pathfindax.PathfindEngine.PathRequest"/>. This callback will be called immediately if the path is already finished.
+            </summary>
+            <param name="callback">The callback that will be called when the pathfinder has solved this <see cref="T:Pathfindax.PathfindEngine.PathRequest"/></param>
+        </member>
+        <member name="T:Pathfindax.PathfindEngine.PathRequestProcesser`2">
+            <summary>
+            Processes a <see cref="T:Pathfindax.PathfindEngine.PathRequest"/>
+            </summary>
+            <typeparam name="TThreadNodeNetwork"></typeparam>
+            <typeparam name="TPath"></typeparam>
+        </member>
+        <member name="M:Pathfindax.PathfindEngine.PathRequestProcesser`2.#ctor(`0,Pathfindax.Algorithms.IPathFindAlgorithm{`0,`1},Pathfindax.Collections.Interfaces.ICache{Pathfindax.PathfindEngine.IPathRequest,`1})">
+            <summary>
+            Initialises a new <see cref="T:Pathfindax.PathfindEngine.PathRequestProcesser`2"/> with a <see cref="T:Pathfindax.Algorithms.IPathFindAlgorithm`2"/> and optional post processing steps.
+            </summary>
+            <param name="nodeNetwork">The <typeparamref name="TThreadNodeNetwork"/> that will be used to solve paths</param>
+            <param name="pathFindAlgorithm">The <see cref="T:Pathfindax.Algorithms.IPathFindAlgorithm`2"/> that will be used to solve paths</param>
+            <param name="pathCache"></param>
+        </member>
+        <member name="M:Pathfindax.PathfindEngine.PathRequestProcesser`2.Process(Pathfindax.PathfindEngine.PathRequest{`1})">
+            <summary>
+            Processes a <see cref="T:Pathfindax.PathfindEngine.PathRequest"/>
+            </summary>
+            <param name="pathRequest"></param>
+        </member>
+        <member name="F:Pathfindax.PathfindEngine.PathRequestStatus.Created">
+            <summary>
+            The <see cref="T:Pathfindax.PathfindEngine.PathRequest"/> is created but no <see cref="T:Pathfindax.PathfindEngine.IPathfinder"/> is solving it.
+            </summary>
+        </member>
+        <member name="F:Pathfindax.PathfindEngine.PathRequestStatus.Solving">
+            <summary>
+            A <see cref="T:Pathfindax.PathfindEngine.IPathfinder"/> is solving this <see cref="T:Pathfindax.PathfindEngine.PathRequest"/> or its waiting in the queue.
+            </summary>
+        </member>
+        <member name="F:Pathfindax.PathfindEngine.PathRequestStatus.Solved">
+            <summary>
+            A path was found.
+            </summary>
+        </member>
+        <member name="F:Pathfindax.PathfindEngine.PathRequestStatus.NoPathFound">
+            <summary>
+            The path could not be solved
+            </summary>
+        </member>
+        <member name="M:Pathfindax.Paths.DynamicPotentialField.#ctor(Pathfindax.PathfindEngine.IPathfindaxManager,Pathfindax.Graph.GridTransformer,System.Single)">
+            <summary>
+            Creates a new <see cref="T:Pathfindax.Paths.DynamicPotentialField"/>
+            </summary>
+            <param name="pathfindaxManager"></param>
+            <param name="gridTransformer"></param>
+            <param name="interval">The update interval in milliseconds.</param>
+        </member>
+        <member name="M:Pathfindax.Paths.IWaypointPath.NextWaypoint">
+            <summary>
+            
+            </summary>
+            <returns><c>True</c> if the end of the path has been reached</returns>
+        </member>
+        <member name="T:Pathfindax.Paths.QuadraticPotentialFunction">
+            <summary>
+            Uses a quadratic function to add potential to a <see cref="T:Pathfindax.Paths.DynamicPotentialField"/>
+            </summary>
+        </member>
+        <member name="M:Pathfindax.Paths.QuadraticPotentialFunction.#ctor(System.Func{Duality.Vector2},System.Single,System.Single)">
+            <summary>
+            Creates a new <see cref="T:Pathfindax.Paths.QuadraticPotentialFunction"/>
+            </summary>
+            <param name="worldPositionProvider"></param>
+            <param name="maxDistance">At distance = <paramref name="maxDistance"/> the potential added will be equal to 0</param>
+            <param name="maxStrength">At distance = 0 the potential added will be equal to this</param>
+        </member>
+        <member name="T:Pathfindax.Threading.MultithreadedWorkerQueue`1">
+            <summary>
+            Queues items and processes them with one or multiple threads
+            </summary>
+            <typeparam name="TIn"></typeparam>
+        </member>
+        <member name="M:Pathfindax.Threading.MultithreadedWorkerQueue`1.Start">
+            <summary>
+            Starts checking the queue for work to do
+            </summary>
+        </member>
+        <member name="M:Pathfindax.Threading.MultithreadedWorkerQueue`1.Stop">
+            <summary>
+            Stops checking the queue for work to do
+            </summary>
+        </member>
+        <member name="M:Pathfindax.Threading.MultithreadedWorkerQueue`1.Enqueue(`0)">
+            <summary>
+            Enqueues a new work item in the queue.
+            </summary>
+            <param name="workItem"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Pathfindax.Threading.MultithreadedWorkerQueue`1.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="T:Pathfindax.Threading.SynchronizationContextAdapter">
+            <summary>
+            Makes it possible to use <see cref="T:System.Threading.SynchronizationContext"/> where <see cref="T:Pathfindax.Threading.IUpdatableSynchronizationContext"/> is required.
+            </summary>
+        </member>
+        <member name="M:Pathfindax.Threading.SynchronizationContextAdapter.Update">
+            <summary>
+            This is just here to implement the <see cref="T:Pathfindax.Threading.IUpdatableSynchronizationContext"/> interface. It does nothing.
+            </summary>
+        </member>
+        <member name="T:Pathfindax.Threading.Worker`1">
+            <summary>
+            Class for doing work on a dedicated thread
+            </summary>
+            <typeparam name="TIn"></typeparam>
+        </member>
+        <member name="P:Pathfindax.Threading.Worker`1.IsBusy">
+            <summary>
+            True if this <see cref="T:Pathfindax.Threading.Worker`1"/> is doing work.
+            </summary>
+        </member>
+        <member name="M:Pathfindax.Threading.Worker`1.#ctor(Pathfindax.Threading.IProcesser{`0})">
+            <summary>
+            Creates a new worker that will start doing its work on a dedicated thread.
+            </summary>
+            <param name="processer"></param>
+        </member>
+        <member name="M:Pathfindax.Threading.Worker`1.Start">
+            <summary>
+            Starts the worker
+            </summary>
+        </member>
+        <member name="M:Pathfindax.Threading.Worker`1.DoWork(`0,System.Action{`0})">
+            <summary>
+            Starts working on a work item on a dedicated thread
+            </summary>
+            <param name="taskCompletionSource">The work item</param>
+            <param name="onCompleted"></param>
+            <returns>True if the worker was not busy and the work was accepted</returns>
+        </member>
+        <member name="M:Pathfindax.Threading.Worker`1.Dispose">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>
