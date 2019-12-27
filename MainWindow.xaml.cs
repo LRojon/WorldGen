@@ -73,9 +73,13 @@ namespace WorldGen
                 {
                     MessageBox.Show("L'extension ." + p[p.Length - 1].Split('.')[1] + " n'est pas prise en charge.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
                 }
-            }
 
-            this.GoTo(map);
+                this.GoTo(map);
+            }
+            else
+            {
+                this.GoTo(this.Help);
+            }
         }
         
         private void HamburgerMenuItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -124,6 +128,11 @@ namespace WorldGen
                 this.GoTo(pantheon);
                 pantheonContent.SelectedItem = World.pantheon.Gods.First();
             }
+        }
+
+        private void Help_Click(object sender, RoutedEventArgs e)
+        {
+            this.GoTo(this.Help);
         }
 
         private void Delaunay_ON_OFF(object sender, RoutedEventArgs e)
@@ -181,6 +190,7 @@ namespace WorldGen
         
         private void NewWorld(object sender, RoutedEventArgs e)
         {
+            GC.Collect();
             this.NW.Visibility = Visibility.Hidden;
             World = new World((int)this.map.ActualWidth, (int)this.map.ActualHeight);
             this.Title = World.name;
@@ -412,5 +422,6 @@ namespace WorldGen
                 MessageBox.Show("L'extension ." + p[p.Length - 1].Split('.')[1] + " n'est pas prise en charge.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
             }
         }
+
     }
 }
