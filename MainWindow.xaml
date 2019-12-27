@@ -55,8 +55,13 @@
                     <ImageBrush ImageSource="Assets/menu/new.png" Stretch="Uniform"/>
                 </Button.Background>
             </Button>
+            <Button ToolTip="Aide" Click="Help_Click" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,540,0,0" BorderBrush="{x:Null}" Foreground="{x:Null}">
+                <Button.Background>
+                    <ImageBrush ImageSource="Assets/menu/tuto.png" Stretch="Uniform"/>
+                </Button.Background>
+            </Button>
         </Grid>
-        <Grid Name="map" Visibility="Visible" Margin="50,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center">
+        <Grid Name="map" Visibility="Hidden" Margin="50,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center">
             <Image Name="imageMap"
                    Source="Assets/Image/map.jpg"
                    Margin="0"
@@ -156,6 +161,24 @@
             <Label Name="nbRegion" Content="Label" HorizontalAlignment="Left" Margin="405,10,0,0" VerticalAlignment="Top" Width="250" FontFamily="Viner Hand ITC" FontSize="18" FontWeight="Bold" Foreground="Black"/>
             <Label Name="nbFollower" Content="Label" HorizontalAlignment="Left" Margin="405,53,0,0" VerticalAlignment="Top" Width="250" FontFamily="Viner Hand ITC" FontSize="18" FontWeight="Bold" Foreground="Black"/>
             <Button Content="Button" HorizontalAlignment="Left" Margin="429,298,0,0" VerticalAlignment="Top" Width="75"/>
+        </Grid>
+        <Grid Name="Help" Background="White" Visibility="Visible" Margin="50,0,0,0">
+            <Button Click="NewWorld" HorizontalAlignment="Left" Margin="268,0,0,10.4" VerticalAlignment="Bottom" Width="40" Height="40" BorderBrush="{x:Null}" Foreground="{x:Null}">
+                <Button.Background>
+                    <ImageBrush ImageSource="Assets/menu/plus.png" Stretch="Uniform"/>
+                </Button.Background>
+            </Button>
+            <Label Content="Clicquez ici pour commencer" HorizontalAlignment="Left" Margin="10,0,0,10.4" VerticalAlignment="Bottom" Height="41" FontSize="18" FontWeight="Bold"/>
+            <Label Content="Pour voir la carte du monde" Margin="10,15,10,0" VerticalAlignment="Top" Height="40" FontSize="18" FontWeight="Bold"/>
+            <Label Content="Pour venir voir cette aide" Margin="10,545,10,0" VerticalAlignment="Top" Height="40" FontSize="18" FontWeight="Bold"/>
+            <Label Content="Pour quitter le logiciel (Déconseillé) " Margin="10,485,10,0" VerticalAlignment="Top" Height="40" FontSize="18" FontWeight="Bold"/>
+            <Label Content="Pour ouvrir un monde déjà créé" Margin="10,425,10,0" VerticalAlignment="Top" Height="40" FontSize="18" FontWeight="Bold"/>
+            <Label Content="Si ce monde vous plait sauvegardez le" Margin="10,365,10,0" VerticalAlignment="Top" Height="40" FontSize="18" FontWeight="Bold"/>
+            <Label Content="Si ce monde ne vous plait pas, changez le" Margin="10,305,10,0" VerticalAlignment="Top" Height="40" FontSize="18" FontWeight="Bold"/>
+            <Label Content="Pour voir le panthéon" Margin="10,185,10,0" VerticalAlignment="Top" Height="40" FontSize="18" FontWeight="Bold"/>
+            <Label Content="Pour avoir les informations sur les villes" Margin="10,125,10,0" VerticalAlignment="Top" Height="40" FontSize="18" FontWeight="Bold"/>
+            <Label Content="Pour avoir les informations sur les pays" Margin="10,65,10,0" VerticalAlignment="Top" Height="40" FontSize="18" FontWeight="Bold"/>
+
         </Grid>
     </Grid>
 </Window>
