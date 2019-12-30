@@ -226,6 +226,51 @@ namespace WorldGen.Classes.Enum
             "phides",
         };
 
+        private static readonly string[] ArtefactSubject =
+        {
+            "Le coffre",
+            "Le pilier",
+            "Le monolithe",
+            "Le cube",
+            "La peau",
+            "L'instrument",
+            "Le rouleau",
+            "Le sabre",
+            "Le pot",
+            "Le rouleau",
+            "Le manteau",
+            "Le calice",
+            "La tablette",
+            "Le grimoire",
+            "L'anneau",
+            "L'amulette",
+            "La palque",
+            "Le sceau",
+            "Le cercle",
+            "Le bâton",
+            "La couronne",
+            "La lampe",
+            "La gemme",
+            "L'arche"
+        };
+        private static readonly string[] ArtefactAdjectif =
+        {
+            " du courage",
+            " du vide",
+            " d'ombre",
+            " de ruine",
+            " du jugement",
+            " du cauchemar",
+            " d'impureté",
+            " de loyauté",
+            " ardent",
+            " du triomphe",
+            " de possibilité",
+            " de dévotion",
+            " de renaissance",
+            " du destin"
+        };
+
         public static string GenKingdomName(int seed = 0)
         {
             Random r;
@@ -341,6 +386,28 @@ namespace WorldGen.Classes.Enum
             tmp += WorldTerm[r.Next(WorldTerm.Length)];
 
             tmp = Convert.ToChar(tmp[0] - 32) + tmp.Substring(1, tmp.Length - 1);
+            return tmp;
+        }
+
+        /// <summary>
+        /// Génère un nom d'artefact.
+        /// </summary>
+        /// <param name="seed"></param>
+        /// <returns>string[2] 0: Le nom; 2: L'adjectif</returns>
+        public static string[] GenArtefactName(int seed = 0)
+        {
+            GC.Collect();
+            Random r;
+            string[] tmp = new string[2];
+
+            if (seed == 0)
+                r = new Random();
+            else
+                r = new Random(seed);
+
+            tmp[1] = ArtefactAdjectif[r.Next(ArtefactAdjectif.Length)];
+            tmp[0] = ArtefactSubject[r.Next(ArtefactSubject.Length)] + tmp[1];
+
             return tmp;
         }
 

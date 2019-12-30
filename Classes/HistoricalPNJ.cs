@@ -7,7 +7,7 @@ using WorldGen.Classes.Enum;
 
 namespace WorldGen.Classes
 {
-    class HistoricalPNJ
+    public class HistoricalPNJ
     {
         private string _name;
         private Race _race;

@@ -40,6 +40,7 @@ namespace WorldGen.Classes
     public class World
     {
         // Age du monde
+
         public List<FortuneSite> sites;
         public List<Region> cities;
         public List<Kingdom> kingdoms;
@@ -51,9 +52,11 @@ namespace WorldGen.Classes
         public bool voronoi;
         public bool affSite;
         public bool croyance;
+        public bool templeDungeon;
         private double[,] perlinMap;
         private Bitmap mapPerlin;
         public string name;
+        public SourceOfMagic source;
 
         public World()
         {
@@ -69,6 +72,7 @@ namespace WorldGen.Classes
             this.voronoi = false;
             this.affSite = true;
             this.croyance = false;
+            this.templeDungeon = true;
             this.pantheon = new Pantheon();
 
             this.mapHeight = heightArea;
@@ -86,6 +90,14 @@ namespace WorldGen.Classes
 
             this.name = NameGenerator.GenWorldName();
 
+            var area = new Localization()
+            {
+                X = this.mapWidth - 100,
+                Y = this.mapHeight - 100
+            };
+            this.source = new Artefacts(area);
+
+
             Perlin p = new Perlin
             {
                 Persistence = 0.65,
@@ -101,6 +113,11 @@ namespace WorldGen.Classes
                     perlinMap[i, j] = p.GetValue(i, j, 0);
                 }
             }
+
+
+            if (this.source is Artefacts)
+                foreach (Artefact a in ((Artefacts)this.source).List)
+                    a.Position.Underwater = !(this.perlinMap[a.Position.X, a.Position.Y] > 0);
 
             for (int i = 0; i < nbSite; i++)
             {
@@ -357,6 +374,11 @@ namespace WorldGen.Classes
                     }
                 }
 
+                if (this.templeDungeon)
+                {
+                    AffTempleDungeon(g);
+                }
+
                 if (voronoi)
                 {
                     foreach (VEdge vedge in vedges)
@@ -556,6 +578,11 @@ namespace WorldGen.Classes
                         new SolidBrush(Color.Black),
                         (position.X < this.mapWidth - width ? (float)(position.X) : (float)(position.X - width * 2)), (float)(position.Y - 10));
 
+                }
+
+                if (this.templeDungeon)
+                {
+                    AffTempleDungeon(g);
                 }
 
                 if (voronoi)
@@ -763,6 +790,22 @@ namespace WorldGen.Classes
             this.name = "";
         }
     
+        private void AffTempleDungeon(Graphics g)
+        {
+            if (this.source is Artefacts)
+            {
+                foreach (Artefact a in ((Artefacts)this.source).List)
+                {
+                    Point[] tmp = {new Point(a.Position.X - 3, a.Position.Y),
+                                new Point(a.Position.X, a.Position.Y + 3),
+                                new Point(a.Position.X + 3, a.Position.Y),
+                                new Point(a.Position.X, a.Position.Y - 3)
+                            };
+                    g.FillPolygon(new SolidBrush(Color.DarkGray), tmp);
+                }
+            }
+        }
+
         private void GenPerlinMap()
         {
             Random r = new Random();
