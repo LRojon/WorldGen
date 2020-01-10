@@ -90,14 +90,6 @@ namespace WorldGen.Classes
 
             this.name = NameGenerator.GenWorldName();
 
-            var area = new Localization()
-            {
-                X = this.mapWidth - 100,
-                Y = this.mapHeight - 100
-            };
-            this.source = new Artefacts(area);
-
-
             Perlin p = new Perlin
             {
                 Persistence = 0.65,
@@ -113,11 +105,6 @@ namespace WorldGen.Classes
                     perlinMap[i, j] = p.GetValue(i, j, 0);
                 }
             }
-
-
-            if (this.source is Artefacts)
-                foreach (Artefact a in ((Artefacts)this.source).List)
-                    a.Position.Underwater = !(this.perlinMap[a.Position.X, a.Position.Y] > 0);
 
             for (int i = 0; i < nbSite; i++)
             {
@@ -225,6 +212,19 @@ namespace WorldGen.Classes
                             site.Cell.Add(vedge);
                 }
             }
+
+            var area = new Localization()
+            {
+                X = this.mapWidth - 20,
+                Y = this.mapHeight - 20
+            };
+            this.source = new Don(this.pantheon);
+
+            if (this.source is Artefacts)
+                foreach (Artefact a in ((Artefacts)this.source).List)
+                    a.Position.Underwater = !(this.perlinMap[a.Position.X, a.Position.Y] > 0);
+            if (this.source is Etre)
+                ((Etre)this.source).Where.Underwater = !(this.perlinMap[((Etre)this.source).Where.X, ((Etre)this.source).Where.Y] > 0);
 
         }
 
@@ -553,16 +553,12 @@ namespace WorldGen.Classes
                     string str = "";
                     if (this.affSite)
                     {
-                        if (info.Kingdom == null)
-                            str = "Les régions sauvages";
-                        else
+                        if (info.Kingdom != null)
                             str = info.Kingdom.Name;
                     }
                     else if (this.croyance)
                     {
-                        if (info.God == null)
-                            str = "Non croyant";
-                        else
+                        if (info.God != null)
                             str = info.God.ToString();
                     }
 
@@ -582,7 +578,7 @@ namespace WorldGen.Classes
 
                 if (this.templeDungeon)
                 {
-                    AffTempleDungeon(g);
+                    AffTempleDungeon(g, position);
                 }
 
                 if (voronoi)
@@ -789,7 +785,7 @@ namespace WorldGen.Classes
             this.mapPerlin = null;
             this.name = "";
         }
-    
+
         private void AffTempleDungeon(Graphics g)
         {
             if (this.source is Artefacts)
@@ -802,6 +798,58 @@ namespace WorldGen.Classes
                                 new Point(a.Position.X, a.Position.Y - 3)
                             };
                     g.FillPolygon(new SolidBrush(Color.DarkGray), tmp);
+                }
+            }
+            if (this.source is Etre)
+            {
+                var a = ((Etre)this.source);
+                Point[] tmp = {new Point(a.Where.X - 7, a.Where.Y),
+                                new Point(a.Where.X, a.Where.Y + 7),
+                                new Point(a.Where.X + 7, a.Where.Y),
+                                new Point(a.Where.X, a.Where.Y - 7)
+                            };
+                g.FillPolygon(new SolidBrush(Color.DarkGray), tmp);
+            }
+        }
+        private void AffTempleDungeon(Graphics g, System.Windows.Point mousePos)
+        {
+            if (this.source is Artefacts)
+            {
+                foreach (Artefact a in ((Artefacts)this.source).List)
+                {
+                    Point[] tmp = {new Point(a.Position.X - 3, a.Position.Y),
+                                new Point(a.Position.X, a.Position.Y + 3),
+                                new Point(a.Position.X + 3, a.Position.Y),
+                                new Point(a.Position.X, a.Position.Y - 3)
+                            };
+                    g.FillPolygon(new SolidBrush(Color.DarkGray), tmp);
+                }
+            }
+            if (this.source is Etre)
+            {
+                var a = ((Etre)this.source);
+                Point[] tmp = { new Point(a.Where.X - 7 , a.Where.Y),
+                                new Point(a.Where.X, a.Where.Y + 7),
+                                new Point(a.Where.X + 7, a.Where.Y),
+                                new Point(a.Where.X, a.Where.Y - 7)
+                            };
+                g.FillPolygon(new SolidBrush(Color.DarkGray), tmp);
+
+                if (mousePos.X - 50 >= a.Where.X - 10 && mousePos.X - 50 <= a.Where.X + 10 &&
+                    mousePos.Y >= a.Where.Y - 10 && mousePos.Y <= a.Where.Y + 10)
+                {
+                    var str = a.Where.Name;
+                    Font font = new Font(System.Drawing.FontFamily.GenericMonospace, 12f, GraphicsUnit.Pixel);
+
+                    var width = str.Length * 7.5f;
+                    g.FillRectangle(new SolidBrush(Color.White),
+                        (float)(mousePos.X),
+                        (float)(mousePos.Y - 10), width, font.Size + 2);
+                    g.DrawString(str,
+                        font,
+                        new SolidBrush(Color.Black),
+                        (float)(mousePos.X), (float)(mousePos.Y - 10));
+
                 }
             }
         }

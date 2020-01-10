@@ -10,7 +10,7 @@
         Title="WorldGen" Height="768" Width="1366"
         Loaded="Window_Loaded" Cursor="Arrow" WindowStyle="SingleBorderWindow"  WindowState="Maximized"
         Drop="Window_Drop" AllowDrop="True">
-    <Grid Name="app" RenderTransformOrigin="0.498,0.481" MouseMove="Grid_MouseMove">
+    <Grid Name="app" RenderTransformOrigin="0.498,0.481">
         <Grid Name="menu"
               HorizontalAlignment="Left"
               Margin="0" Width="50" Background="#FF383838"
@@ -174,7 +174,7 @@
             <Label Name="nbRegion" Content="Label" HorizontalAlignment="Left" Margin="405,10,0,0" VerticalAlignment="Top" Width="250" FontFamily="Viner Hand ITC" FontSize="18" FontWeight="Bold" Foreground="Black"/>
             <Label Name="nbFollower" Content="Label" HorizontalAlignment="Left" Margin="405,53,0,0" VerticalAlignment="Top" Width="250" FontFamily="Viner Hand ITC" FontSize="18" FontWeight="Bold" Foreground="Black"/>
         </Grid>
-        <Grid Name="Help" Background="White" Visibility="Visible" Margin="50,0,0,0">
+        <Grid Name="Help" Background="White" Visibility="Hidden" Margin="50,0,0,0">
             <Button Click="NewWorld" HorizontalAlignment="Left" Margin="268,0,0,10.4" VerticalAlignment="Bottom" Width="40" Height="40" BorderBrush="{x:Null}" Foreground="{x:Null}">
                 <Button.Background>
                     <ImageBrush ImageSource="Assets/menu/plus.png" Stretch="Uniform"/>
@@ -194,15 +194,25 @@
 
         </Grid>
 
-        <Grid Name="magic" Visibility="Hidden" Margin="50,0,0,0">
+        <Grid Name="magic" Visibility="Visible" Margin="50,0,0,0">
             <Grid.Background>
                 <ImageBrush ImageSource="Assets/Background/BackgroundMagic.png"/>
             </Grid.Background>
-            <Grid Name="artefacts">
+            <Grid Name="artefacts" Visibility="Hidden">
                 <Label x:Name="artefactDescription" Content="Label" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="1290" FontFamily="Viner Hand ITC" FontWeight="Bold" FontSize="18"/>
                 <ListBox x:Name="listArtefacts" SelectionChanged="Artefacts_SelectionChanged" HorizontalAlignment="Left" Height="100" Margin="10,53,0,0" VerticalAlignment="Top" Width="300" Background="{x:Null}" BorderBrush="{x:Null}" FontFamily="Viner Hand ITC" FontWeight="Bold" FontSize="18"/>
                 <Label x:Name="artefactsTemple" Content="Label" HorizontalAlignment="Left" Margin="315,53,0,0" VerticalAlignment="Top" Width="985" FontFamily="Viner Hand ITC" FontWeight="Bold" FontSize="18"/>
                 <Label x:Name="artefactsTempleUnderwater" Content="Label" HorizontalAlignment="Left" Margin="315,96,0,0" VerticalAlignment="Top" Width="985" FontFamily="Viner Hand ITC" FontWeight="Bold" FontSize="18"/>
+            </Grid>
+            <Grid Name="etre" Visibility="Hidden">
+                <TextBlock x:Name="etreDescription" TextWrapping="WrapWithOverflow" Margin="0,10,0,0" FontFamily="Viner Hand ITC" FontWeight="Bold" FontSize="18" VerticalAlignment="Top" Text="Label" Height="60"></TextBlock>
+                <Label x:Name="etreTemple" Content="Label" Margin="0,75,0.4,0" VerticalAlignment="Top" FontFamily="Viner Hand ITC" FontWeight="Bold" FontSize="18"/>
+            </Grid>
+            <Grid Name="plan" Visibility="Hidden">
+                <TextBlock x:Name="planDescription" TextWrapping="WrapWithOverflow" Margin="0,10,0,0" FontFamily="Viner Hand ITC" FontWeight="Bold" FontSize="18" VerticalAlignment="Top" Text="Label" Height="60"></TextBlock>
+            </Grid>
+            <Grid Name="don" Visibility="Visible">
+                <TextBlock x:Name="donDescription" TextWrapping="WrapWithOverflow" Margin="0,10,0,0" FontFamily="Viner Hand ITC" FontWeight="Bold" FontSize="18" VerticalAlignment="Top" Text="Label" Height="60"></TextBlock>
             </Grid>
         </Grid>
     </Grid>

@@ -271,6 +271,11 @@ namespace WorldGen.Classes.Enum
             " du destin"
         };
 
+        /// <summary>
+        /// Génère le nom d'un royaume
+        /// </summary>
+        /// <param name="seed"></param>
+        /// <returns></returns>
         public static string GenKingdomName(int seed = 0)
         {
             Random r;
@@ -301,6 +306,11 @@ namespace WorldGen.Classes.Enum
             return tmp;
         }
 
+        /// <summary>
+        /// Génère le nom d'une capitale
+        /// </summary>
+        /// <param name="seed"></param>
+        /// <returns></returns>
         public static string GenCapitalName(int seed = 0)
         {
             GC.Collect();
@@ -319,6 +329,12 @@ namespace WorldGen.Classes.Enum
             return tmp;
         }
 
+        /// <summary>
+        /// Génère le nom d'une ville, selon sa taille
+        /// </summary>
+        /// <param name="size"></param>
+        /// <param name="seed"></param>
+        /// <returns></returns>
         public static string GenCityName(CitySize size, int seed = 0)
         {
             GC.Collect();
@@ -354,6 +370,11 @@ namespace WorldGen.Classes.Enum
             return tmp;
         }
 
+        /// <summary>
+        /// Génère le nom d'un monde
+        /// </summary>
+        /// <param name="seed"></param>
+        /// <returns></returns>
         public static string GenWorldName(int seed = 0)
         {
             GC.Collect();
@@ -411,6 +432,11 @@ namespace WorldGen.Classes.Enum
             return tmp;
         }
 
+        /// <summary>
+        /// Génère le nom d'un dieux.
+        /// </summary>
+        /// <param name="seed"></param>
+        /// <returns></returns>
         public static string GenGodName(int seed = 0)
         {
             Random r;

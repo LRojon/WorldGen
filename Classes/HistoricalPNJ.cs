@@ -13,5 +13,8 @@ namespace WorldGen.Classes
         private Race _race;
         private bool _sexe;
 
+        public string Name { get => _name; set => _name = value; }
+        public Race Race { get => _race; set => _race = value; }
+        public bool Sexe { get => _sexe; set => _sexe = value; }
     }
 }

@@ -87,12 +87,6 @@ namespace WorldGen
                 this.GoTo(this.Help);
             }
         }
-        
-        private void HamburgerMenuItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            World = new World((int)this.map.ActualWidth, (int)this.map.ActualHeight);
-            this.imageMap.Source = World.GetVoronoiGraph(this.delaunay);
-        }
 
         private void Exit_Selected(object sender, RoutedEventArgs e)
         {
@@ -137,20 +131,33 @@ namespace WorldGen
         {
             if (this.World != null)
             {
-                if (World.source is Artefacts)
+                switch(this.World.source)
                 {
-                    var source = (Artefacts)World.source;
-                    this.listArtefacts.Height = source.List.Count * 40;
-                    this.listArtefacts.ItemsSource = source.List;
-                    this.artefactDescription.Content = source.Description;
-                    this.artefactsTemple.Content = source.List.First().Position.Name;
-                    this.artefactsTempleUnderwater.Content = source.List.First().Position.Underwater ? "Submergé" : "Emergé";
-                    this.GoTo(artefacts);
+                    case Artefacts source:
+                        this.listArtefacts.Height = source.List.Count * 40;
+                        this.listArtefacts.ItemsSource = source.List;
+                        this.artefactDescription.Content = source.Description;
+                        this.artefactsTemple.Content = source.List.First().Position.Name;
+                        this.artefactsTempleUnderwater.Content = source.List.First().Position.Underwater ? "Submergé" : "Emergé";
+                        this.GoTo(this.artefacts);
+                        break;
+                    case Etre source:
+                        this.etreDescription.Text = source.Description;
+                        this.etreTemple.Content = "Il réside maintenant " + (source.State == State.Mort ? "à la " : "au ") + source.Where.Name;
+                        this.GoTo(this.etre);
+                        break;
+                    case Plan source:
+                        this.planDescription.Text = source.Description;
+                        this.GoTo(this.plan);
+                        break;
+                    case Don source:
+                        this.donDescription.Text = source.Description;
+                        this.GoTo(this.don);
+                        break;
                 }
                 this.magic.Visibility = Visibility.Visible;
             }
         }
-
         private void Help_Click(object sender, RoutedEventArgs e)
         {
             this.GoTo(this.Help);
@@ -251,10 +258,6 @@ namespace WorldGen
             }
         }
 
-        private void Grid_MouseMove(object sender, MouseEventArgs e)
-        {
-        }
-
         private void ImageMap_MouseLeave(object sender, MouseEventArgs e)
         {
             if (this.World != null)
@@ -281,7 +284,6 @@ namespace WorldGen
             backgroundKingdom.Source = World.GetKingdomMap(selected.ToString());
             SetKingdom(selected);
         }
-    
         private void SetKingdom(Kingdom kingdom)
         {
             kingdomType.Content = kingdom.Type + (kingdom.Type == Classes.Enum.KingdomType.Théocratie ? ": " + kingdom.God.ToString() : "");
@@ -318,7 +320,6 @@ namespace WorldGen
                 backgroundPantheon.Source = this.backPantheon;
             SetGod(selected);
         }
-
         private void SetGod(God god)
         {
             nbRegion.Content = god.Followers.Count.ToString("N0", CultureInfo.GetCultureInfo("ru-RU")) + " regions sous influence";
@@ -331,7 +332,6 @@ namespace WorldGen
             //backgroundKingdom.Source = World.GetKingdomMap(selected.ToString());
             SetCity(selected);
         }
-
         private void SetCity(Region r)
         {
             if(r.Capital)
@@ -354,14 +354,13 @@ namespace WorldGen
             cityInfo.Document = flowDocument;
             cityRessource.Content = "Ressource principale: " + r.Ressource.ToString();
         }
-    
+
         private void Artefacts_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Artefact selected = ((Artefacts)World.source).List.Where(c => c.ToString() == listArtefacts.SelectedItem.ToString()).FirstOrDefault();
 
             SetArtefact(selected);
         }
-
         private void SetArtefact(Artefact a)
         {
             var source = (Artefacts)World.source;
@@ -387,7 +386,6 @@ namespace WorldGen
                 sfd.ShowDialog();
             }
         }
-
         private void Sfd_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
         {
             SaveFileDialog sfd = (SaveFileDialog)sender;
@@ -411,7 +409,6 @@ namespace WorldGen
 
             ofd.ShowDialog();
         }
-
         private void Ofd_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
         {
             OpenFileDialog ofd = (OpenFileDialog)sender;
@@ -443,7 +440,6 @@ namespace WorldGen
             this.NW.Visibility = Visibility.Hidden;
             this.GoTo(map);
         }
-
         private void Window_Drop(object sender, DragEventArgs e)
         {
             string[] path = (string[])e.Data.GetData(DataFormats.FileDrop);
