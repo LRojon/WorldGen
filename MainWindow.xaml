@@ -211,8 +211,12 @@
             <Grid Name="plan" Visibility="Hidden">
                 <TextBlock x:Name="planDescription" TextWrapping="WrapWithOverflow" Margin="0,10,0,0" FontFamily="Viner Hand ITC" FontWeight="Bold" FontSize="18" VerticalAlignment="Top" Text="Label" Height="60"></TextBlock>
             </Grid>
-            <Grid Name="don" Visibility="Visible">
+            <Grid Name="don" Visibility="Hidden">
                 <TextBlock x:Name="donDescription" TextWrapping="WrapWithOverflow" Margin="0,10,0,0" FontFamily="Viner Hand ITC" FontWeight="Bold" FontSize="18" VerticalAlignment="Top" Text="Label" Height="60"></TextBlock>
+            </Grid>
+            <Grid Name="titan" Visibility="Visible">
+                <TextBlock x:Name="titanDescription" TextWrapping="WrapWithOverflow" Margin="0,10,0,0" FontFamily="Viner Hand ITC" FontWeight="Bold" FontSize="18" VerticalAlignment="Top" Text="Label" Height="60"/>
+                <ListBox Name="titanList" HorizontalAlignment="Left" Height="669" Margin="0,70,0,0" VerticalAlignment="Top" Width="511" Background="{x:Null}" BorderBrush="{x:Null}" FontFamily="Viner Hand ITC" FontSize="18" FontWeight="Bold" Focusable="False"/>
             </Grid>
         </Grid>
     </Grid>

@@ -115,9 +115,36 @@ namespace WorldGen.Classes
 
     public class Titan : SourceOfMagic
     {
-        public Titan() { }
+        List<string> _titans = new List<string>();
+        public Titan(Pantheon pantheon) {
+            var r = new Random();
+            if(r.Next(100)%2 == 0)
+            {
+                int n = 0;
+                foreach(God g in pantheon.Gods)
+                {
+                    this.Titans.Add(NameGenerator.GenTitanName((r.Next(100000) + n)) + " " + g.Title);
+                    n++;
+                }
+                this.Description = "Les titans sont les avatars des dieux sur terre, et sont les gardiens de la magie.";
+            }
+            else
+            {
+                int nb = r.Next(1, 6);
+                for (int i = 0; i<nb; i++)
+                {
+                    this.Titans.Add(NameGenerator.GenTitanName((r.Next(100000) + i)));
+                }
+                if(this.Titans.Count > 1)
+                    this.Description = "Les titans sont la depuis la création du monde. Des études peuvent prouver que la magie provient de l'air qu'ils expirent.";
+                else
+                    this.Description = "Le titan sont la depuis la création du monde. Des études peuvent prouver que la magie provient de l'air qu'il expire.";
+            }
+        }
 
         public Titan(string description) : base (description) { }
+
+        public List<string> Titans { get => _titans; set => _titans = value; }
     }
 
     public class Etre : SourceOfMagic
@@ -172,7 +199,6 @@ namespace WorldGen.Classes
         public State State { get => _state; set => _state = value; }
         public Localization Where { get => _where; set => _where = value; }
     }
-
     public enum State
     {
         Eveillé,
@@ -220,7 +246,6 @@ namespace WorldGen.Classes
 
         internal List<Artefact> List { get => _artefacts; set => _artefacts = value; }
     }
-
     public class Artefact
     {
         private Localization _localization;

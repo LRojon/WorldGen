@@ -154,6 +154,11 @@ namespace WorldGen
                         this.donDescription.Text = source.Description;
                         this.GoTo(this.don);
                         break;
+                    case Titan source:
+                        this.titanDescription.Text = source.Description;
+                        this.titanList.ItemsSource = source.Titans;
+                        this.GoTo(this.titan);
+                        break;
                 }
                 this.magic.Visibility = Visibility.Visible;
             }
@@ -257,7 +262,6 @@ namespace WorldGen
                 this.imageMap.Source = World.GetVoronoiGraph(e.GetPosition(this), delaunay);
             }
         }
-
         private void ImageMap_MouseLeave(object sender, MouseEventArgs e)
         {
             if (this.World != null)

@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WorldGen.Classes.Enum;
 
-namespace WorldGen.Classes.Enum
+namespace WorldGen.Classes
 {
     static class NameGenerator
     {
@@ -271,8 +272,40 @@ namespace WorldGen.Classes.Enum
             " du destin"
         };
 
+        private static readonly string[] TitanSyllabe1 =
+        {
+            "Ji",
+            "Vez",
+            "Cre",
+            "Blod",
+            "Aka",
+            "Wosr",
+            "Krik",
+            "Krid",
+            "Iks",
+            "Is",
+            "Mal",
+            "Am",
+            "Mow"
+        };
+        private static readonly string[] TitanSyllabe2 =
+        {
+            "gi",
+            "us",
+            "lag",
+            "thos",
+            "ros",
+            "dius",
+            "sar",
+            "og",
+            "las",
+            "rym",
+            "ag",
+            "barg"
+        };
+
         /// <summary>
-        /// Génère le nom d'un royaume
+        /// Génère un nom d'un royaume
         /// </summary>
         /// <param name="seed"></param>
         /// <returns></returns>
@@ -307,7 +340,7 @@ namespace WorldGen.Classes.Enum
         }
 
         /// <summary>
-        /// Génère le nom d'une capitale
+        /// Génère un nom d'une capitale
         /// </summary>
         /// <param name="seed"></param>
         /// <returns></returns>
@@ -330,7 +363,7 @@ namespace WorldGen.Classes.Enum
         }
 
         /// <summary>
-        /// Génère le nom d'une ville, selon sa taille
+        /// Génère un nom d'une ville, selon sa taille
         /// </summary>
         /// <param name="size"></param>
         /// <param name="seed"></param>
@@ -371,7 +404,7 @@ namespace WorldGen.Classes.Enum
         }
 
         /// <summary>
-        /// Génère le nom d'un monde
+        /// Génère un nom d'un monde
         /// </summary>
         /// <param name="seed"></param>
         /// <returns></returns>
@@ -433,7 +466,7 @@ namespace WorldGen.Classes.Enum
         }
 
         /// <summary>
-        /// Génère le nom d'un dieux.
+        /// Génère un nom d'un dieux.
         /// </summary>
         /// <param name="seed"></param>
         /// <returns></returns>
@@ -454,6 +487,22 @@ namespace WorldGen.Classes.Enum
                 tmp = GodSyllabe[r.Next(GodSyllabe.Length)] + GodSyllabe[new Random(r.Next(999999)).Next(GodSyllabe.Length)] + GodTerm[r.Next(GodTerm.Length)];
 
             return Convert.ToChar(tmp[0] - 32) + tmp.Substring(1, tmp.Length - 1); ;
+        }
+    
+        /// <summary>
+        /// Génère un nom de Titan
+        /// </summary>
+        /// <param name="seed"></param>
+        /// <returns></returns>
+        public static string GenTitanName(int seed = 0)
+        {
+            Random r;
+            if (seed == 0)
+                r = new Random();
+            else
+                r = new Random(seed);
+
+            return TitanSyllabe1[r.Next(TitanSyllabe1.Length)] + TitanSyllabe2[r.Next(TitanSyllabe2.Length)];
         }
     }
 }

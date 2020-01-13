@@ -218,7 +218,7 @@ namespace WorldGen.Classes
                 X = this.mapWidth - 20,
                 Y = this.mapHeight - 20
             };
-            this.source = new Don(this.pantheon);
+            this.source = new Titan(this.pantheon);
 
             if (this.source is Artefacts)
                 foreach (Artefact a in ((Artefacts)this.source).List)
