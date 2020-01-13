@@ -103,16 +103,6 @@ namespace WorldGen.Classes
         Null
     }
 
-    public class Lien : SourceOfMagic
-    {
-        public Lien()
-        {
-        }
-
-        public Lien(string description) : base(description)
-        { }
-    }
-
     public class Titan : SourceOfMagic
     {
         List<string> _titans = new List<string>();

@@ -129,6 +129,7 @@ namespace WorldGen
         } 
         private void Magic_Selected(object sender, RoutedEventArgs e)
         {
+            
             if (this.World != null)
             {
                 switch(this.World.source)
@@ -277,6 +278,9 @@ namespace WorldGen
                 if (elem is Grid tmp && ((Grid)elem).Name != "menu")
                 {
                     tmp.Visibility = Visibility.Hidden;
+                    if (((Grid)elem).Name == "magic")
+                        foreach (Grid grid in ((Grid)elem).Children)
+                            grid.Visibility = Visibility.Hidden;
                 }
             }
             g.Visibility = Visibility.Visible;
