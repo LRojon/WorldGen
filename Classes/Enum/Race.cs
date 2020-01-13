@@ -28,6 +28,7 @@ namespace WorldGen.Classes.Enum
         Halfelin,
         Gobelin,
         Minotaure,
-        Centaure
+        Centaure,
+        Titan = 1000
     }
 }

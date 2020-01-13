@@ -67,6 +67,12 @@ namespace WorldGen
                     this.listCity.SelectedItem = tmp.First();
                     this.listCity.ItemsSource = tmp;
 
+                    if (World.source is Artefacts)
+                    {
+                        this.listArtefacts.SelectedItem = ((Artefacts)World.source).List.First();
+                        this.listArtefacts.ItemsSource = ((Artefacts)World.source).List;
+                    }
+
                     this.NW.Visibility = Visibility.Hidden;
                 }
                 else
@@ -80,12 +86,6 @@ namespace WorldGen
             {
                 this.GoTo(this.Help);
             }
-        }
-        
-        private void HamburgerMenuItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            World = new World((int)this.map.ActualWidth, (int)this.map.ActualHeight);
-            this.imageMap.Source = World.GetVoronoiGraph(this.delaunay);
         }
 
         private void Exit_Selected(object sender, RoutedEventArgs e)
@@ -116,7 +116,6 @@ namespace WorldGen
             if (this.World != null)
             {
                 this.GoTo(kingdom);
-                listKingdom.SelectedItem = World.kingdoms.First();
                 backgroundKingdom.Source = World.GetKingdomMap(listKingdom.SelectedItem.ToString());
                 SetKingdom(World.kingdoms.First());
             }
@@ -126,10 +125,45 @@ namespace WorldGen
             if (this.World != null)
             {
                 this.GoTo(pantheon);
-                pantheonContent.SelectedItem = World.pantheon.Gods.First();
+            }
+        } 
+        private void Magic_Selected(object sender, RoutedEventArgs e)
+        {
+            
+            if (this.World != null)
+            {
+                switch(this.World.source)
+                {
+                    case Artefacts source:
+                        this.listArtefacts.Height = source.List.Count * 40;
+                        this.listArtefacts.ItemsSource = source.List;
+                        this.artefactDescription.Content = source.Description;
+                        this.artefactsTemple.Content = source.List.First().Position.Name;
+                        this.artefactsTempleUnderwater.Content = source.List.First().Position.Underwater ? "Submergé" : "Emergé";
+                        this.GoTo(this.artefacts);
+                        break;
+                    case Etre source:
+                        this.etreDescription.Text = source.Description;
+                        this.etreTemple.Content = "Il réside maintenant " + (source.State == State.Mort ? "à la " : "au ") + source.Where.Name;
+                        this.GoTo(this.etre);
+                        break;
+                    case Plan source:
+                        this.planDescription.Text = source.Description;
+                        this.GoTo(this.plan);
+                        break;
+                    case Don source:
+                        this.donDescription.Text = source.Description;
+                        this.GoTo(this.don);
+                        break;
+                    case Titan source:
+                        this.titanDescription.Text = source.Description;
+                        this.titanList.ItemsSource = source.Titans;
+                        this.GoTo(this.titan);
+                        break;
+                }
+                this.magic.Visibility = Visibility.Visible;
             }
         }
-
         private void Help_Click(object sender, RoutedEventArgs e)
         {
             this.GoTo(this.Help);
@@ -187,7 +221,20 @@ namespace WorldGen
                     imageMap.Source = World.GetVoronoiGraph(delaunay);
             }
         }
-        
+        private void TempleDungeon_ON_OFF(object sender, RoutedEventArgs e)
+        {
+            if (this.World != null)
+            {
+                Button btn = (Button)sender;
+
+                World.templeDungeon = !World.templeDungeon;
+                btn.Content = World.templeDungeon ? "Temple et Donjon: ON" : "Temple et Donjon: OFF";
+
+                if (World != null)
+                    imageMap.Source = World.GetVoronoiGraph(delaunay);
+            }
+        }
+
         private void NewWorld(object sender, RoutedEventArgs e)
         {
             GC.Collect();
@@ -216,11 +263,6 @@ namespace WorldGen
                 this.imageMap.Source = World.GetVoronoiGraph(e.GetPosition(this), delaunay);
             }
         }
-
-        private void Grid_MouseMove(object sender, MouseEventArgs e)
-        {
-        }
-
         private void ImageMap_MouseLeave(object sender, MouseEventArgs e)
         {
             if (this.World != null)
@@ -236,6 +278,9 @@ namespace WorldGen
                 if (elem is Grid tmp && ((Grid)elem).Name != "menu")
                 {
                     tmp.Visibility = Visibility.Hidden;
+                    if (((Grid)elem).Name == "magic")
+                        foreach (Grid grid in ((Grid)elem).Children)
+                            grid.Visibility = Visibility.Hidden;
                 }
             }
             g.Visibility = Visibility.Visible;
@@ -247,7 +292,6 @@ namespace WorldGen
             backgroundKingdom.Source = World.GetKingdomMap(selected.ToString());
             SetKingdom(selected);
         }
-    
         private void SetKingdom(Kingdom kingdom)
         {
             kingdomType.Content = kingdom.Type + (kingdom.Type == Classes.Enum.KingdomType.Théocratie ? ": " + kingdom.God.ToString() : "");
@@ -284,7 +328,6 @@ namespace WorldGen
                 backgroundPantheon.Source = this.backPantheon;
             SetGod(selected);
         }
-
         private void SetGod(God god)
         {
             nbRegion.Content = god.Followers.Count.ToString("N0", CultureInfo.GetCultureInfo("ru-RU")) + " regions sous influence";
@@ -297,7 +340,6 @@ namespace WorldGen
             //backgroundKingdom.Source = World.GetKingdomMap(selected.ToString());
             SetCity(selected);
         }
-
         private void SetCity(Region r)
         {
             if(r.Capital)
@@ -320,7 +362,20 @@ namespace WorldGen
             cityInfo.Document = flowDocument;
             cityRessource.Content = "Ressource principale: " + r.Ressource.ToString();
         }
-    
+
+        private void Artefacts_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Artefact selected = ((Artefacts)World.source).List.Where(c => c.ToString() == listArtefacts.SelectedItem.ToString()).FirstOrDefault();
+
+            SetArtefact(selected);
+        }
+        private void SetArtefact(Artefact a)
+        {
+            var source = (Artefacts)World.source;
+            this.artefactsTemple.Content = a.Position.Name;
+            this.artefactsTempleUnderwater.Content = a.Position.Underwater ? "Submergé" : "Emergé";
+        }
+
         private void SaveWorld(object sender, RoutedEventArgs e)
         {
             if (this.World != null)
@@ -339,7 +394,6 @@ namespace WorldGen
                 sfd.ShowDialog();
             }
         }
-
         private void Sfd_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
         {
             SaveFileDialog sfd = (SaveFileDialog)sender;
@@ -363,7 +417,6 @@ namespace WorldGen
 
             ofd.ShowDialog();
         }
-
         private void Ofd_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
         {
             OpenFileDialog ofd = (OpenFileDialog)sender;
@@ -386,10 +439,15 @@ namespace WorldGen
             this.listCity.SelectedItem = tmp.First();
             this.listCity.ItemsSource = tmp;
 
+            if (World.source is Artefacts)
+            {
+                this.listArtefacts.SelectedItem = ((Artefacts)World.source).List.First();
+                this.listArtefacts.ItemsSource = ((Artefacts)World.source).List;
+            }
+
             this.NW.Visibility = Visibility.Hidden;
             this.GoTo(map);
         }
-
         private void Window_Drop(object sender, DragEventArgs e)
         {
             string[] path = (string[])e.Data.GetData(DataFormats.FileDrop);
@@ -414,6 +472,12 @@ namespace WorldGen
                 this.listCity.SelectedItem = tmp.First();
                 this.listCity.ItemsSource = tmp;
 
+                if (World.source is Artefacts)
+                {
+                    this.listArtefacts.SelectedItem = ((Artefacts)World.source).List.First();
+                    this.listArtefacts.ItemsSource = ((Artefacts)World.source).List;
+                }
+
                 this.NW.Visibility = Visibility.Hidden;
                 this.GoTo(map);
             }
@@ -422,6 +486,5 @@ namespace WorldGen
                 MessageBox.Show("L'extension ." + p[p.Length - 1].Split('.')[1] + " n'est pas prise en charge.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
             }
         }
-
     }
 }

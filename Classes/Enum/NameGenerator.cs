@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WorldGen.Classes.Enum;
 
-namespace WorldGen.Classes.Enum
+namespace WorldGen.Classes
 {
     static class NameGenerator
     {
@@ -226,6 +227,88 @@ namespace WorldGen.Classes.Enum
             "phides",
         };
 
+        private static readonly string[] ArtefactSubject =
+        {
+            "Le coffre",
+            "Le pilier",
+            "Le monolithe",
+            "Le cube",
+            "La peau",
+            "L'instrument",
+            "Le rouleau",
+            "Le sabre",
+            "Le pot",
+            "Le rouleau",
+            "Le manteau",
+            "Le calice",
+            "La tablette",
+            "Le grimoire",
+            "L'anneau",
+            "L'amulette",
+            "La palque",
+            "Le sceau",
+            "Le cercle",
+            "Le bâton",
+            "La couronne",
+            "La lampe",
+            "La gemme",
+            "L'arche"
+        };
+        private static readonly string[] ArtefactAdjectif =
+        {
+            " du courage",
+            " du vide",
+            " d'ombre",
+            " de ruine",
+            " du jugement",
+            " du cauchemar",
+            " d'impureté",
+            " de loyauté",
+            " ardent",
+            " du triomphe",
+            " de possibilité",
+            " de dévotion",
+            " de renaissance",
+            " du destin"
+        };
+
+        private static readonly string[] TitanSyllabe1 =
+        {
+            "Ji",
+            "Vez",
+            "Cre",
+            "Blod",
+            "Aka",
+            "Wosr",
+            "Krik",
+            "Krid",
+            "Iks",
+            "Is",
+            "Mal",
+            "Am",
+            "Mow"
+        };
+        private static readonly string[] TitanSyllabe2 =
+        {
+            "gi",
+            "us",
+            "lag",
+            "thos",
+            "ros",
+            "dius",
+            "sar",
+            "og",
+            "las",
+            "rym",
+            "ag",
+            "barg"
+        };
+
+        /// <summary>
+        /// Génère un nom d'un royaume
+        /// </summary>
+        /// <param name="seed"></param>
+        /// <returns></returns>
         public static string GenKingdomName(int seed = 0)
         {
             Random r;
@@ -256,6 +339,11 @@ namespace WorldGen.Classes.Enum
             return tmp;
         }
 
+        /// <summary>
+        /// Génère un nom d'une capitale
+        /// </summary>
+        /// <param name="seed"></param>
+        /// <returns></returns>
         public static string GenCapitalName(int seed = 0)
         {
             GC.Collect();
@@ -274,6 +362,12 @@ namespace WorldGen.Classes.Enum
             return tmp;
         }
 
+        /// <summary>
+        /// Génère un nom d'une ville, selon sa taille
+        /// </summary>
+        /// <param name="size"></param>
+        /// <param name="seed"></param>
+        /// <returns></returns>
         public static string GenCityName(CitySize size, int seed = 0)
         {
             GC.Collect();
@@ -309,6 +403,11 @@ namespace WorldGen.Classes.Enum
             return tmp;
         }
 
+        /// <summary>
+        /// Génère un nom d'un monde
+        /// </summary>
+        /// <param name="seed"></param>
+        /// <returns></returns>
         public static string GenWorldName(int seed = 0)
         {
             GC.Collect();
@@ -344,6 +443,33 @@ namespace WorldGen.Classes.Enum
             return tmp;
         }
 
+        /// <summary>
+        /// Génère un nom d'artefact.
+        /// </summary>
+        /// <param name="seed"></param>
+        /// <returns>string[2] 0: Le nom; 2: L'adjectif</returns>
+        public static string[] GenArtefactName(int seed = 0)
+        {
+            GC.Collect();
+            Random r;
+            string[] tmp = new string[2];
+
+            if (seed == 0)
+                r = new Random();
+            else
+                r = new Random(seed);
+
+            tmp[1] = ArtefactAdjectif[r.Next(ArtefactAdjectif.Length)];
+            tmp[0] = ArtefactSubject[r.Next(ArtefactSubject.Length)] + tmp[1];
+
+            return tmp;
+        }
+
+        /// <summary>
+        /// Génère un nom d'un dieux.
+        /// </summary>
+        /// <param name="seed"></param>
+        /// <returns></returns>
         public static string GenGodName(int seed = 0)
         {
             Random r;
@@ -361,6 +487,22 @@ namespace WorldGen.Classes.Enum
                 tmp = GodSyllabe[r.Next(GodSyllabe.Length)] + GodSyllabe[new Random(r.Next(999999)).Next(GodSyllabe.Length)] + GodTerm[r.Next(GodTerm.Length)];
 
             return Convert.ToChar(tmp[0] - 32) + tmp.Substring(1, tmp.Length - 1); ;
+        }
+    
+        /// <summary>
+        /// Génère un nom de Titan
+        /// </summary>
+        /// <param name="seed"></param>
+        /// <returns></returns>
+        public static string GenTitanName(int seed = 0)
+        {
+            Random r;
+            if (seed == 0)
+                r = new Random();
+            else
+                r = new Random(seed);
+
+            return TitanSyllabe1[r.Next(TitanSyllabe1.Length)] + TitanSyllabe2[r.Next(TitanSyllabe2.Length)];
         }
     }
 }

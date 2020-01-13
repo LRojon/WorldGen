@@ -10,7 +10,7 @@
         Title="WorldGen" Height="768" Width="1366"
         Loaded="Window_Loaded" Cursor="Arrow" WindowStyle="SingleBorderWindow"  WindowState="Maximized"
         Drop="Window_Drop" AllowDrop="True">
-    <Grid Name="app" RenderTransformOrigin="0.498,0.481" MouseMove="Grid_MouseMove">
+    <Grid Name="app" RenderTransformOrigin="0.498,0.481">
         <Grid Name="menu"
               HorizontalAlignment="Left"
               Margin="0" Width="50" Background="#FF383838"
@@ -35,29 +35,34 @@
                     <ImageBrush ImageSource="Assets/menu/temple.png" Stretch="Uniform"/>
                 </Button.Background>
             </Button>
-            <Button ToolTip="Quitter" Foreground="{x:Null}" FontWeight="Bold" Click="Exit_Selected" RenderTransformOrigin="0.5,0.5" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,480,0,0" BorderBrush="{x:Null}" Panel.ZIndex="1">
+            <Button ToolTip="Quitter" Foreground="{x:Null}" FontWeight="Bold" Click="Exit_Selected" RenderTransformOrigin="0.5,0.5" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,540,0,0" BorderBrush="{x:Null}" Panel.ZIndex="1">
                 <Button.Background>
                     <ImageBrush ImageSource="Assets/menu/off.png" Stretch="Uniform"/>
                 </Button.Background>
             </Button>
-            <Button ToolTip="Sauvegarder" Click="SaveWorld" Width="40" Height="40" Margin="0,360,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" BorderBrush="{x:Null}" Foreground="{x:Null}">
+            <Button ToolTip="Sauvegarder" Click="SaveWorld" Width="40" Height="40" Margin="0,420,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" BorderBrush="{x:Null}" Foreground="{x:Null}">
                 <Button.Background>
                     <ImageBrush ImageSource="Assets/menu/save.png" Stretch="Uniform"/>
                 </Button.Background>
             </Button>
-            <Button ToolTip="Ouvrir" Click="LoadWorld" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,420,0,0" BorderBrush="{x:Null}" Foreground="{x:Null}">
+            <Button ToolTip="Ouvrir" Click="LoadWorld" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,480,0,0" BorderBrush="{x:Null}" Foreground="{x:Null}">
                 <Button.Background>
                     <ImageBrush ImageSource="Assets/menu/open.png" Stretch="Uniform"/>
                 </Button.Background>
             </Button>
-            <Button ToolTip="Nouveau monde" Click="NewWorld" BorderBrush="{x:Null}" Foreground="{x:Null}" Width="40" Height="40" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,300,0,0">
+            <Button ToolTip="Nouveau monde" Click="NewWorld" BorderBrush="{x:Null}" Foreground="{x:Null}" Width="40" Height="40" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,360,0,0">
                 <Button.Background>
                     <ImageBrush ImageSource="Assets/menu/new.png" Stretch="Uniform"/>
                 </Button.Background>
             </Button>
-            <Button ToolTip="Aide" Click="Help_Click" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,540,0,0" BorderBrush="{x:Null}" Foreground="{x:Null}">
+            <Button ToolTip="Aide" Click="Help_Click" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,600,0,0" BorderBrush="{x:Null}" Foreground="{x:Null}">
                 <Button.Background>
                     <ImageBrush ImageSource="Assets/menu/tuto.png" Stretch="Uniform"/>
+                </Button.Background>
+            </Button>
+            <Button ToolTip="Source de la magie" Click="Magic_Selected" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,240,0,0" BorderBrush="{x:Null}" Foreground="{x:Null}">
+                <Button.Background>
+                    <ImageBrush ImageSource="Assets/menu/magic.png" Stretch="Uniform"/>
                 </Button.Background>
             </Button>
         </Grid>
@@ -74,13 +79,13 @@
                     <ImageBrush Stretch="Uniform" ImageSource="Assets/menu/bars.png"/>
                 </Button.Background>
             </Button>
-            <Grid Name="subMenuMap" Visibility="Hidden" HorizontalAlignment="Right" Height="138" Margin="0,0,5,42.2" VerticalAlignment="Bottom" Width="119" Background="#BF000000">
+            <Grid Name="subMenuMap" Visibility="Visible" HorizontalAlignment="Right" Height="172" Margin="0,0,5.4,40.4" VerticalAlignment="Bottom" Width="161" Background="#BF000000">
                 <Button Click="Delaunay_ON_OFF"
                     Opacity="0.75" 
                     Content="Delaunay: OFF" 
                     VerticalAlignment="Bottom" 
                     HorizontalAlignment="Left"
-                    Width="100"
+                    Width="141"
                     Height="25"
                     Margin="10,0,0,103"/>
                 <Button Click="Voronoi_ON_OFF"
@@ -88,7 +93,7 @@
                     Content="Voronoi: ON" 
                     VerticalAlignment="Bottom" 
                     HorizontalAlignment="Left"
-                    Width="100"
+                    Width="141"
                     Height="25"
                     Margin="10,0,0,73"/>
                 <Button Click="Sites_ON_OFF"
@@ -96,7 +101,7 @@
                     Content="Royaume: ON" 
                     VerticalAlignment="Bottom" 
                     HorizontalAlignment="Left"
-                    Width="100"
+                    Width="141"
                     Height="25"
                     Margin="10,0,0,43"/>
                 <Button Click="Croyance_ON_OFF"
@@ -104,9 +109,17 @@
                     Content="Croyance: OFF" 
                     VerticalAlignment="Bottom" 
                     HorizontalAlignment="Left"
-                    Width="100"
+                    Width="141"
                     Height="25"
                     Margin="10,0,0,13"/>
+                <Button Click="TempleDungeon_ON_OFF"
+                        Opacity="0.75" 
+                        Content="Temple et Donjon: ON" 
+                        VerticalAlignment="Bottom" 
+                        HorizontalAlignment="Left" 
+                        Width="141" 
+                        Height="25"
+                        Margin="10,0,0,133"/>
             </Grid>
             <Button Name="NW" Click="NewWorld" Content="Button" HorizontalAlignment="Center" Height="150" Margin="0" VerticalAlignment="Center" Width="150" BorderBrush="{x:Null}">
                 <Button.Background>
@@ -160,9 +173,8 @@
             <ListBox Name="pantheonContent" SelectionChanged="PantheonContent_SelectionChanged" HorizontalAlignment="Left" Margin="0" Width="400" Background="{x:Null}" BorderBrush="{x:Null}" FontFamily="Viner Hand ITC" FontSize="18" FontWeight="Bold" Foreground="Black"/>
             <Label Name="nbRegion" Content="Label" HorizontalAlignment="Left" Margin="405,10,0,0" VerticalAlignment="Top" Width="250" FontFamily="Viner Hand ITC" FontSize="18" FontWeight="Bold" Foreground="Black"/>
             <Label Name="nbFollower" Content="Label" HorizontalAlignment="Left" Margin="405,53,0,0" VerticalAlignment="Top" Width="250" FontFamily="Viner Hand ITC" FontSize="18" FontWeight="Bold" Foreground="Black"/>
-            <Button Content="Button" HorizontalAlignment="Left" Margin="429,298,0,0" VerticalAlignment="Top" Width="75"/>
         </Grid>
-        <Grid Name="Help" Background="White" Visibility="Visible" Margin="50,0,0,0">
+        <Grid Name="Help" Background="White" Visibility="Hidden" Margin="50,0,0,0">
             <Button Click="NewWorld" HorizontalAlignment="Left" Margin="268,0,0,10.4" VerticalAlignment="Bottom" Width="40" Height="40" BorderBrush="{x:Null}" Foreground="{x:Null}">
                 <Button.Background>
                     <ImageBrush ImageSource="Assets/menu/plus.png" Stretch="Uniform"/>
@@ -170,15 +182,42 @@
             </Button>
             <Label Content="Clicquez ici pour commencer" HorizontalAlignment="Left" Margin="10,0,0,10.4" VerticalAlignment="Bottom" Height="41" FontSize="18" FontWeight="Bold"/>
             <Label Content="Pour voir la carte du monde" Margin="10,15,10,0" VerticalAlignment="Top" Height="40" FontSize="18" FontWeight="Bold"/>
-            <Label Content="Pour venir voir cette aide" Margin="10,545,10,0" VerticalAlignment="Top" Height="40" FontSize="18" FontWeight="Bold"/>
-            <Label Content="Pour quitter le logiciel (Déconseillé) " Margin="10,485,10,0" VerticalAlignment="Top" Height="40" FontSize="18" FontWeight="Bold"/>
-            <Label Content="Pour ouvrir un monde déjà créé" Margin="10,425,10,0" VerticalAlignment="Top" Height="40" FontSize="18" FontWeight="Bold"/>
-            <Label Content="Si ce monde vous plait sauvegardez le" Margin="10,365,10,0" VerticalAlignment="Top" Height="40" FontSize="18" FontWeight="Bold"/>
-            <Label Content="Si ce monde ne vous plait pas, changez le" Margin="10,305,10,0" VerticalAlignment="Top" Height="40" FontSize="18" FontWeight="Bold"/>
+            <Label Content="Pour venir voir cette aide" Margin="10,605,10,0" VerticalAlignment="Top" Height="40" FontSize="18" FontWeight="Bold"/>
+            <Label Content="Pour quitter le logiciel (Déconseillé) " Margin="10,545,10,0" VerticalAlignment="Top" Height="40" FontSize="18" FontWeight="Bold"/>
+            <Label Content="Pour ouvrir un monde déjà créé" Margin="10,485,10,0" VerticalAlignment="Top" Height="40" FontSize="18" FontWeight="Bold"/>
+            <Label Content="Si ce monde vous plait sauvegardez le" Margin="10,425,10,0" VerticalAlignment="Top" Height="40" FontSize="18" FontWeight="Bold"/>
+            <Label Content="Si ce monde ne vous plait pas, changez le" Margin="10,365,10,0" VerticalAlignment="Top" Height="40" FontSize="18" FontWeight="Bold"/>
             <Label Content="Pour voir le panthéon" Margin="10,185,10,0" VerticalAlignment="Top" Height="40" FontSize="18" FontWeight="Bold"/>
             <Label Content="Pour avoir les informations sur les villes" Margin="10,125,10,0" VerticalAlignment="Top" Height="40" FontSize="18" FontWeight="Bold"/>
             <Label Content="Pour avoir les informations sur les pays" Margin="10,65,10,0" VerticalAlignment="Top" Height="40" FontSize="18" FontWeight="Bold"/>
+            <Label Content="Pour voir la source de la magie" HorizontalAlignment="Left" Margin="10,245,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="18" Width="1290" Height="40"/>
 
+        </Grid>
+
+        <Grid Name="magic" Visibility="Visible" Margin="50,0,0,0">
+            <Grid.Background>
+                <ImageBrush ImageSource="Assets/Background/BackgroundMagic.png"/>
+            </Grid.Background>
+            <Grid Name="artefacts" Visibility="Hidden">
+                <Label x:Name="artefactDescription" Content="Label" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="1290" FontFamily="Viner Hand ITC" FontWeight="Bold" FontSize="18"/>
+                <ListBox x:Name="listArtefacts" SelectionChanged="Artefacts_SelectionChanged" HorizontalAlignment="Left" Height="100" Margin="10,53,0,0" VerticalAlignment="Top" Width="300" Background="{x:Null}" BorderBrush="{x:Null}" FontFamily="Viner Hand ITC" FontWeight="Bold" FontSize="18"/>
+                <Label x:Name="artefactsTemple" Content="Label" HorizontalAlignment="Left" Margin="315,53,0,0" VerticalAlignment="Top" Width="985" FontFamily="Viner Hand ITC" FontWeight="Bold" FontSize="18"/>
+                <Label x:Name="artefactsTempleUnderwater" Content="Label" HorizontalAlignment="Left" Margin="315,96,0,0" VerticalAlignment="Top" Width="985" FontFamily="Viner Hand ITC" FontWeight="Bold" FontSize="18"/>
+            </Grid>
+            <Grid Name="etre" Visibility="Hidden">
+                <TextBlock x:Name="etreDescription" TextWrapping="WrapWithOverflow" Margin="0,10,0,0" FontFamily="Viner Hand ITC" FontWeight="Bold" FontSize="18" VerticalAlignment="Top" Text="Label" Height="60"></TextBlock>
+                <Label x:Name="etreTemple" Content="Label" Margin="0,75,0.4,0" VerticalAlignment="Top" FontFamily="Viner Hand ITC" FontWeight="Bold" FontSize="18"/>
+            </Grid>
+            <Grid Name="plan" Visibility="Hidden">
+                <TextBlock x:Name="planDescription" TextWrapping="WrapWithOverflow" Margin="0,10,0,0" FontFamily="Viner Hand ITC" FontWeight="Bold" FontSize="18" VerticalAlignment="Top" Text="Label" Height="60"></TextBlock>
+            </Grid>
+            <Grid Name="don" Visibility="Hidden">
+                <TextBlock x:Name="donDescription" TextWrapping="WrapWithOverflow" Margin="0,10,0,0" FontFamily="Viner Hand ITC" FontWeight="Bold" FontSize="18" VerticalAlignment="Top" Text="Label" Height="60"></TextBlock>
+            </Grid>
+            <Grid Name="titan" Visibility="Hidden">
+                <TextBlock x:Name="titanDescription" TextWrapping="WrapWithOverflow" Margin="0,10,0,0" FontFamily="Viner Hand ITC" FontWeight="Bold" FontSize="18" VerticalAlignment="Top" Text="Label" Height="60"/>
+                <ListBox Name="titanList" HorizontalAlignment="Left" Height="669" Margin="0,70,0,0" VerticalAlignment="Top" Width="511" Background="{x:Null}" BorderBrush="{x:Null}" FontFamily="Viner Hand ITC" FontSize="18" FontWeight="Bold" Focusable="False"/>
+            </Grid>
         </Grid>
     </Grid>
 </Window>

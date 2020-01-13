@@ -8,11 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-<<<<<<< HEAD
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("assets/menu/new.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("assets/menu/plus.png")]
-=======
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("icon.ico")]
->>>>>>> bacd94be8c90752d72cbeb3760958655fc3c4ead
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("assets/background/backgroundmagic.png")]
 
 
