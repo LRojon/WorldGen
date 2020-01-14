@@ -420,6 +420,7 @@ namespace WorldGen.Classes
             }
             Bitmap bmp = new Bitmap(mapPerlin);
 
+            bool prioToolTip = false;
 
             using (Graphics g = Graphics.FromImage(bmp))
             {
@@ -567,7 +568,12 @@ namespace WorldGen.Classes
 
                 }
 
-                if (info != null && (this.croyance || this.affSite))
+                if (this.templeDungeon)
+                {
+                    prioToolTip = AffTempleDungeon(g, position);
+                }
+
+                if (info != null && (this.croyance || this.affSite) && !prioToolTip)
                 {
                     string str = "";
                     if (this.affSite)
@@ -595,10 +601,6 @@ namespace WorldGen.Classes
 
                 }
 
-                if (this.templeDungeon)
-                {
-                    AffTempleDungeon(g, position);
-                }
 
                 if (voronoi)
                 {
@@ -830,8 +832,9 @@ namespace WorldGen.Classes
                 g.FillPolygon(new SolidBrush(Color.DarkGray), tmp);
             }
         }
-        private void AffTempleDungeon(Graphics g, System.Windows.Point mousePos)
+        private bool AffTempleDungeon(Graphics g, System.Windows.Point mousePos)
         {
+            bool res = false;
             if (this.source is Artefacts)
             {
                 foreach (Artefact a in ((Artefacts)this.source).List)
@@ -841,7 +844,24 @@ namespace WorldGen.Classes
                                 new Point(a.Position.X + 3, a.Position.Y),
                                 new Point(a.Position.X, a.Position.Y - 3)
                             };
-                    g.FillPolygon(new SolidBrush(Color.DarkGray), tmp);
+                    g.FillPolygon(new SolidBrush(Color.DarkGray), tmp); 
+                    if (mousePos.X - 50 >= a.Position.X - 10 && mousePos.X - 50 <= a.Position.X + 10 &&
+                     mousePos.Y >= a.Position.Y - 10 && mousePos.Y <= a.Position.Y + 10)
+                    {
+                        res = true;
+                        var str = a.Position.Name;
+                        Font font = new Font(System.Drawing.FontFamily.GenericMonospace, 12f, GraphicsUnit.Pixel);
+
+                        var width = str.Length * 7.5f;
+                        g.FillRectangle(new SolidBrush(Color.White),
+                            (float)(mousePos.X),
+                            (float)(mousePos.Y - 10), width, font.Size + 2);
+                        g.DrawString(str,
+                            font,
+                            new SolidBrush(Color.Black),
+                            (float)(mousePos.X), (float)(mousePos.Y - 10));
+
+                    }
                 }
             }
             if (this.source is Etre)
@@ -857,6 +877,7 @@ namespace WorldGen.Classes
                 if (mousePos.X - 50 >= a.Where.X - 10 && mousePos.X - 50 <= a.Where.X + 10 &&
                     mousePos.Y >= a.Where.Y - 10 && mousePos.Y <= a.Where.Y + 10)
                 {
+                    res = true;
                     var str = a.Where.Name;
                     Font font = new Font(System.Drawing.FontFamily.GenericMonospace, 12f, GraphicsUnit.Pixel);
 
@@ -871,6 +892,7 @@ namespace WorldGen.Classes
 
                 }
             }
+            return res;
         }
 
         private void GenPerlinMap()
