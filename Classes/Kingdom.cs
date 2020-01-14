@@ -29,6 +29,7 @@ namespace WorldGen.Classes
         private Dictionary<RaceDominante, int> _distribution = new Dictionary<RaceDominante, int>();
         private God _god;
         private Dictionary<Ressource, int> _richesse = new Dictionary<Ressource, int>();
+        private Currency _currency;
 
         public Kingdom() { }
         public Kingdom(Region capital, Color color, Pantheon pantheon)
@@ -43,6 +44,7 @@ namespace WorldGen.Classes
             this.Name = NameGenerator.GenKingdomName(r.Next(99999) + color.R + color.B + color.G);
             this.Leader = "Roi";
             this.Race = (RaceDominante)r.Next(5);
+            this.Currency = new Currency(this);
 
             if (this.Type == KingdomType.Théocratie)
                 this.God = pantheon.Gods.ElementAt(r.Next(pantheon.Gods.Count));
@@ -63,6 +65,7 @@ namespace WorldGen.Classes
         public Dictionary<RaceDominante, int> Distribution { get => _distribution; set => _distribution = value; }
         internal God God { get => _god; set => _god = value; }
         public Dictionary<Ressource, int> Richesse { get => _richesse; set => _richesse = value; }
+        internal Currency Currency { get => _currency; set => _currency = value; }
 
         private void CreateKingdom(Region current)
         {

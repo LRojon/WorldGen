@@ -296,6 +296,7 @@ namespace WorldGen
         {
             kingdomType.Content = kingdom.Type + (kingdom.Type == Classes.Enum.KingdomType.Théocratie ? ": " + kingdom.God.ToString() : "");
             capitalName.Content = "Capitale: " + kingdom.Capital.Name;
+            currencyImage.Source = kingdom.Currency.GetCurrencyImage();
 
             demoInfo.Height = 40 + kingdom.Distribution.Count * 40;
             var xaml = HtmlToXamlConverter.ConvertHtmlToXaml(kingdom.GetDemoInfo(), true);

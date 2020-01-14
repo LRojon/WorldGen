@@ -144,7 +144,7 @@
             <Label Name="cityType" Content="Label" HorizontalAlignment="Left" Margin="10,139,0,0" VerticalAlignment="Top" Width="233" FontSize="18" FontFamily="Viner Hand ITC" FontWeight="Bold" Foreground="Black"/>
             <Label Name="cityRessource" Content="Ressource principale: " HorizontalAlignment="Left" Margin="250,10,0,0" VerticalAlignment="Top" Height="38" FontSize="18" FontWeight="Bold" FontFamily="Viner Hand ITC" Width="350" Foreground="Black"/>
         </Grid>
-        <Grid Name="kingdom" Visibility="Hidden" Margin="50,0,0,0">
+        <Grid Name="kingdom" Visibility="Visible" Margin="50,0,0,0">
             <Image Name="backgroundKingdom" Stretch="Fill" Margin="0"/>
             <ComboBox x:Name="listKingdom" 
                       SelectionChanged="Kingdom_SelectionChanged"
@@ -167,6 +167,7 @@
                     </Paragraph>
                 </FlowDocument>
             </RichTextBox>
+            <Image x:Name="currencyImage" HorizontalAlignment="Left" Height="250" Margin="10,395,0,0" VerticalAlignment="Top" Width="655"/>
         </Grid>
         <Grid Name="pantheon" Visibility="Hidden" Margin="50,0,0,0">
             <Image Name="backgroundPantheon" Source="Assets/Background/BackgroundTemple.jpg" Stretch="Fill" Margin="0"/>
@@ -194,7 +195,7 @@
 
         </Grid>
 
-        <Grid Name="magic" Visibility="Visible" Margin="50,0,0,0">
+        <Grid Name="magic" Visibility="Hidden" Margin="50,0,0,0">
             <Grid.Background>
                 <ImageBrush ImageSource="Assets/Background/BackgroundMagic.png"/>
             </Grid.Background>
