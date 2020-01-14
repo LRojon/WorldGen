@@ -413,7 +413,7 @@ namespace WorldGen.Classes
         }
         public ImageSource GetVoronoiGraph(System.Windows.Point position,bool delaunay = false)
         {
-
+            GC.Collect();
             if (mapPerlin == null)
             {
                 GenPerlinMap();

@@ -254,6 +254,7 @@ namespace WorldGen
             this.listCity.SelectedItem = tmp.First();
             this.listCity.ItemsSource = tmp;
 
+            GC.Collect();
             this.GoTo(map);
         }
         private void ImageMap_ToolTip(object sender, MouseEventArgs e)
