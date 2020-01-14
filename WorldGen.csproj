@@ -281,7 +281,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Classes\DeviseParPays.cs" />
+    <Compile Include="Classes\Currency.cs" />
     <Compile Include="Classes\FileAssociation.cs" />
     <Compile Include="Classes\SourceOfMagic.cs" />
     <Compile Include="Voronoi\FortunesAlgorithm.cs" />
