@@ -304,6 +304,50 @@ namespace WorldGen.Classes
             "barg"
         };
 
+        private static readonly string[] CoinSyllabe1 =
+        {
+            "Sufr",
+            "Awd",
+            "Kne",
+            "Zeal",
+            "Hun",
+            "Eap",
+            "Sron",
+            "Iot",
+            "Wil",
+            "Aer",
+            "Vrot",
+            "Yr"
+        };
+        private static readonly string[] CoinSyllabe2 =
+        {
+            "una",
+            "er",
+            "ode",
+            "ar",
+            "ia",
+            "y",
+            "a",
+            "e",
+            "i",
+            "o",
+            "u",
+            "iram",
+            "am"
+        };
+        private static readonly string[] CoinAdjectif =
+        {
+            " utopique",
+            " cramoisis",
+            " éthéré",
+            " d'Étain",
+            " élémentaires",
+            " de la coallition",
+            " bleus",
+            " célestes",
+            " d'obsidienne"
+        };
+
         /// <summary>
         /// Génère un nom d'un royaume
         /// </summary>
@@ -503,6 +547,26 @@ namespace WorldGen.Classes
                 r = new Random(seed);
 
             return TitanSyllabe1[r.Next(TitanSyllabe1.Length)] + TitanSyllabe2[r.Next(TitanSyllabe2.Length)];
+        }
+    
+        /// <summary>
+        /// Génère un nom de pièce + un adjectif
+        /// </summary>
+        /// <param name="seed"></param>
+        /// <returns></returns>
+        public static string[] GenCoinName(int seed = 0)
+        {
+            Random r;
+            if (seed == 0)
+                r = new Random();
+            else
+                r = new Random(seed);
+
+            var tmp = new string[2];
+            tmp[0] = CoinSyllabe1[r.Next(CoinSyllabe1.Length)] + CoinSyllabe2[r.Next(CoinSyllabe2.Length)];
+            tmp[1] = CoinAdjectif[r.Next(CoinAdjectif.Length)];
+
+            return tmp;
         }
     }
 }
