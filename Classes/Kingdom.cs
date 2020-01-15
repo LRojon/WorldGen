@@ -133,7 +133,7 @@ namespace WorldGen.Classes
         
         public string GetEcoInfo()
         {
-            string tmp = "Argent: " + this.Money.ToString("N0", CultureInfo.CreateSpecificCulture("ru-RU")) + " PO<br>";
+            string tmp = "Argent: " + this.Money.ToString("N0", CultureInfo.CreateSpecificCulture("ru-RU")) + " " + this.Currency.Po.Name + "<br>";
             tmp += "Ressource principale du pays: " + this.Richesse.OrderByDescending(kvp => kvp.Value).First().Key + "<br>";
             foreach(KeyValuePair<Ressource,int> kvp in this.Richesse.OrderByDescending(kvp => kvp.Value))
             {

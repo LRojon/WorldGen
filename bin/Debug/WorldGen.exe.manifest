@@ -223,14 +223,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="WorldGen.exe" size="5756928">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="WorldGen.exe" size="5759488">
       <assemblyIdentity name="WorldGen" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>rQMryQFZWZ9VHWRbIFqjXAzgCR+QLebhFEHwA6pl+D4=</dsig:DigestValue>
+        <dsig:DigestValue>cHdfCpPJeyDx2SWdwRHEdLXWzic9x894uJ9ZGefFIYQ=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

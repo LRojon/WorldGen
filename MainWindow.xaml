@@ -168,6 +168,7 @@
                 </FlowDocument>
             </RichTextBox>
             <Image x:Name="currencyImage" HorizontalAlignment="Left" Height="250" Margin="10,395,0,0" VerticalAlignment="Top" Width="655"/>
+            <TextBlock x:Name="currencyName" HorizontalAlignment="Left" Margin="10,650,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Height="79" Width="655" FontFamily="Viner Hand ITC" FontWeight="Bold" FontSize="18"/>
         </Grid>
         <Grid Name="pantheon" Visibility="Hidden" Margin="50,0,0,0">
             <Image Name="backgroundPantheon" Source="Assets/Background/BackgroundTemple.jpg" Stretch="Fill" Margin="0"/>
