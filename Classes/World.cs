@@ -23,6 +23,7 @@ using PixelFormat = System.Drawing.Imaging.PixelFormat;
 using Pen = System.Drawing.Pen;
 using Point = System.Drawing.Point;
 using Math = System.Math;
+using IList = System.Collections.IList;
 using WorldGen.Classes.Enum;
 using Pathfindax.PathfindEngine;
 using Pathfindax.Factories;
@@ -247,7 +248,57 @@ namespace WorldGen.Classes
 
         }
 
-        public ImageSource GetVoronoiGraph(bool delaunay = false)
+        public void AffKingdom(Graphics g, Region site, int seed)
+        {
+            List<VEdge> tmp = new List<VEdge>();
+            int i = 0;
+            tmp.Add(site.Cell.First());
+            site.Cell.Remove(site.Cell.First());
+            while (!site.Cell.IsEmpty() && i < site.Cell.Count)
+            {
+                VEdge ve = site.Cell.ElementAt(i);
+                VEdge t = tmp.Last();
+                if (t.End == ve.Start)
+                {
+                    tmp.Add(ve);
+                    site.Cell.Remove(ve);
+                    i = 0;
+                }
+                else if (t.End == ve.End)
+                {
+                    VPoint vp = ve.End;
+                    ve.End = ve.Start;
+                    ve.Start = vp;
+
+                    tmp.Add(ve);
+                    site.Cell.Remove(ve);
+                    i = 0;
+                }
+                else
+                {
+                    i++;
+                }
+            }
+            site.Cell = tmp;
+
+            List<Point> points = new List<Point>();
+            foreach (var edge in site.Cell)
+            {
+                points.Add(new Point((int)edge.Start.X, (int)edge.Start.Y));
+                points.Add(new Point((int)edge.End.X, (int)edge.End.Y));
+            }
+
+            Point[] tab = points.ToArray();
+            Random rand = new Random(seed);
+            Color color = Color.FromArgb(90,
+                site.Kingdom.Color.R,
+                site.Kingdom.Color.G,
+                site.Kingdom.Color.B);
+
+            g.FillPolygon(new SolidBrush(color), tab);
+        }
+
+        public ImageSource GetVoronoiGraph(IList selectedKingdoms, bool delaunay = false)
         {
             if (mapPerlin == null)
             {
@@ -266,54 +317,8 @@ namespace WorldGen.Classes
 
                     if (site.Kingdom != null && affSite)
                     {
-                        List<VEdge> tmp = new List<VEdge>();
-                        int i = 0;
-                        tmp.Add(site.Cell.First());
-                        site.Cell.Remove(site.Cell.First());
-                        while (!site.Cell.IsEmpty() && i < site.Cell.Count)
-                        {
-                            VEdge ve = site.Cell.ElementAt(i);
-                            VEdge t = tmp.Last();
-                            if (t.End == ve.Start)
-                            {
-                                tmp.Add(ve);
-                                site.Cell.Remove(ve);
-                                i = 0;
-                            }
-                            else if (t.End == ve.End)
-                            {
-                                VPoint vp = ve.End;
-                                ve.End = ve.Start;
-                                ve.Start = vp;
-
-                                tmp.Add(ve);
-                                site.Cell.Remove(ve);
-                                i = 0;
-                            }
-                            else
-                            {
-                                i++;
-                            }
-                        }
-                        site.Cell = tmp;
-
-                        List<Point> points = new List<Point>();
-                        foreach (var edge in site.Cell)
-                        {
-                            points.Add(new Point((int)edge.Start.X, (int)edge.Start.Y));
-                            points.Add(new Point((int)edge.End.X, (int)edge.End.Y));
-                        }
-
-                        Point[] tab = points.ToArray();
-                        Random rand = new Random(seed);
-                        Color color = Color.FromArgb(90,
-                            site.Kingdom.Color.R,
-                            site.Kingdom.Color.G,
-                            site.Kingdom.Color.B);
-
-
-                        g.FillPolygon(new SolidBrush(color), tab);
-
+                        if(selectedKingdoms.Contains(site.Kingdom))
+                            AffKingdom(g, site, seed);
                     }
 
                     if (site.God != null && this.croyance)
@@ -411,7 +416,7 @@ namespace WorldGen.Classes
 
             return ImageSourceFromBitmap(bmp);
         }
-        public ImageSource GetVoronoiGraph(System.Windows.Point position,bool delaunay = false)
+        public ImageSource GetVoronoiGraph(System.Windows.Point position, IList selectedKingdoms, bool delaunay = false)
         {
             GC.Collect();
             if (mapPerlin == null)
@@ -434,54 +439,8 @@ namespace WorldGen.Classes
 
                     if (site.Kingdom != null && this.affSite)
                     {
-                        List<VEdge> tmp = new List<VEdge>();
-                        int i = 0;
-                        tmp.Add(site.Cell.First());
-                        site.Cell.Remove(site.Cell.First());
-                        while (!site.Cell.IsEmpty() && i < site.Cell.Count)
-                        {
-                            VEdge ve = site.Cell.ElementAt(i);
-                            VEdge t = tmp.Last();
-                            if (t.End == ve.Start)
-                            {
-                                tmp.Add(ve);
-                                site.Cell.Remove(ve);
-                                i = 0;
-                            }
-                            else if (t.End == ve.End)
-                            {
-                                VPoint vp = ve.End;
-                                ve.End = ve.Start;
-                                ve.Start = vp;
-
-                                tmp.Add(ve);
-                                site.Cell.Remove(ve);
-                                i = 0;
-                            }
-                            else
-                            {
-                                i++;
-                            }
-                        }
-                        site.Cell = tmp;
-
-                        List<Point> points = new List<Point>();
-                        foreach (var edge in site.Cell)
-                        {
-                            points.Add(new Point((int)edge.Start.X, (int)edge.Start.Y));
-                            points.Add(new Point((int)edge.End.X, (int)edge.End.Y));
-                        }
-
-                        Point[] tab = points.ToArray();
-                        Random rand = new Random(seed);
-                        Color color = Color.FromArgb(90,
-                            site.Kingdom.Color.R,
-                            site.Kingdom.Color.G,
-                            site.Kingdom.Color.B);
-
-
-                        g.FillPolygon(new SolidBrush(color), tab);
-
+                        if (selectedKingdoms.Contains(site.Kingdom))
+                            AffKingdom(g, site, seed);
                     }
 
                     if(site.God != null && this.croyance)
@@ -535,13 +494,6 @@ namespace WorldGen.Classes
                         g.FillPolygon(new SolidBrush(color), tab);
                     }
 
-                    double dist = Math.Sqrt(Math.Pow(site.X - position.X, 2) + Math.Pow(site.Y - position.Y, 2));
-                    if (distMin > dist)
-                    {
-                        info = site;
-                        distMin = dist;
-                    }
-
                     if (site.City)
                     {
                         if (!site.Capital)
@@ -553,52 +505,11 @@ namespace WorldGen.Classes
                                 (float)(site.X - 2), (float)(site.Y - 2),
                                 5f, 5f);
                     }
-
-                    if (delaunay)
-                    {
-                        foreach (var neighbor in site.Neighbors)
-                        {
-                            g.DrawLine(new System.Drawing.Pen(Color.Blue),
-                                (float)site.X,
-                                (float)site.Y,
-                                (float)neighbor.X,
-                                (float)neighbor.Y);
-                        }
-                    }
-
                 }
 
                 if (this.templeDungeon)
                 {
                     prioToolTip = AffTempleDungeon(g, position);
-                }
-
-                if (info != null && (this.croyance || this.affSite) && !prioToolTip)
-                {
-                    string str = "";
-                    if (this.affSite)
-                    {
-                        if (info.Kingdom != null)
-                            str = info.Kingdom.Name;
-                    }
-                    else if (this.croyance)
-                    {
-                        if (info.God != null)
-                            str = info.God.ToString();
-                    }
-
-                    Font font = new Font(System.Drawing.FontFamily.GenericMonospace, 12f, GraphicsUnit.Pixel);
-
-                    var width = str.Length * 7.5f;
-
-                    g.FillRectangle(new SolidBrush(Color.White),
-                        (position.X < this.mapWidth - width ? (float)(position.X) : (float)(position.X - width * 2)),
-                        (float)(position.Y - 10), width, font.Size + 2);
-                    g.DrawString(str,
-                        font,
-                        new SolidBrush(Color.Black),
-                        (position.X < this.mapWidth - width ? (float)(position.X) : (float)(position.X - width * 2)), (float)(position.Y - 10));
-
                 }
 
 

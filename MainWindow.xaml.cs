@@ -22,6 +22,7 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Xml.Serialization;
+using System.Windows.Controls.Primitives;
 
 namespace WorldGen
 {
@@ -33,6 +34,7 @@ namespace WorldGen
         private bool delaunay = false;
         private World _world;
         private ImageSource backPantheon;
+        private double delay = DateTime.Now.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
 
         public World World { get => _world; set => _world = value; }
 
@@ -55,7 +57,7 @@ namespace WorldGen
                     stream.Close();
 
                     this.Title = World.name;
-                    this.imageMap.Source = World.GetVoronoiGraph(this.delaunay);
+                    this.imageMap.Source = World.GetVoronoiGraph(this.legendKingdom.SelectedItems ,this.delaunay);
 
                     this.listKingdom.SelectedItem = World.kingdoms.First();
                     this.listKingdom.ItemsSource = World.kingdoms;
@@ -79,7 +81,7 @@ namespace WorldGen
                 {
                     MessageBox.Show("L'extension ." + p[p.Length - 1].Split('.')[1] + " n'est pas prise en charge.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
                 }
-
+                
                 this.GoTo(map);
             }
             else
@@ -179,7 +181,7 @@ namespace WorldGen
                 btn.Content = delaunay ? "Delaunay: ON" : "Delaunay: OFF";
 
                 if (World != null)
-                    imageMap.Source = World.GetVoronoiGraph(delaunay);
+                    imageMap.Source = World.GetVoronoiGraph(this.legendKingdom.SelectedItems, delaunay);
             }
         }        
         private void Voronoi_ON_OFF(object sender, RoutedEventArgs e)
@@ -192,7 +194,7 @@ namespace WorldGen
                 btn.Content = World.voronoi ? "Voronoi: ON" : "Voronoi: OFF";
 
                 if (World != null)
-                    imageMap.Source = World.GetVoronoiGraph(delaunay);
+                    imageMap.Source = World.GetVoronoiGraph(this.legendKingdom.SelectedItems, delaunay);
             }
         }
         private void Sites_ON_OFF(object sender, RoutedEventArgs e)
@@ -205,7 +207,7 @@ namespace WorldGen
                 btn.Content = World.affSite ? "Royaume: ON" : "Royaume: OFF";
 
                 if (World != null)
-                    imageMap.Source = World.GetVoronoiGraph(delaunay);
+                    imageMap.Source = World.GetVoronoiGraph(this.legendKingdom.SelectedItems, delaunay);
             }
         }
         private void Croyance_ON_OFF(object sender, RoutedEventArgs e)
@@ -218,7 +220,7 @@ namespace WorldGen
                 btn.Content = World.croyance ? "Croyance: ON" : "Croyance: OFF";
 
                 if (World != null)
-                    imageMap.Source = World.GetVoronoiGraph(delaunay);
+                    imageMap.Source = World.GetVoronoiGraph(this.legendKingdom.SelectedItems, delaunay);
             }
         }
         private void TempleDungeon_ON_OFF(object sender, RoutedEventArgs e)
@@ -231,7 +233,7 @@ namespace WorldGen
                 btn.Content = World.templeDungeon ? "Temple et Donjon: ON" : "Temple et Donjon: OFF";
 
                 if (World != null)
-                    imageMap.Source = World.GetVoronoiGraph(delaunay);
+                    imageMap.Source = World.GetVoronoiGraph(this.legendKingdom.SelectedItems, delaunay);
             }
         }
 
@@ -242,7 +244,8 @@ namespace WorldGen
             World = new World((int)this.map.ActualWidth, (int)this.map.ActualHeight);
             this.Title = World.name;
 
-            this.imageMap.Source = World.GetVoronoiGraph(this.delaunay);
+            this.legendKingdom.ItemsSource = this.World.kingdoms;
+            this.imageMap.Source = World.GetVoronoiGraph(this.legendKingdom.SelectedItems, this.delaunay);
 
             this.listKingdom.SelectedItem = World.kingdoms.First();
             this.listKingdom.ItemsSource = World.kingdoms;
@@ -259,16 +262,21 @@ namespace WorldGen
         }
         private void ImageMap_ToolTip(object sender, MouseEventArgs e)
         {
-            if (this.World != null)
+            double tt = DateTime.Now.Subtract(new DateTime(1970,1,1)).TotalMilliseconds;
+                if (tt - this.delay > 1000)
             {
-                this.imageMap.Source = World.GetVoronoiGraph(e.GetPosition(this), delaunay);
+                if (this.World != null)
+                {
+                    this.imageMap.Source = World.GetVoronoiGraph(e.GetPosition(this), this.legendKingdom.SelectedItems, delaunay);
+                }
+                this.delay = DateTime.Now.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
             }
         }
         private void ImageMap_MouseLeave(object sender, MouseEventArgs e)
         {
             if (this.World != null)
             {
-                imageMap.Source = World.GetVoronoiGraph(delaunay);
+                imageMap.Source = World.GetVoronoiGraph(this.legendKingdom.SelectedItems, delaunay);
             }
         }
     
@@ -430,7 +438,7 @@ namespace WorldGen
             stream.Close();
 
             this.Title = World.name;
-            this.imageMap.Source = World.GetVoronoiGraph(this.delaunay);
+            this.imageMap.Source = World.GetVoronoiGraph(this.legendKingdom.SelectedItems, this.delaunay);
 
             this.listKingdom.SelectedItem = World.kingdoms.First();
             this.listKingdom.ItemsSource = World.kingdoms;
@@ -463,7 +471,7 @@ namespace WorldGen
                 stream.Close();
 
                 this.Title = World.name;
-                this.imageMap.Source = World.GetVoronoiGraph(this.delaunay);
+                this.imageMap.Source = World.GetVoronoiGraph(this.legendKingdom.SelectedItems, this.delaunay);
 
                 this.listKingdom.SelectedItem = World.kingdoms.First();
                 this.listKingdom.ItemsSource = World.kingdoms;
@@ -487,6 +495,19 @@ namespace WorldGen
             else
             {
                 MessageBox.Show("L'extension ." + p[p.Length - 1].Split('.')[1] + " n'est pas prise en charge.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
+            }
+        }
+
+        private void legendKingdom_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ListView lv = (ListView)sender;
+            this.imageMap.Source = this.World.GetVoronoiGraph(lv.SelectedItems);
+            for (int i = 0; i < lv.Items.Count; i++)
+            {
+                var k = this.World.kingdoms[i];
+                var li = lv.ItemContainerGenerator.ContainerFromIndex(i) as ListViewItem;
+                li.Foreground = new SolidColorBrush(Color.FromRgb(k.Color.R, k.Color.G, k.Color.B));
+                li.Background = new SolidColorBrush(Color.FromArgb(100, 100, 100, 100));
             }
         }
     }
