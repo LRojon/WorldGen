@@ -66,7 +66,7 @@
                 </Button.Background>
             </Button>
         </Grid>
-        <Grid Name="map" Visibility="Hidden" Margin="50,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center">
+        <Grid Name="map" Visibility="Visible" Margin="50,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center">
             <Image Name="imageMap"
                    Source="Assets/Image/map.jpg"
                    Margin="0"
@@ -79,47 +79,48 @@
                     <ImageBrush Stretch="Uniform" ImageSource="Assets/menu/bars.png"/>
                 </Button.Background>
             </Button>
-            <Grid Name="subMenuMap" Visibility="Visible" HorizontalAlignment="Right" Height="172" Margin="0,0,5.4,40.4" VerticalAlignment="Bottom" Width="161" Background="#BF000000">
-                <Button Click="Delaunay_ON_OFF"
-                    Opacity="0.75" 
-                    Content="Delaunay: OFF" 
-                    VerticalAlignment="Bottom" 
-                    HorizontalAlignment="Left"
-                    Width="141"
-                    Height="25"
-                    Margin="10,0,0,103"/>
+            <Grid Name="subMenuMap" Visibility="Visible" HorizontalAlignment="Right" Height="346" Margin="0,0,5.333,40.667" VerticalAlignment="Bottom" Width="250" Background="#BF000000">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="99*"/>
+                    <ColumnDefinition Width="151*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="5*"/>
+                    <RowDefinition Height="78*"/>
+                </Grid.RowDefinitions>
                 <Button Click="Voronoi_ON_OFF"
                     Opacity="0.75" 
                     Content="Voronoi: ON" 
                     VerticalAlignment="Bottom" 
                     HorizontalAlignment="Left"
-                    Width="141"
+                    Width="230"
                     Height="25"
-                    Margin="10,0,0,73"/>
+                    Margin="10,0,0,73" Grid.Row="1" Grid.ColumnSpan="2"/>
                 <Button Click="Sites_ON_OFF"
                     Opacity="0.75" 
                     Content="Royaume: ON" 
                     VerticalAlignment="Bottom" 
                     HorizontalAlignment="Left"
-                    Width="141"
+                    Width="230"
                     Height="25"
-                    Margin="10,0,0,43"/>
+                    Margin="10,0,0,43" Grid.Row="1" Grid.ColumnSpan="2"/>
                 <Button Click="Croyance_ON_OFF"
                     Opacity="0.75" 
                     Content="Croyance: OFF" 
                     VerticalAlignment="Bottom" 
                     HorizontalAlignment="Left"
-                    Width="141"
+                    Width="230"
                     Height="25"
-                    Margin="10,0,0,13"/>
+                    Margin="10,0,0,13" Grid.Row="1" Grid.ColumnSpan="2"/>
                 <Button Click="TempleDungeon_ON_OFF"
                         Opacity="0.75" 
                         Content="Temple et Donjon: ON" 
                         VerticalAlignment="Bottom" 
                         HorizontalAlignment="Left" 
-                        Width="141" 
+                        Width="230" 
                         Height="25"
-                        Margin="10,0,0,133"/>
+                        Margin="10,0,0,103" Grid.Row="1" Grid.ColumnSpan="2"/>
+                <ListView x:Name="legendKingdom" SelectionChanged="legendKingdom_SelectionChanged" HorizontalAlignment="Left" Height="200" Margin="10,10,0,0" VerticalAlignment="Top" Width="230" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF0021C1" FontFamily="Viner Hand ITC" FontSize="14" FontWeight="Bold" SelectionMode="Multiple" Grid.RowSpan="2" Grid.ColumnSpan="2"/>
             </Grid>
             <Button Name="NW" Click="NewWorld" Content="Button" HorizontalAlignment="Center" Height="150" Margin="0" VerticalAlignment="Center" Width="150" BorderBrush="{x:Null}">
                 <Button.Background>
@@ -144,7 +145,7 @@
             <Label Name="cityType" Content="Label" HorizontalAlignment="Left" Margin="10,139,0,0" VerticalAlignment="Top" Width="233" FontSize="18" FontFamily="Viner Hand ITC" FontWeight="Bold" Foreground="Black"/>
             <Label Name="cityRessource" Content="Ressource principale: " HorizontalAlignment="Left" Margin="250,10,0,0" VerticalAlignment="Top" Height="38" FontSize="18" FontWeight="Bold" FontFamily="Viner Hand ITC" Width="350" Foreground="Black"/>
         </Grid>
-        <Grid Name="kingdom" Visibility="Visible" Margin="50,0,0,0">
+        <Grid Name="kingdom" Visibility="Hidden" Margin="50,0,0,0">
             <Image Name="backgroundKingdom" Stretch="Fill" Margin="0"/>
             <ComboBox x:Name="listKingdom" 
                       SelectionChanged="Kingdom_SelectionChanged"
